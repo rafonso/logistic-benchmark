@@ -9,6 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rafael.logistic_benchmark.core.Processor;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.util.stream.DoubleStream;
+
 /**
  * Hello world!
  */
@@ -24,6 +31,9 @@ public class App {
     @Parameter(names = {"-it"}, description = "Interactions to generate the series", required = true, validateWith = PositiveInteger.class)
     private Integer interactions;
 
+    @Parameter(names = {"-of"}, description = "Serie will be printed in a file")
+    private boolean outputToFile = false;
+
     @Parameter(names = {"-h", "--help"}, description = "Show usage", help = true)
     private boolean help;
 
@@ -32,6 +42,7 @@ public class App {
 
         var jCommander = JCommander
                 .newBuilder()
+//                .verbose(1)
                 .addObject(app)
                 .build();
         try {
@@ -57,7 +68,27 @@ public class App {
         double[] series = processor.calculate(x0, r, interactions);
         long deltaT = System.currentTimeMillis() - t0;
 
+        if(outputToFile) {
+            exportToFile(series, deltaT);
+        } else {
+            DoubleStream.of(series).forEach(System.out::println);
+        }
+
         LOGGER.info("Tempo: {} ms", deltaT);
+    }
+
+    private void exportToFile(double[] series, long deltaT) {
+//        LocalDateTime now = LocalDateTime.now();
+        String fileName = String.format("x0=%f_r=%f_it=%d_time=%d.%tF_%<tH-%<tM-%<tS-%<tL.txt", x0, r, interactions, deltaT, LocalDateTime.now());
+
+        Path path = Paths.get(fileName);
+        try {
+            Files.write(path, DoubleStream.of(series).mapToObj(Double::toString).toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        LOGGER.info("Saving to {}", fileName);
     }
 
 }
