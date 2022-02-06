@@ -7,9 +7,7 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.validators.PositiveInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rafael.logistic_benchmark.code.Processor;
-
-import java.util.stream.DoubleStream;
+import rafael.logistic_benchmark.core.Processor;
 
 /**
  * Hello world!

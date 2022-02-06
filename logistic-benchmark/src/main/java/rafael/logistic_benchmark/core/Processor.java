@@ -1,4 +1,4 @@
-package rafael.logistic_benchmark.code;
+package rafael.logistic_benchmark.core;
 
 import java.util.stream.IntStream;
 
