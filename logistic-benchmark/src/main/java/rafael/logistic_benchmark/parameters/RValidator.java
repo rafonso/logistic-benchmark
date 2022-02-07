@@ -1,4 +1,4 @@
-package rafael.logistic_benchmark;
+package rafael.logistic_benchmark.parameters;
 
 import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;

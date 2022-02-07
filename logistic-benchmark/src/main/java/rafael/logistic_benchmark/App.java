@@ -5,7 +5,10 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import rafael.logistic_benchmark.actions.Action;
+import rafael.logistic_benchmark.actions.SimpleAction;
 import rafael.logistic_benchmark.core.Processor;
+import rafael.logistic_benchmark.parameters.Parameters;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,10 +37,15 @@ public class App {
             if (params.isHelp()) {
                 jCommander.usage();
             } else {
-                App app = new App();
-                app.run(params);
+                Action action = new SimpleAction();
+
+                action.run(params);
+
+//                App app = new App();
+//                app.run(params);
             }
         } catch (ParameterException pe) {
+            pe.printStackTrace();
             System.err.println(pe.getMessage());
             jCommander.usage();
         }
@@ -48,6 +56,8 @@ public class App {
         Processor processor = new Processor();
 
         LOGGER.info("x0 = {}, r = {}, series size = {}", params.getX0(), params.getR(), params.getInteractions());
+
+
 
         long t0 = System.currentTimeMillis();
         double[] series = processor.calculate(params.getX0(), params.getR(), params.getInteractions());
