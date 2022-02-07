@@ -13,6 +13,9 @@ public class Parameters {
     @Parameter(names = {"-it"}, description = "Interactions to generate the series", required = true, validateWith = PositiveInteger.class)
     private Integer interactions;
 
+    @Parameter(names = {"-re"}, description = "How many times the series is repeated", required = true, validateWith = PositiveInteger.class)
+    private Integer repititions;
+
     @Parameter(names = {"-of"}, description = "Series will be printed in a file")
     private boolean outputToFile = false;
 
@@ -32,6 +35,10 @@ public class Parameters {
 
     public Integer getInteractions() {
         return interactions;
+    }
+
+    public Integer getRepititions() {
+        return repititions;
     }
 
     public boolean isOutputToFile() {

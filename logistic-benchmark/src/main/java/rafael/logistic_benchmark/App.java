@@ -6,7 +6,7 @@ import com.beust.jcommander.ParameterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rafael.logistic_benchmark.actions.Action;
-import rafael.logistic_benchmark.actions.SimpleAction;
+import rafael.logistic_benchmark.actions.RepeatAction;
 import rafael.logistic_benchmark.core.Processor;
 import rafael.logistic_benchmark.parameters.Parameters;
 
@@ -37,7 +37,7 @@ public class App {
             if (params.isHelp()) {
                 jCommander.usage();
             } else {
-                Action action = new SimpleAction();
+                Action action = new RepeatAction();
 
                 action.run(params);
 
