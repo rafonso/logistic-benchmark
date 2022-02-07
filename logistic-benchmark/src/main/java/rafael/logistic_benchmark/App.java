@@ -2,9 +2,7 @@ package rafael.logistic_benchmark;
 
 
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.validators.PositiveInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rafael.logistic_benchmark.core.Processor;
@@ -22,35 +20,22 @@ import java.util.stream.DoubleStream;
 public class App {
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class.getName());
 
-    @Parameter(names = {"-x0"}, description = "Initial x value", required = true, validateWith = X0Validator.class)
-    private Double x0;
-
-    @Parameter(names = {"-r"}, description = "r value", required = true, validateWith = RValidator.class)
-    private Double r;
-
-    @Parameter(names = {"-it"}, description = "Interactions to generate the series", required = true, validateWith = PositiveInteger.class)
-    private Integer interactions;
-
-    @Parameter(names = {"-of"}, description = "Serie will be printed in a file")
-    private boolean outputToFile = false;
-
-    @Parameter(names = {"-h", "--help"}, description = "Show usage", help = true)
-    private boolean help;
 
     public static void main(String[] args) {
-        App app = new App();
+        Parameters params = new Parameters();
+
 
         var jCommander = JCommander
                 .newBuilder()
-//                .verbose(1)
-                .addObject(app)
+                .addObject(params)
                 .build();
         try {
             jCommander.parse(args);
-            if (app.help) {
+            if (params.isHelp()) {
                 jCommander.usage();
             } else {
-                app.run();
+                App app = new App();
+                app.run(params);
             }
         } catch (ParameterException pe) {
             System.err.println(pe.getMessage());
@@ -59,17 +44,17 @@ public class App {
 
     }
 
-    public void run() {
+    public void run(Parameters params) {
         Processor processor = new Processor();
 
-        LOGGER.info("x0 = {}, r = {}, series size = {}", x0, r, interactions);
+        LOGGER.info("x0 = {}, r = {}, series size = {}", params.getX0(), params.getR(), params.getInteractions());
 
         long t0 = System.currentTimeMillis();
-        double[] series = processor.calculate(x0, r, interactions);
+        double[] series = processor.calculate(params.getX0(), params.getR(), params.getInteractions());
         long deltaT = System.currentTimeMillis() - t0;
 
-        if(outputToFile) {
-            exportToFile(series, deltaT);
+        if (params.isOutputToFile()) {
+            exportToFile(params, series, deltaT);
         } else {
             DoubleStream.of(series).forEach(System.out::println);
         }
@@ -77,9 +62,8 @@ public class App {
         LOGGER.info("Tempo: {} ms", deltaT);
     }
 
-    private void exportToFile(double[] series, long deltaT) {
-//        LocalDateTime now = LocalDateTime.now();
-        String fileName = String.format("x0=%f_r=%f_it=%d_time=%d.%tF_%<tH-%<tM-%<tS-%<tL.txt", x0, r, interactions, deltaT, LocalDateTime.now());
+    private void exportToFile(Parameters params, double[] series, long deltaT) {
+        String fileName = String.format("x0=%f_r=%f_it=%d_time=%d.%tF_%<tH-%<tM-%<tS-%<tL.txt", params.getX0(), params.getR(), params.getInteractions(), deltaT, LocalDateTime.now());
 
         Path path = Paths.get(fileName);
         try {
