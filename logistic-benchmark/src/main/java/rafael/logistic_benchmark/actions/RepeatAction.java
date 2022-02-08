@@ -14,24 +14,17 @@ public class RepeatAction implements Action {
 
     Processor processor = new Processor();
 
-    private long calculateSeries(Parameters params) {
-        long t0 = System.currentTimeMillis();
-        double[] series = processor.calculate(params.getX0(), params.getR(), params.getInteractions());
-
-        return System.currentTimeMillis() - t0;
-    }
-
     @Override
     public void run(Parameters parameters) {
         long[] times = new long[parameters.getRepititions()];
 
         // warming
-        calculateSeries(parameters);
+        processor.calculate(parameters.getX0(), parameters.getR(), parameters.getInteractions());
 
         IntStream
                 .rangeClosed(1, parameters.getRepititions())
                 .peek(i -> System.out.print('.'))
-                .forEach(i -> times[i - 1] = calculateSeries(parameters));
+                .forEach(i -> times[i - 1] = processor.calculate(parameters.getX0(), parameters.getR(), parameters.getInteractions()).time());
         System.out.println();
 
         LongStream.of(times).forEach(System.out::println);

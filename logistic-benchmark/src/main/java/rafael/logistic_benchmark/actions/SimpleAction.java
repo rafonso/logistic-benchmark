@@ -3,6 +3,7 @@ package rafael.logistic_benchmark.actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rafael.logistic_benchmark.core.Processor;
+import rafael.logistic_benchmark.core.ProcessorResult;
 import rafael.logistic_benchmark.parameters.Parameters;
 
 import java.io.IOException;
@@ -17,12 +18,12 @@ public class SimpleAction implements Action {
 
     Processor processor = new Processor();
 
-    private void exportToFile(Parameters params, double[] series, long deltaT) {
-        String fileName = String.format("x0=%f_r=%f_it=%d_time=%d.%tF_%<tH-%<tM-%<tS-%<tL.txt", params.getX0(), params.getR(), params.getInteractions(), deltaT, LocalDateTime.now());
+    private void exportToFile(Parameters params, ProcessorResult result) {
+        String fileName = String.format("x0=%f_r=%f_it=%d_time=%d.%tF_%<tH-%<tM-%<tS-%<tL.txt", params.getX0(), params.getR(), params.getInteractions(), result.time(), LocalDateTime.now());
 
         Path path = Paths.get(fileName);
         try {
-            Files.write(path, DoubleStream.of(series).mapToObj(Double::toString).toList());
+            Files.write(path, DoubleStream.of(result.series()).mapToObj(Double::toString).toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -33,18 +34,16 @@ public class SimpleAction implements Action {
 
     @Override
     public void run(Parameters params) {
-        long t0 = System.currentTimeMillis();
-        double[] series = processor.calculate(params.getX0(), params.getR(), params.getInteractions());
-        long deltaT = System.currentTimeMillis() - t0;
+        var result =  processor.calculate(params.getX0(), params.getR(), params.getInteractions());
 
         if (params.isOutputToFile()) {
-            exportToFile(params, series, deltaT);
+            exportToFile(params, result);
         }
 
         if(!params.isHiddenOutputSeries()){
-            DoubleStream.of(series).forEach(System.out::println);
+            DoubleStream.of(result.series()).forEach(System.out::println);
         }
 
-        LOGGER.info("Tempo: {} ms", deltaT);
+        LOGGER.info("Tempo: {} ms", result.time());
     }
 }
