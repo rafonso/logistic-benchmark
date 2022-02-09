@@ -1,6 +1,7 @@
-import { calculate } from "./core/index";
-import { parse } from "ts-command-line-args";
-import { IParameters } from "./parameters/IParameters";
+import { parse } from 'ts-command-line-args';
+
+import { SimpleAction } from './actions/SimpleAction';
+import { IParameters } from './parameters/IParameters';
 
 export const params = parse<IParameters>(
   {
@@ -29,12 +30,7 @@ export const params = parse<IParameters>(
   { helpArg: "help" }
 );
 
-const result = calculate(params.x0, params.r, params.interactions);
 
-if (!params.hiddenOutputSeries) {
-  result.series.forEach((x) => console.log(x));
-}
-console.log("----------------");
-console.log("TIME: ", result.time, "ms");
+const action = new SimpleAction();
 
-console.log(params);
+action.run(params);
