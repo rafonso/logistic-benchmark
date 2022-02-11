@@ -1,11 +1,15 @@
-import { parse } from 'ts-command-line-args';
+import { parse } from "ts-command-line-args";
 
-import { SimpleAction } from './actions/SimpleAction';
-import { IParameters } from './parameters/IParameters';
+import { SimpleAction } from "./actions/SimpleAction";
+import { IParameters } from "./parameters/IParameters";
+import { RepeatAction } from './actions/RepeatAction';
 
 export const params = parse<IParameters>(
   {
-    // action: {type: String, alias: "ac", description: "Action: s = Single, r = Repeat"},
+    action: {
+      type: String,
+      description: "Action: s = Single, r = Repeat",
+    },
     x0: { type: Number, description: "Initial x value" },
     r: { type: Number, description: "r value" },
     interactions: {
@@ -13,7 +17,11 @@ export const params = parse<IParameters>(
       alias: "i",
       description: "Interactions to generate the series",
     },
-    // repititions: {type: Number, alias: "re", description : "How many times the series is repeated (if action if repeat)"},
+    repetitions: {
+      type: Number,
+      description:
+        "How many times the series is repeated (if action if repeat)",
+    },
     //  outputToFile: { type: Boolean, optional: true, alias: 'hos', description: 'Series will be hidden in a console' , },
     hiddenOutputSeries: {
       type: Boolean,
@@ -31,6 +39,6 @@ export const params = parse<IParameters>(
 );
 
 
-const action = new SimpleAction();
+const action = (params.action === "s")? new SimpleAction(): ((params.action === "r")? new RepeatAction(): null);
 
-action.run(params);
+if(action) action.run(params);
