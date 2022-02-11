@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="18dbf3a5-e04e-4ffb-98d3-7f570e336106" name="Changes" comment="REpeat Action.">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/rafael/logistic_benchmark/App.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/rafael/logistic_benchmark/actions/Action.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/rafael/logistic_benchmark/actions/RepeatAction.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/rafael/logistic_benchmark/actions/SimpleAction.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/rafael/logistic_benchmark/core/Processor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/rafael/logistic_benchmark/core/ProcessorResult.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/rafael/logistic_benchmark/parameters/Parameters.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/rafael/logistic_benchmark/parameters/RValidator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/rafael/logistic_benchmark/parameters/X0Validator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j.properties" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+        <option value="Record" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectId" id="24k3rWBMd0QAlt7A3VxEXD1tSAF" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="VisualVMLauncher" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\rucaf\OneDrive\Documentos\GitHub\logistic-benchmark\logistic-benchmark\src\main" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="rafael.logistic_benchmark.App" />
+      <module name="java-logistic-benchmark" />
+      <option name="PROGRAM_PARAMETERS" value="$Prompt$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="rafael.logistic_benchmark.parameters.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="java-logistic-benchmark" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="java-logistic-benchmark" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.App" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="18dbf3a5-e04e-4ffb-98d3-7f570e336106" name="Changes" comment="" />
+      <created>1644160959329</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1644160959329</updated>
+    </task>
+    <task id="LOCAL-00001" summary="First Java Version">
+      <created>1644163432452</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1644163432452</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Command line parsing, using JCommander (https://jcommander.org/)">
+      <created>1644167698365</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1644167698365</updated>
+    </task>
+    <task id="LOCAL-00003" summary="code package renamed to core">
+      <created>1644167826054</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1644167826054</updated>
+    </task>
+    <task id="LOCAL-00004" summary="EXtraction of CLI parameters">
+      <created>1644260914047</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1644260914047</updated>
+    </task>
+    <task id="LOCAL-00005" summary="EXtraction of CLI parameters">
+      <created>1644260941034</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1644260941034</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Interface Action amd SimpleAction. Parameter to its own package. Hide output">
+      <created>1644262442744</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1644262442744</updated>
+    </task>
+    <task id="LOCAL-00007" summary="ProcessorResult to store series and time. Option to choose action">
+      <created>1644349556491</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1644349556491</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Showing average time. Exporting FAT JAR.">
+      <created>1644605526466</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1644605526467</updated>
+    </task>
+    <task id="LOCAL-00009" summary="REpeat Action.">
+      <created>1644605551154</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1644605551154</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="First Java Version" />
+    <MESSAGE value="Command line parsing, using JCommander (https://jcommander.org/)" />
+    <MESSAGE value="code package renamed to core" />
+    <MESSAGE value="EXtraction of CLI parameters" />
+    <MESSAGE value="Interface Action amd SimpleAction. Parameter to its own package." />
+    <MESSAGE value="Interface Action amd SimpleAction. Parameter to its own package. Hide output" />
+    <MESSAGE value="ProcessorResult to store series and time. Option to choose action" />
+    <MESSAGE value="Showing average time. Exporting FAT JAR." />
+    <MESSAGE value="REpeat Action." />
+    <option name="LAST_COMMIT_MESSAGE" value="REpeat Action." />
+  </component>
+</project>
