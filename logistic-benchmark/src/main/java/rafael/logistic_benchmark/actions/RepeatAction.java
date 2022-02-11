@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import rafael.logistic_benchmark.core.Processor;
 import rafael.logistic_benchmark.parameters.Parameters;
 
+import java.util.OptionalDouble;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -27,7 +28,8 @@ public class RepeatAction implements Action {
                 .forEach(i -> times[i - 1] = processor.calculate(parameters.getX0(), parameters.getR(), parameters.getInteractions()).time());
         System.out.println();
 
-        LongStream.of(times).forEach(System.out::println);
-        System.out.println(LongStream.of(times).average());
+//        LongStream.of(times).forEach(System.out::println);
+        OptionalDouble average = LongStream.of(times).average();
+        LOGGER.info("AVERAGE {} ms", average.getAsDouble());
     }
 }
