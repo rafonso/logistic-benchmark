@@ -24,7 +24,7 @@ public class RepeatAction implements Action {
 
         IntStream
                 .rangeClosed(1, parameters.getRepititions())
-                .peek(i -> System.out.print('.'))
+                .peek(i -> System.out.printf("\r%5d / %5d", i, parameters.getRepititions()))
                 .forEach(i -> times[i - 1] = processor.calculate(parameters.getX0(), parameters.getR(), parameters.getInteractions()).time());
         System.out.println();
 

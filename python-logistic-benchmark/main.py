@@ -18,9 +18,8 @@ def repeat(x0, r, it, rep):
     times = [0.0] * rep
 
     for i in range(0, rep):
-        print(".", end="", flush=True)
+        print(f'\r{i + 1}\t/\t{rep}', end="", flush=True)
         times[i] = calculate(x0, r, it)[1]
-    print("\n")
 
     average = sum(times) / len(times)
     print(f'AVERAGE: {average}')

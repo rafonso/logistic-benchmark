@@ -41,8 +41,6 @@ export const params = parse<IParameters>(
 );
 
 
-console.log(params);
-
 const action = (params.action === "s")? new SimpleAction(): ((params.action === "r")? new RepeatAction(): null);
 
 if(action) action.run(params);

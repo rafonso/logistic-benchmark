@@ -1,6 +1,6 @@
-import { calculate } from "../core";
-import { IParameters } from "../parameters/IParameters";
-import { Action } from "./IAction";
+import { calculate } from '../core';
+import { IParameters } from '../parameters/IParameters';
+import { Action } from './IAction';
 
 export class RepeatAction implements Action {
   run(params: IParameters): void {
@@ -8,7 +8,7 @@ export class RepeatAction implements Action {
       const times = new Array<number>(params.repetitions);
 
       for (let i = 0; i < params.repetitions; i++) {
-        process.stdout.write(".");
+        process.stdout.write(`\r${i + 1}\t/\t${params.repetitions}`);
         times[i] = calculate(params.x0, params.r, params.interactions).time;
       }
       process.stdout.write("\n");
