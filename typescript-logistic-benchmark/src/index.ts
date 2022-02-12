@@ -19,6 +19,8 @@ export const params = parse<IParameters>(
     },
     repetitions: {
       type: Number,
+      defaultValue: 1,
+      optional: true,
       description:
         "How many times the series is repeated (if action if repeat)",
     },
@@ -38,6 +40,8 @@ export const params = parse<IParameters>(
   { helpArg: "help" }
 );
 
+
+console.log(params);
 
 const action = (params.action === "s")? new SimpleAction(): ((params.action === "r")? new RepeatAction(): null);
 
