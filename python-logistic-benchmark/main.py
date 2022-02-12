@@ -1,7 +1,6 @@
 import sys
 import time
 
-
 def calculate(x0, r, it):
     series = [0] * it
 
@@ -13,19 +12,39 @@ def calculate(x0, r, it):
 
     return (series, deltaT)
 
+def repeat(x0, r, it, rep):
+  times = [0.0] * rep
+
+  for i in range(0, rep):
+    print(".", end="")
+    (series, time) = calculate(x0, r, it)
+    times[i] = time
+  print("\n")
+
+  print(times)
+
+  average = sum(times) / len(times)
+  print(f'AVERAGE: {average}')
+
+
 ######################################
 # MAIN PART
 ######################################
 
-x0 = float(sys.argv[1])
-r  = float(sys.argv[2])
-it = int(sys.argv[3])
-show_output = (len(sys.argv) > 4) and (sys.argv[4] == "show")
+action = sys.argv[1]
+x0 = float(sys.argv[2])
+r  = float(sys.argv[3])
+it = int(sys.argv[4])
 
-(series, deltaT) =  calculate(x0, r, it)
+if action == "s":
+  (series, deltaT) =  calculate(x0, r, it)
 
-if(show_output):
-  for x in series:
-    print(x)
+  show_output = (len(sys.argv) > 5) and (sys.argv[5] == "show")
+  if(show_output):
+    for x in series:
+      print(x)
 
-print("TIME: " + str(deltaT))
+  print("TIME: " + str(deltaT))
+elif action == "r":
+  repetitions = int(sys.argv[5])
+  repeat(x0, r, it, repetitions)
