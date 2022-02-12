@@ -27,17 +27,52 @@ Result generate(const double x0, const double r, const int it)
 	return { x, it, deltaT };
 }
 
-int main(int argc, char* argv[])
-{
-	double x0 = 0.1;
-	double r = 3.91;
-	int it = 100;
-
+void simple_action(const double x0, const double r, const int it, bool show_series) {
 	Result result = generate(x0, r, it);
 
-	for (int i = 0; i < result.series_size; i++)
-	{
-		printf("%.17f\n", result.series[i]);
+	if (show_series) {
+		for (int i = 0; i < result.series_size; i++)
+		{
+			printf("%.17f\n", result.series[i]);
+		}
 	}
-	printf("%d", result.time);
+
+	printf("-----------------------\n");
+	printf("TIME: %d", result.time);
+}
+
+void repeat_action(const double x0, const double r, const int it, int repetitions) {
+	long* times = (long*)malloc(it * sizeof(long));
+
+	if (times) {
+		long t0 = clock();
+		long totalTime = 0;
+		for (int i = 0; i < repetitions; i++) {
+			printf("\r%5d / %5d", (i + 1), repetitions);
+			times[i] = generate(x0, r, it).time;
+			totalTime += times[i];
+		}
+		printf("\n");
+		long deltaT = clock() - t0;
+		long average = totalTime / repetitions;
+
+		printf("AVERAGE %d ms\n", average);
+		printf("TOTAL_TIME %d\n", deltaT);
+	}
+}
+
+int main(int argc, char* argv[])
+{
+	char action = argv[1][0];
+	double x0 = atof(argv[2]);
+	double r = atof(argv[3]);
+	int it = atoi(argv[4]);
+
+	if (action == 's') {
+		bool show_series = (argc > 5) && (argv[5][0] == 's');
+		simple_action(x0, r, it, show_series);
+	}	else if (action == 'r') {
+		int repetitions = atoi(argv[5]);
+		repeat_action(x0, r, it, repetitions);
+	}
 }
