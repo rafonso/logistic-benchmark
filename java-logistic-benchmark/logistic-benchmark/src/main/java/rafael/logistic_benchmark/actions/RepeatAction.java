@@ -22,14 +22,17 @@ public class RepeatAction implements Action {
         // warming
         processor.calculate(parameters.getX0(), parameters.getR(), parameters.getInteractions());
 
+        long t0 = System.currentTimeMillis();
         IntStream
                 .rangeClosed(1, parameters.getRepititions())
                 .peek(i -> System.out.printf("\r%5d / %5d", i, parameters.getRepititions()))
                 .forEach(i -> times[i - 1] = processor.calculate(parameters.getX0(), parameters.getR(), parameters.getInteractions()).time());
+        long time = System.currentTimeMillis() - t0;
         System.out.println();
 
 //        LongStream.of(times).forEach(System.out::println);
         OptionalDouble average = LongStream.of(times).average();
         LOGGER.info("AVERAGE {} ms", average.getAsDouble());
+        System.out.println("TOTAL_TIME " + time);
     }
 }

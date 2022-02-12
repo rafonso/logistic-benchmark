@@ -45,4 +45,7 @@ if action == "s":
     print("TIME: " + str(deltaT))
 elif action == "r":
     repetitions = int(sys.argv[5])
+    t0 = time.time()
     repeat(x0, r, it, repetitions)
+    deltaT = int((time.time() - t0) * 1000)
+    print("TOTAL_TIME " + str(deltaT))
