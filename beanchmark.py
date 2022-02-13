@@ -1,7 +1,7 @@
-import sys
-import subprocess
 import datetime
 import re
+import subprocess
+import sys
 
 col_size = 10
 time_re = 'TOTAL_TIME (\d+)'
@@ -9,8 +9,8 @@ time_re = 'TOTAL_TIME (\d+)'
 def run_for_interations(commands,  x0, r, num_interations, repetitions):
     time_interations = {}
     print(60 * "=")
-    print("[{0}] Interations: {1}".format(
-        datetime.datetime.now().time(), str(num_interations).rjust(col_size)))
+    print("[{0}] {1} {2}".format(
+        datetime.datetime.now().time(), "inter".rjust(col_size), str(num_interations).rjust(col_size)))
     for description in commands.keys():
         time_interations.update(run_command(
             description, commands.get(description), x0, r, num_interations, repetitions))
@@ -19,11 +19,13 @@ def run_for_interations(commands,  x0, r, num_interations, repetitions):
 
 def run_command(description, command_pattern, x0, r, num_interations, repetitions):
     print(60 * "-")
-    print("[{0}] {1}".format(datetime.datetime.now().time(), description))
+    print("[{0}] {1}".format(datetime.datetime.now().time(),
+          description.rjust(col_size)), end="", flush=True)
     final_command = command_pattern.format(x0, r, num_interations, repetitions)
     # print(final_command)
     result = subprocess.run(final_command, shell=True, capture_output=True)
     deltaT = re.findall(time_re, str(result.stdout))[0]
+    print(deltaT.rjust(col_size))
     return {description: deltaT}
 
 
@@ -56,7 +58,7 @@ commands = {
     "python": "python .\\python-logistic-benchmark\\main.py r {} {} {} {}"
 }
 
-interations = [100, 1000, 10000, 100000, 1000000, 10000000]
+interations = [100, 1_000, 10_000, 100_000, 1_000_000] # , 5_000_000]
 
 results = {}
 
