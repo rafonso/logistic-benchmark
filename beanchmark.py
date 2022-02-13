@@ -71,8 +71,9 @@ def main():
     repetitions = int(sys.argv[3])
 
     languages = {
-        "c":        LangParams(".\\c-logistic-benchmark\\x64\\Debug\\c-logistic-benchmark.exe r {} {} {} {}",  [ 10_000_000]),
+        "c":        LangParams(".\\c-logistic-benchmark\\x64\\Debug\\c-logistic-benchmark.exe r {} {} {} {}",  [10_000_000]),
         "c#":       LangParams(".\\cs-logistic-beanchmark\\bin\\Debug\\net6.0\\cs-logistic-beanchmark.exe r {} {} {} {}"),
+        "go":       LangParams(".\\go-logistic-benchmark\\go-logistic-benchmark.exe r {} {} {} {}"),
         "java":     LangParams("java -jar .\\java-logistic-benchmark\\logistic-benchmark\\target\\java-logistic-benchmark-jar-with-dependencies.jar r {} {} {} {}"),
         "node":     LangParams("npm start --prefix typescript-logistic-benchmark -- r {} {} {} {}"),
         "python":   LangParams("python .\\python-logistic-benchmark\\main.py r {} {} {} {}"),
