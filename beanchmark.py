@@ -54,7 +54,7 @@ repetitions = int(sys.argv[3])
 commands = {
     "c": ".\\c-logistic-benchmark\\x64\\Debug\\c-logistic-benchmark.exe r {} {} {} {}",
     "c#": ".\\cs-logistic-beanchmark\\bin\\Debug\\net6.0\\cs-logistic-beanchmark.exe r {} {} {} {}",
-    "java": "java -jar .\\java-logistic-benchmark\\logistic-benchmark\\target\\java-logistic-benchmark-jar-with-dependencies.jar -ac r -x0 {} -r {} -it {} -re {}",
+    "java": "java -jar .\\java-logistic-benchmark\\logistic-benchmark\\target\\java-logistic-benchmark-jar-with-dependencies.jar r {} {} {} {}",
     "node": "npm start --prefix typescript-logistic-benchmark -- r {} {} {} {}",
     "python": "python .\\python-logistic-benchmark\\main.py r {} {} {} {}"
 }
