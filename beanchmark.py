@@ -53,12 +53,13 @@ repetitions = int(sys.argv[3])
 
 commands = {
     "c": ".\\c-logistic-benchmark\\x64\\Debug\\c-logistic-benchmark.exe r {} {} {} {}",
+    "c#": ".\\cs-logistic-beanchmark\\bin\\Debug\\net6.0\\cs-logistic-beanchmark.exe r {} {} {} {}",
     "java": "java -jar .\\java-logistic-benchmark\\logistic-benchmark\\target\\java-logistic-benchmark-jar-with-dependencies.jar -ac r -x0 {} -r {} -it {} -re {}",
     "node": "npm start --prefix typescript-logistic-benchmark -- --action=r --x0={} --r={} -i {} --repetitions={}",
     "python": "python .\\python-logistic-benchmark\\main.py r {} {} {} {}"
 }
 
-interations = [100, 1_000, 10_000, 100_000, 1_000_000] # , 5_000_000]
+interations = [100, 1_000, 10_000, 100_000, 1_000_000, 5_000_000]
 
 results = {}
 
