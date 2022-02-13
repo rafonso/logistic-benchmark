@@ -1,46 +1,62 @@
-import { parse } from "ts-command-line-args";
 
-import { SimpleAction } from "./actions/SimpleAction";
-import { IParameters } from "./parameters/IParameters";
-import { RepeatAction } from './actions/RepeatAction';
+export interface ProcessResult {
+  readonly series: number[];
+  readonly time: number;
+}
 
-export const params = parse<IParameters>(
-  {
-    action: {
-      type: String,
-      description: "Action: s = Single, r = Repeat",
-    },
-    x0: { type: Number, description: "Initial x value" },
-    r: { type: Number, description: "r value" },
-    interactions: {
-      type: Number,
-      alias: "i",
-      description: "Interactions to generate the series",
-    },
-    repetitions: {
-      type: Number,
-      defaultValue: 1,
-      optional: true,
-      description:
-        "How many times the series is repeated (if action if repeat)",
-    },
-    //  outputToFile: { type: Boolean, optional: true, alias: 'hos', description: 'Series will be hidden in a console' , },
-    hiddenOutputSeries: {
-      type: Boolean,
-      // alias: "of",
-      description: "Series will be printed in a file",
-    },
-    help: {
-      type: Boolean,
-      optional: true,
-      alias: "h",
-      description: "Prints this usage guide",
-    },
-  },
-  { helpArg: "help" }
-);
+export function calculate(x0: number, k: number, size: number): ProcessResult {
+  const series = new Array<number>(size);
 
+  const t0 = Date.now();
+  series[0] = x0;
+  for (let i = 1; i < size; i++) {
+    series[i] = k * series[i - 1] * (1.0 - series[i - 1]);
+  }
+  const time = Date.now() - t0;
 
-const action = (params.action === "s")? new SimpleAction(): ((params.action === "r")? new RepeatAction(): null);
+  return { series, time };
+}
 
-if(action) action.run(params);
+function simpleAction(x0: number, r: number, interactions: number, showSeries: boolean): void {
+  const result = calculate(x0, r, interactions);
+
+  if (showSeries) {
+    result.series.forEach((x) => console.log(x));
+  }
+
+  console.log("TIME: ", result.time, "ms");
+}
+
+function repeatAction(x0: number, r: number, interactions: number, repetitions: number): void {
+  const times = new Array<number>(repetitions);
+
+  const t0 = Date.now();
+  for (let i = 0; i < repetitions; i++) {
+    process.stdout.write(`\r${i + 1}\t/\t${repetitions}`);
+    times[i] = calculate(x0, r, interactions).time;
+  }
+  const time = Date.now() - t0;
+  process.stdout.write("\n");
+
+  const average = times.reduce((a, b) => a + b, 0) / repetitions;
+
+  console.log("AVERAGE", average, "ms");
+  console.log("TOTAL_TIME " + time)
+}
+
+/************************************
+ * MAIN
+ ************************************/
+
+const action = process.argv[2];
+const x0 = parseFloat(process.argv[3]);
+const r =  parseFloat(process.argv[4]);
+const iter = parseInt(process.argv[5]);
+
+if(action === "s") {
+  const showSeries = (process.argv.length === 7) && (process.argv[6] === "s");
+  simpleAction(x0, r, iter, showSeries);
+} else if(action === "r") {
+  const repetitions = parseInt(process.argv[6]);
+  repeatAction(x0, r, iter, repetitions);
+}
