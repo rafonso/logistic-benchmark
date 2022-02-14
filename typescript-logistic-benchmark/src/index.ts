@@ -21,10 +21,12 @@ function simpleAction(x0: number, r: number, interactions: number, showSeries: b
   const result = calculate(x0, r, interactions);
 
   if (showSeries) {
+    console.log("-".repeat(40))
     result.series.forEach((x) => console.log(x));
+    console.log("-".repeat(40))
   }
 
-  console.log("TIME: ", result.time, "ms");
+  console.log("TIME:", result.time, "ms");
 }
 
 function repeatAction(x0: number, r: number, interactions: number, repetitions: number): void {

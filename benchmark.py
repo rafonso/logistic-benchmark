@@ -25,9 +25,9 @@ def run_for_interations(languages: dict[str, LangParams],  x0: float, r: float, 
     print("[{0}] {1} {2}".format(
         get_now(), "inter".rjust(col_size), str(num_interations).rjust(col_size)))
     for language in languages.keys():
-
         time_interations.update(run_command(
             language, languages.get(language), x0, r, num_interations, repetitions))
+    
     return {num_interations: time_interations}
 
 

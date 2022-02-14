@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -24,12 +25,14 @@ func simple_action(x0 float64, r float64, interactions int, showSeries bool) {
 	series, deltaT := calculate(x0, r, interactions)
 
 	if showSeries {
+		fmt.Println(strings.Repeat("-", 40))
 		for i := 0; i < len(series); i++ {
 			fmt.Println(series[i])
 		}
+		fmt.Println(strings.Repeat("-", 40))
 	}
 
-	fmt.Println("TIME: ", deltaT, " ms")
+	fmt.Println("TIME:", deltaT, "ms")
 }
 
 func repeat_action(x0 float64, r float64, interactions int, repetitions int) {

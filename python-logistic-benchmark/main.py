@@ -23,7 +23,7 @@ def simple_action(calculate, x0, r, it, show_output):
             print(x)
         print("-" * 40)
 
-    print("TIME: " + str(deltaT))
+    print("TIME: " + str(deltaT) + " ms")
 
 
 def repeat_action(x0, r, it, repetitions):

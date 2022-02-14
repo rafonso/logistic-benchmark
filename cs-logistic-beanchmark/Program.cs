@@ -22,14 +22,12 @@ void simpleAction(double x0, double r, int size, bool showSeries)
 
     if (showSeries)
     {
-        foreach (var x in result.Item1)
-        {
-            Console.WriteLine(x);
-        }
+        Console.WriteLine(new string('-', 40));
+        result.Item1.Select(x => x.ToString().Replace(",", ".")).ToList().ForEach(x => Console.WriteLine(x));
+        Console.WriteLine(new string('-', 40));
     }
 
-    Console.WriteLine(new string('-', 20));
-    Console.WriteLine("TIME {0} ms", result.Item2);
+    Console.WriteLine("TIME: {0} ms", result.Item2);
 }
 
 

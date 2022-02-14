@@ -25,10 +25,12 @@ public class App {
         var result =  calculate(x0, r, iter);
 
         if(showSeries){
+            System.out.println("-".repeat(40));
             DoubleStream.of(result.series()).forEach(System.out::println);
+            System.out.println("-".repeat(40));
         }
 
-        System.out.println("TIME: " + result.time());
+        System.out.println("TIME: " + result.time() +" ms");
     }
 
     private void repeatAction(double x0, double r, int iter, int repetitions) {

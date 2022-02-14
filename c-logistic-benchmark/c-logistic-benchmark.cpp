@@ -31,14 +31,15 @@ void simple_action(const double x0, const double r, const int it, bool show_seri
 	Result result = generate(x0, r, it);
 
 	if (show_series) {
+		printf("----------------------------------------\n");
 		for (int i = 0; i < result.series_size; i++)
 		{
 			printf("%.17f\n", result.series[i]);
 		}
+		printf("----------------------------------------\n");
 	}
 
-	printf("-----------------------\n");
-	printf("TIME: %d", result.time);
+	printf("TIME: %d ms", result.time);
 }
 
 void repeat_action(const double x0, const double r, const int it, int repetitions) {
@@ -71,7 +72,8 @@ int main(int argc, char* argv[])
 	if (action == 's') {
 		bool show_series = (argc > 5) && (argv[5][0] == 's');
 		simple_action(x0, r, it, show_series);
-	}	else if (action == 'r') {
+	}
+	else if (action == 'r') {
 		int repetitions = atoi(argv[5]);
 		repeat_action(x0, r, it, repetitions);
 	}
