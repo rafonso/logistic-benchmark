@@ -14,38 +14,47 @@ def calculate(x0, r, it):
     return (series, deltaT)
 
 
-def repeat(x0, r, it, rep):
-    times = [0.0] * rep
-
-    for i in range(0, rep):
-        print(f'\r{i + 1}\t/\t{rep}', end="", flush=True)
-        times[i] = calculate(x0, r, it)[1]
-
-    average = sum(times) / len(times)
-    print(f'AVERAGE: {average}')
-
-
-######################################
-# MAIN PART
-######################################
-
-action = sys.argv[1]
-x0 = float(sys.argv[2])
-r = float(sys.argv[3])
-it = int(sys.argv[4])
-
-if action == "s":
+def simple_action(calculate, x0, r, it, show_output):
     (series, deltaT) = calculate(x0, r, it)
 
-    show_output = (len(sys.argv) > 5) and (sys.argv[5] == "show")
     if(show_output):
+        print("-" * 40)
         for x in series:
             print(x)
+        print("-" * 40)
 
     print("TIME: " + str(deltaT))
-elif action == "r":
-    repetitions = int(sys.argv[5])
+
+
+def repeat_action(x0, r, it, repetitions):
+    times = [0.0] * repetitions
+
     t0 = time.time()
-    repeat(x0, r, it, repetitions)
+    for i in range(0, repetitions):
+        print(f'\r{i + 1}\t/\t{repetitions}', end="", flush=True)
+        times[i] = calculate(x0, r, it)[1]
     deltaT = int((time.time() - t0) * 1000)
+    print()
+
+    average = sum(times) / len(times)
+
+    print(f'AVERAGE: {average} ms')
     print("TOTAL_TIME " + str(deltaT))
+
+
+def main():
+    action = sys.argv[1]
+    x0 = float(sys.argv[2])
+    r = float(sys.argv[3])
+    it = int(sys.argv[4])
+
+    if action == "s":
+        show_output = (len(sys.argv) > 5) and (sys.argv[5] == "s")
+        simple_action(calculate, x0, r, it, show_output)
+    elif action == "r":
+        repetitions = int(sys.argv[5])
+        repeat_action(x0, r, it, repetitions)
+
+
+if __name__ == '__main__':
+    main()
