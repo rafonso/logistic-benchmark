@@ -1,7 +1,8 @@
+import csv
 import datetime
-import re
 import subprocess
 import sys
+import time
 
 
 class LangParams:
@@ -10,11 +11,11 @@ class LangParams:
         self.interations_to_skip = skip
 
 
+col_size = 24
+
+
 def get_now():
     return datetime.datetime.now().time()
-
-
-col_size = 24
 
 
 def run_command(language: str, lang_params: LangParams, x0: float, r: float, interations: int):
@@ -27,7 +28,7 @@ def run_command(language: str, lang_params: LangParams, x0: float, r: float, int
     for i in range(0, len(lines)):
         lines[i] = lines[i].decode("utf-8")
 
-    limits = [i for i, e in enumerate(lines) if e == ("-" * 40)]
+    limits = [i for i, line in enumerate(lines) if line == ("-" * 40)]
     series = lines[limits[0]+1:limits[1]]
 
     str_time = lines[limits[1] + 1]
@@ -36,26 +37,43 @@ def run_command(language: str, lang_params: LangParams, x0: float, r: float, int
     return series
 
 
-def create_output(results: dict, it: int):
-    output = ""
+def create_output(results: dict, it: int) -> list[list[str]]:
+    lines = []
     languages = results.keys()
-
-    for language in languages:
-        output += language.ljust(col_size)
-    output += "\n"
+    lines.append(list(languages))
 
     for i in range(0, it):
+        line = []
         for language in languages:
-            output += results.get(language)[i].ljust(col_size)
-        output += "\n"
+            line.append(results.get(language)[i])
+        lines.append(line)
 
-    return output
+    return lines
+
+
+def lines_to_console(lines: list[list[str]]):
+    for line in lines:
+        for item in line:
+            print(item.ljust(col_size), flush=True, end="")
+        print()
+
+
+def lines_to_file(x0: float, r: float, interations: int, lines: list[list[str]]):
+    str_now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    file_name = f"x0={x0}_r={r}_it={interations}_{str_now}.csv"
+    with open(file_name, 'w', newline="",  encoding='UTF8') as f:
+        writer = csv.writer(f, delimiter=';')
+        writer.writerows(lines)
+    print(f"Exporting to {file_name}")
 
 
 def main():
+    t0 = time.time()
+
     x0 = float(sys.argv[1])
     r = float(sys.argv[2])
     it = int(sys.argv[3])
+    output_to_file = (len(sys.argv) > 4) and (sys.argv[4] == "f")
 
     languages = {
         "c":        LangParams(".\\c-logistic-benchmark\\x64\\Debug\\c-logistic-benchmark.exe s {} {} {} s"),
@@ -71,10 +89,17 @@ def main():
         results.update({language: run_command(
             language, lang_params, x0, r, it)})
 
-    output = create_output(results, it)
+    lines = create_output(results, it)
 
     print()
-    print(output)
+    if(output_to_file):
+        lines_to_file(x0, r, it, lines)
+    else:
+        lines_to_console(lines)
+
+    delta_t = int((time.time() - t0) * 1000)
+    print("=" * 60)
+    print(f"TOTAL TIME: {delta_t} ms")
 
 
 if __name__ == '__main__':
