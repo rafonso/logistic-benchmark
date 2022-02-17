@@ -4,24 +4,15 @@ import subprocess
 import sys
 import time
 
-
-class LangParams:
-    def __init__(self, cmd, skip: list = []) -> None:
-        self.command = cmd
-        self.interations_to_skip = skip
-
+from commons import LangParams, get_now, languages
 
 col_size = 24
-
-
-def get_now():
-    return datetime.datetime.now().time()
 
 
 def run_command(language: str, lang_params: LangParams, x0: float, r: float, interations: int):
     print("[{0}] {1}".format(
         get_now(), language.rjust(col_size)), flush=True, end="")
-    final_command = lang_params.command.format(x0, r, interations)
+    final_command = (lang_params.command + " s {} {} {} s").format(x0, r, interations)
     result = subprocess.run(final_command, shell=True, capture_output=True)
 
     lines = result.stdout.splitlines()
@@ -74,15 +65,6 @@ def main():
     r = float(sys.argv[2])
     it = int(sys.argv[3])
     output_to_file = (len(sys.argv) > 4) and (sys.argv[4] == "f")
-
-    languages = {
-        "c":        LangParams(".\\c-logistic-benchmark\\x64\\Debug\\c-logistic-benchmark.exe s {} {} {} s"),
-        "c#":       LangParams(".\\cs-logistic-beanchmark\\bin\\Debug\\net6.0\\cs-logistic-beanchmark.exe s {} {} {} s"),
-        "go":       LangParams(".\\go-logistic-benchmark\\go-logistic-benchmark.exe s {} {} {} s"),
-        "java":     LangParams("java -jar .\\java-logistic-benchmark\\logistic-benchmark\\target\\java-logistic-benchmark-jar-with-dependencies.jar s {} {} {} s"),
-        "node":     LangParams("npm start --prefix typescript-logistic-benchmark -- s {} {} {} s"),
-        "python":   LangParams("python .\\python-logistic-benchmark\\main.py s {} {} {} s"),
-    }
 
     results = {}
     for language, lang_params in languages.items():

@@ -1,22 +1,12 @@
-import datetime
 import re
 import subprocess
 import sys
 from typing import Any
 
-
-class LangParams:
-    def __init__(self, cmd, skip: list = []) -> None:
-        self.command = cmd
-        self.interations_to_skip = skip
-
+from commons import LangParams, get_now, languages
 
 col_size = 10
 time_re = 'TOTAL_TIME (\d+)'
-
-
-def get_now():
-    return datetime.datetime.now().time()
 
 
 def run_for_interations(languages: dict[str, LangParams],  x0: float, r: float, num_interations: int, repetitions: int) -> dict[int, dict]:
@@ -27,7 +17,7 @@ def run_for_interations(languages: dict[str, LangParams],  x0: float, r: float, 
     for language in languages.keys():
         time_interations.update(run_command(
             language, languages.get(language), x0, r, num_interations, repetitions))
-    
+
     return {num_interations: time_interations}
 
 
@@ -40,7 +30,7 @@ def run_command(language: str, lang_params: LangParams, x0: float, r: float, num
         deltaT = ""
         print()
     else:
-        final_command = lang_params.command.format(
+        final_command = (lang_params.command + " r {} {} {} {}").format(
             x0, r, num_interations, repetitions)
         # print(final_command)
         result = subprocess.run(final_command, shell=True, capture_output=True)
@@ -69,15 +59,6 @@ def main():
     x0 = float(sys.argv[1])
     r = float(sys.argv[2])
     repetitions = int(sys.argv[3])
-
-    languages = {
-        "c":        LangParams(".\\c-logistic-benchmark\\x64\\Debug\\c-logistic-benchmark.exe r {} {} {} {}",  [10_000_000]),
-        "c#":       LangParams(".\\cs-logistic-beanchmark\\bin\\Debug\\net6.0\\cs-logistic-beanchmark.exe r {} {} {} {}"),
-        "go":       LangParams(".\\go-logistic-benchmark\\go-logistic-benchmark.exe r {} {} {} {}"),
-        "java":     LangParams("java -jar .\\java-logistic-benchmark\\logistic-benchmark\\target\\java-logistic-benchmark-jar-with-dependencies.jar r {} {} {} {}"),
-        "node":     LangParams("npm start --prefix typescript-logistic-benchmark -- r {} {} {} {}"),
-        "python":   LangParams("python .\\python-logistic-benchmark\\main.py r {} {} {} {}"),
-    }
 
     interations = [100, 1_000, 10_000, 100_000,
                    1_000_000, 5_000_000, 10_000_000]
