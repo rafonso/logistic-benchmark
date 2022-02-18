@@ -1,5 +1,6 @@
 import csv
 import datetime
+import statistics
 import subprocess
 import sys
 import time
@@ -12,7 +13,8 @@ col_size = 24
 def run_command(language: str, lang_params: LangParams, x0: float, r: float, interations: int):
     print("[{0}] {1}".format(
         get_now(), language.rjust(col_size)), flush=True, end="")
-    final_command = (lang_params.command + " s {} {} {} s").format(x0, r, interations)
+    final_command = (lang_params.command +
+                     " s {} {} {} s").format(x0, r, interations)
     result = subprocess.run(final_command, shell=True, capture_output=True)
 
     lines = result.stdout.splitlines()
@@ -32,12 +34,16 @@ def create_output(results: dict, it: int) -> list[list[str]]:
     lines = []
     languages = results.keys()
     lines.append(list(languages))
+    lines[0].append("AVERAGE")
+    lines[0].append("DEVIATION")
 
-    for i in range(0, it):
-        line = []
+    for iteration in range(0, it):
+        iteration_values = []
         for language in languages:
-            line.append(results.get(language)[i])
-        lines.append(line)
+            iteration_values.append(float(results.get(language)[iteration]))
+        iteration_values.append(statistics.mean(iteration_values))
+        iteration_values.append(statistics.stdev(iteration_values))
+        lines.append(iteration_values)
 
     return lines
 
@@ -45,7 +51,7 @@ def create_output(results: dict, it: int) -> list[list[str]]:
 def lines_to_console(lines: list[list[str]]):
     for line in lines:
         for item in line:
-            print(item.ljust(col_size), flush=True, end="")
+            print(str(item).ljust(col_size), flush=True, end="")
         print()
 
 
@@ -53,7 +59,7 @@ def lines_to_file(x0: float, r: float, interations: int, lines: list[list[str]])
     str_now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     file_name = f"x0={x0}_r={r}_it={interations}_{str_now}.csv"
     with open(file_name, 'w', newline="",  encoding='UTF8') as f:
-        writer = csv.writer(f, delimiter=';')
+        writer = csv.writer(f)
         writer.writerows(lines)
     print(f"Exporting to {file_name}")
 
