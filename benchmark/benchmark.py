@@ -3,7 +3,8 @@ import subprocess
 import sys
 from typing import Any
 
-from commons import LangParams, get_now, languages, interations
+from commons import (LangParams, change_work_dir, get_now, interations,
+                     languages)
 
 col_size = 10
 time_re = 'TOTAL_TIME (\d+)'
@@ -60,7 +61,7 @@ def main():
     r = float(sys.argv[2])
     repetitions = int(sys.argv[3])
 
-    
+    change_work_dir()
 
     results = {}
 

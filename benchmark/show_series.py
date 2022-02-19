@@ -5,7 +5,7 @@ import subprocess
 import sys
 import time
 
-from commons import LangParams, get_now, languages
+from commons import LangParams, change_work_dir, get_now, languages
 
 col_size = 24
 
@@ -71,6 +71,8 @@ def main():
     r = float(sys.argv[2])
     it = int(sys.argv[3])
     output_to_file = (len(sys.argv) > 4) and (sys.argv[4] == "f")
+
+    change_work_dir()
 
     results = {}
     for language, lang_params in languages.items():
