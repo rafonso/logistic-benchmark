@@ -2,7 +2,6 @@ import re
 import subprocess
 import sys
 import time
-from typing import Any
 
 from commons import (LangParams, change_work_dir, get_now, interations,
                      languages, print_total_time)
@@ -11,7 +10,7 @@ col_size = 10
 time_re = 'TOTAL_TIME (\d+)'
 
 
-def run_for_interations(languages: dict[str, LangParams],  x0: float, r: float, num_interations: int, repetitions: int) -> dict[int, dict]:
+def run_for_interations(languages: dict[str, LangParams],  x0: float, r: float, num_interations: int, repetitions: int) -> dict[int, dict[str, str]]:
     time_interations = {}
     print(60 * "=")
     print("[{0}] {1} {2}".format(
@@ -23,7 +22,7 @@ def run_for_interations(languages: dict[str, LangParams],  x0: float, r: float, 
     return {num_interations: time_interations}
 
 
-def run_command(language: str, lang_params: LangParams, x0: float, r: float, num_interations: int, repetitions: int) -> dict[str, Any]:
+def run_command(language: str, lang_params: LangParams, x0: float, r: float, num_interations: int, repetitions: int) -> dict[str, str]:
     # print(60 * "-")
     print("[{0}] {1}".format(
         get_now(), language.rjust(col_size)), end="", flush=True)
@@ -42,7 +41,7 @@ def run_command(language: str, lang_params: LangParams, x0: float, r: float, num
     return {language: deltaT}
 
 
-def print_results(results: dict, lang_names: list):
+def print_results(results: dict[int, dict], lang_names: list):
     print(60 * "=")
     print("[{0}] RESULTS".format(get_now()))
     header = "inter".rjust(col_size)
@@ -66,7 +65,7 @@ def main():
 
     change_work_dir()
 
-    results = {}
+    results: dict[int, dict[str, str]] = {}
 
     for num_interations in interations:
         results.update(run_for_interations(
