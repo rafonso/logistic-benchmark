@@ -39,7 +39,7 @@ languages = {
     "kotlin":   LangParams("java -jar kotlin-logistic-benchmark/target/kotlin-logistic-benchmark-jar-with-dependencies.jar"),
     "lua":      LangParams("lua lua-logistic-benchmark/main.lua", [10_000_000]),
     "node":     LangParams("npm start --prefix typescript-logistic-benchmark --"),
-    "python":   LangParams("python python-logistic-benchmark/main.py"),
+    "python":   LangParams("python python-logistic-benchmark/main.py", [10_000_000]),
 }
 
 

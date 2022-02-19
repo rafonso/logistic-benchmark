@@ -1,7 +1,10 @@
+import datetime
 import re
 import subprocess
 import sys
 import time
+
+import matplotlib.pyplot as plt
 
 from commons import (LangParams, change_work_dir, get_now, interations,
                      languages, print_total_time)
@@ -56,6 +59,31 @@ def print_results(results: dict[int, dict], lang_names: list):
         print(line)
 
 
+def plot_results(results: dict[int, dict], languages: dict[str, LangParams], x0: float, r: float, repetitions: int):
+    for lang_name in languages.keys():
+        times = []
+        for iter in interations:
+            str_time = results.get(iter).get(lang_name)
+            if str_time:
+                times.append(int(str_time))
+            else:
+                times.append(None)
+        plt.plot(interations, times, label=lang_name)
+    plt.legend()
+
+    plt.title(f"x0 = {x0}, r = {r}, Repetitions = {repetitions}")
+    plt.grid(visible = True)
+    plt.xscale("log")
+    plt.xlabel("Interations")
+    plt.yscale("log")
+    plt.ylabel("Time (ms)")
+
+    str_now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    file_name = f"../x0={x0}_r={r}_rep={repetitions}_{str_now}.png"
+    plt.savefig(file_name)
+    print(f"Plot saved at {file_name}")
+
+
 def main():
     t0 = time.time()
 
@@ -72,6 +100,8 @@ def main():
             languages, x0, r, num_interations, repetitions))
 
     print_results(results, languages.keys())
+
+    plot_results(results, languages, x0, r, repetitions)
 
     print_total_time(t0)
 
