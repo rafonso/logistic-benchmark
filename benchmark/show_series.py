@@ -5,7 +5,8 @@ import subprocess
 import sys
 import time
 
-from commons import LangParams, change_work_dir, get_now, languages
+from commons import (LangParams, change_work_dir, get_now, languages,
+                     print_total_time)
 
 col_size = 24
 
@@ -87,9 +88,7 @@ def main():
     else:
         lines_to_console(lines)
 
-    delta_t = int((time.time() - t0) * 1000)
-    print("=" * 60)
-    print(f"TOTAL TIME: {delta_t} ms")
+    print_total_time(t0)
 
 
 if __name__ == '__main__':

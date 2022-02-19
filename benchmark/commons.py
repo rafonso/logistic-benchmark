@@ -1,4 +1,5 @@
 import datetime
+import time
 from os import chdir
 from os.path import dirname, normpath
 
@@ -8,8 +9,20 @@ def get_now():
 
 
 def change_work_dir():
+    ''' Change the working dir to the languages one '''
     script_dir = dirname(__file__)
     chdir(normpath(script_dir + "/../languages"))
+
+
+def print_total_time(t0: float):
+    """Print the total time of execution of program.
+    
+    Parameters:
+    t0: the initial time (in milliseconds) when started the execution
+    """
+    delta_t = int((time.time() - t0) * 1000)
+    print("=" * 60)
+    print(f"[{get_now()}] TOTAL TIME: {delta_t} ms")
 
 
 class LangParams:

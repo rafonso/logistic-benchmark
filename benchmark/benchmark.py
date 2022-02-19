@@ -1,10 +1,11 @@
 import re
 import subprocess
 import sys
+import time
 from typing import Any
 
 from commons import (LangParams, change_work_dir, get_now, interations,
-                     languages)
+                     languages, print_total_time)
 
 col_size = 10
 time_re = 'TOTAL_TIME (\d+)'
@@ -57,6 +58,8 @@ def print_results(results: dict, lang_names: list):
 
 
 def main():
+    t0 = time.time()
+
     x0 = float(sys.argv[1])
     r = float(sys.argv[2])
     repetitions = int(sys.argv[3])
@@ -70,6 +73,8 @@ def main():
             languages, x0, r, num_interations, repetitions))
 
     print_results(results, languages.keys())
+
+    print_total_time(t0)
 
 
 if __name__ == '__main__':
