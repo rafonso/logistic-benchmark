@@ -17,10 +17,10 @@ languages = {
     "go":       LangParams(".\\go-logistic-benchmark\\go-logistic-benchmark.exe"),
     "java":     LangParams("java -jar .\\java-logistic-benchmark\\target\\java-logistic-benchmark-jar-with-dependencies.jar"),
     "kotlin":   LangParams("java -jar .\\kotlin-logistic-benchmark\\target\\kotlin-logistic-benchmark-jar-with-dependencies.jar"),
-    "lua":      LangParams("lua .\\lua-logistic-benchmark\\main.lua", [5000000, 10000000]),
+    "lua":      LangParams("lua .\\lua-logistic-benchmark\\main.lua", [5_000_000, 10_000_000]),
     "node":     LangParams("npm start --prefix typescript-logistic-benchmark --"),
     "python":   LangParams("python .\\python-logistic-benchmark\\main.py"),
 }
 
 
-interations = [100, 1_000, 10_000, 100_000, 1_000_000, 5_000_000, 10_000_000]
+interations = [100, 300, 1_000, 3_000, 10_000, 30_000, 100_000, 300_000, 1_000_000, 3_000_000, 10_000_000]
