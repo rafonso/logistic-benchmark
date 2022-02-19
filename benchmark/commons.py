@@ -19,7 +19,7 @@ class LangParams:
 
 
 languages = {
-    "c":        LangParams("c-logistic-benchmark/x64/Debug/c-logistic-benchmark.exe"),
+    "c":        LangParams("c-logistic-benchmark/c-logistic-benchmark.exe"),
     "c#":       LangParams("cs-logistic-beanchmark/bin/Debug/net6.0/cs-logistic-beanchmark.exe"),
     "go":       LangParams("go-logistic-benchmark/go-logistic-benchmark.exe"),
     "java":     LangParams("java -jar java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar"),
