@@ -1,13 +1,15 @@
 import argparse
 import datetime
+import math
 import re
 import subprocess
+import sys
 import time
 
 import matplotlib.pyplot as plt
 
-from commons import (LangParams, change_work_dir, get_now, interations,
-                     languages, print_total_time)
+from commons import (LangParams, change_work_dir, get_now, languages,
+                     print_total_time)
 
 col_size = 10
 time_re = 'TOTAL_TIME (\d+)'
@@ -23,6 +25,8 @@ def parse_args() -> argparse.Namespace:
         "repetitions", help="Number of repetitions to each series", type=int)
     parser.add_argument("-g", help="Results will be exported to a graphic",
                         action=argparse.BooleanOptionalAction)
+    parser.add_argument("-mr", help="Max repetitions",
+                        type=int, default=sys.maxsize)
 
     args = parser.parse_args()
 
@@ -32,8 +36,27 @@ def parse_args() -> argparse.Namespace:
         parser.error("r must be between 0.0 and 4.0")
     if args.repetitions <= 0:
         parser.error("repetitions must be a positive number")
+    if args.mr <= 0:
+        parser.error("Max repetitions must be a positive number")
 
     return args
+
+
+def get_interactions(max_interactions: int) -> list[int]:
+    qdrt_10 = math.sqrt(math.sqrt(10))
+    roots_10 = [1 / (qdrt_10*qdrt_10*qdrt_10), 1 /
+                (qdrt_10*qdrt_10), 1 / (qdrt_10), 1.0]
+    powers_10 = [100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000]
+
+    interations = [10]
+    for pow_10 in powers_10:
+        for root_10 in roots_10:
+            interation = int(root_10 * pow_10)
+            if interation > max_interactions:
+                return interations
+            interations.append(interation)
+
+    return interations
 
 
 def run_for_interations(languages: dict[str, LangParams], args: argparse.Namespace, num_interations: int) -> dict[int, dict[str, str]]:
@@ -82,16 +105,16 @@ def print_results(results: dict[int, dict], lang_names: list):
         print(line)
 
 
-def plot_results(results: dict[int, dict], languages: dict[str, LangParams],  args: argparse.Namespace):
+def plot_results(results: dict[int, dict], languages: dict[str, LangParams],  args: argparse.Namespace, interactions: list[int]):
     for lang_name in languages.keys():
         times = []
-        for iter in interations:
+        for iter in interactions:
             str_time = results.get(iter).get(lang_name)
             if str_time:
                 times.append(int(str_time))
             else:
                 times.append(None)
-        plt.plot(interations, times, label=lang_name)
+        plt.plot(interactions, times, label=lang_name)
     plt.legend()
 
     plt.title(
@@ -112,18 +135,19 @@ def main():
     t0 = time.time()
 
     args = parse_args()
+    interactions = get_interactions(args.mr)
 
     change_work_dir()
 
     results: dict[int, dict[str, str]] = {}
 
-    for num_interations in interations:
+    for num_interations in interactions:
         results.update(run_for_interations(languages, args, num_interations))
 
     print_results(results, languages.keys())
 
     if args.g:
-        plot_results(results, languages, args)
+        plot_results(results, languages, args, interactions)
 
     print_total_time(t0)
 

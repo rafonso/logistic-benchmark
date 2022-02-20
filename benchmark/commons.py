@@ -16,7 +16,7 @@ def change_work_dir():
 
 def print_total_time(t0: float):
     """Print the total time of execution of program.
-    
+
     Parameters:
     t0: the initial time (in milliseconds) when started the execution
     """
@@ -37,10 +37,7 @@ languages = {
     "go":       LangParams("go-logistic-benchmark/go-logistic-benchmark.exe"),
     "java":     LangParams("java -jar java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar"),
     "kotlin":   LangParams("java -jar kotlin-logistic-benchmark/target/kotlin-logistic-benchmark-jar-with-dependencies.jar"),
-    "lua":      LangParams("lua lua-logistic-benchmark/main.lua", [10_000_000]),
+    "lua":      LangParams("lua lua-logistic-benchmark/main.lua", [5_620_000, 10_000_000]),
     "node":     LangParams("npm start --prefix typescript-logistic-benchmark --"),
     "python":   LangParams("python python-logistic-benchmark/main.py", [10_000_000]),
 }
-
-
-interations = [100, 300, 1_000, 3_000, 10_000, 30_000, 100_000, 300_000, 1_000_000, 3_000_000, 10_000_000]
