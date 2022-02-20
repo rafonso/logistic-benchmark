@@ -1,0 +1,4 @@
+{
+  "name": "Go",
+  "command": "languages/go-logistic-benchmark/go-logistic-benchmark.exe"
+}

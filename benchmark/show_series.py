@@ -5,18 +5,17 @@ import subprocess
 import sys
 import time
 
-from commons import (LangParams, change_work_dir, get_now, languages,
-                     print_total_time)
+from commons import (LangParams, change_work_dir, get_now, print_total_time,
+                     read_config)
 
 COL_SIZE = 24
-
 OUTPUT_DIR = "output/series"
 
 
-def run_command(language: str, lang_params: LangParams, x0: float, r: float, interations: int):
+def run_command(param: LangParams, x0: float, r: float, interations: int):
     print("[{0}] {1}".format(
-        get_now(), language.rjust(COL_SIZE)), flush=True, end="")
-    final_command = (lang_params.command +
+        get_now(), param.name.rjust(COL_SIZE)), flush=True, end="")
+    final_command = (param.command +
                      " s {} {} {} s").format(x0, r, interations)
     result = subprocess.run(final_command, shell=True, capture_output=True)
 
@@ -76,11 +75,11 @@ def main():
     output_to_file = (len(sys.argv) > 4) and (sys.argv[4] == "f")
 
     change_work_dir()
+    params = read_config()
 
     results = {}
-    for language, lang_params in languages.items():
-        results.update({language: run_command(
-            language, lang_params, x0, r, it)})
+    for param in params:
+        results.update({param.name: run_command(param, x0, r, it)})
 
     lines = create_output(results, it)
 

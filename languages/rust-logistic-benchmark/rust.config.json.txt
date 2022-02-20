@@ -1,0 +1,4 @@
+{
+  "name": "Rust",
+  "command": "languages/rust-logistic-benchmark/target/debug/rust-logistic-benchmark.exe"
+}

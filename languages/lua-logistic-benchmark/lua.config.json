@@ -1,0 +1,5 @@
+{
+  "name": "Lua",
+  "command": "lua languages/lua-logistic-benchmark/main.lua",
+  "maxIter": 5000000
+}

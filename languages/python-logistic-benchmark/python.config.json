@@ -1,0 +1,4 @@
+{
+  "name": "Python",
+  "command": "python languages/python-logistic-benchmark/main.py"
+}
