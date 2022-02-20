@@ -11,8 +11,9 @@ import matplotlib.pyplot as plt
 from commons import (LangParams, change_work_dir, get_now, languages,
                      print_total_time)
 
-col_size = 10
-time_re = 'TOTAL_TIME (\d+)'
+COL_SIZE = 10
+TIME_RE = 'TOTAL_TIME (\d+)'
+OUTPUT_DIR = "output/benchmark"
 
 
 def parse_args() -> argparse.Namespace:
@@ -63,7 +64,7 @@ def run_for_interations(languages: dict[str, LangParams], args: argparse.Namespa
     time_interations = {}
     print(60 * "=")
     print("[{0}] {1} {2}".format(
-        get_now(), "inter".rjust(col_size), "{:,}".format(num_interations).rjust(col_size)))
+        get_now(), "inter".rjust(COL_SIZE), "{:,}".format(num_interations).rjust(COL_SIZE)))
     for language in languages.keys():
         time_interations.update(run_command(
             language, languages.get(language), args, num_interations))
@@ -74,7 +75,7 @@ def run_for_interations(languages: dict[str, LangParams], args: argparse.Namespa
 def run_command(language: str, lang_params: LangParams, args: argparse.Namespace, num_interations: int) -> dict[str, str]:
     # print(60 * "-")
     print("[{0}] {1}".format(
-        get_now(), language.rjust(col_size)), end="", flush=True)
+        get_now(), language.rjust(COL_SIZE)), end="", flush=True)
 
     if (num_interations in lang_params.interations_to_skip):
         deltaT = ""
@@ -84,8 +85,8 @@ def run_command(language: str, lang_params: LangParams, args: argparse.Namespace
             args.x0, args.r, num_interations, args.repetitions)
         # print(final_command)
         result = subprocess.run(final_command, shell=True, capture_output=True)
-        deltaT = re.findall(time_re, str(result.stdout))[0]
-        print(deltaT.rjust(col_size))
+        deltaT = re.findall(TIME_RE, str(result.stdout))[0]
+        print(deltaT.rjust(COL_SIZE))
 
     return {language: deltaT}
 
@@ -93,15 +94,15 @@ def run_command(language: str, lang_params: LangParams, args: argparse.Namespace
 def print_results(results: dict[int, dict], lang_names: list):
     print(60 * "=")
     print("[{0}] RESULTS".format(get_now()))
-    header = "inter".rjust(col_size)
+    header = "inter".rjust(COL_SIZE)
     for lang_name in lang_names:
-        header = header + lang_name.rjust(col_size)
+        header = header + lang_name.rjust(COL_SIZE)
     print(header)
     for interation in results.keys():
-        line = str(interation).rjust(col_size)
+        line = str(interation).rjust(COL_SIZE)
         times = results.get(interation)
         for lang_name in lang_names:
-            line = line + str(times.get(lang_name)).rjust(col_size)
+            line = line + str(times.get(lang_name)).rjust(COL_SIZE)
         print(line)
 
 
@@ -126,7 +127,7 @@ def plot_results(results: dict[int, dict], languages: dict[str, LangParams],  ar
     plt.ylabel("Time (ms)")
 
     str_now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    file_name = f"../x0={args.x0}_r={args.r}_rep={args.repetitions}_{str_now}.png"
+    file_name = f"{OUTPUT_DIR}/plots/x0={args.x0}_r={args.r}_rep={args.repetitions}_{str_now}.png"
     plt.savefig(file_name)
     print(f"Plot saved at {file_name}")
 

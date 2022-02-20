@@ -8,12 +8,14 @@ import time
 from commons import (LangParams, change_work_dir, get_now, languages,
                      print_total_time)
 
-col_size = 24
+COL_SIZE = 24
+
+OUTPUT_DIR = "output/series"
 
 
 def run_command(language: str, lang_params: LangParams, x0: float, r: float, interations: int):
     print("[{0}] {1}".format(
-        get_now(), language.rjust(col_size)), flush=True, end="")
+        get_now(), language.rjust(COL_SIZE)), flush=True, end="")
     final_command = (lang_params.command +
                      " s {} {} {} s").format(x0, r, interations)
     result = subprocess.run(final_command, shell=True, capture_output=True)
@@ -26,7 +28,7 @@ def run_command(language: str, lang_params: LangParams, x0: float, r: float, int
     series = lines[limits[0]+1:limits[1]]
 
     str_time = lines[limits[1] + 1]
-    print(str_time.rjust(col_size))
+    print(str_time.rjust(COL_SIZE))
 
     return series
 
@@ -52,13 +54,13 @@ def create_output(results: dict, it: int) -> list[list[str]]:
 def lines_to_console(lines: list[list[str]]):
     for line in lines:
         for item in line:
-            print(str(item).ljust(col_size), flush=True, end="")
+            print(str(item).ljust(COL_SIZE), flush=True, end="")
         print()
 
 
 def lines_to_file(x0: float, r: float, interations: int, lines: list[list[str]]):
     str_now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    file_name = f"x0={x0}_r={r}_it={interations}_{str_now}.csv"
+    file_name = f"{OUTPUT_DIR}/x0={x0}_r={r}_it={interations}_{str_now}.csv"
     with open(file_name, 'w', newline="",  encoding='UTF8') as f:
         writer = csv.writer(f)
         writer.writerows(lines)

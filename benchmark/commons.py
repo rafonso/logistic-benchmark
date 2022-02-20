@@ -11,7 +11,7 @@ def get_now():
 def change_work_dir():
     ''' Change the working dir to the languages one '''
     script_dir = dirname(__file__)
-    chdir(normpath(script_dir + "/../languages"))
+    chdir(normpath(script_dir + "/.."))
 
 
 def print_total_time(t0: float):
@@ -32,12 +32,12 @@ class LangParams:
 
 
 languages = {
-    "c":        LangParams("c-logistic-benchmark/c-logistic-benchmark.exe"),
-    "c#":       LangParams("cs-logistic-beanchmark/bin/Debug/net6.0/cs-logistic-beanchmark.exe"),
-    "go":       LangParams("go-logistic-benchmark/go-logistic-benchmark.exe"),
-    "java":     LangParams("java -jar java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar"),
-    "kotlin":   LangParams("java -jar kotlin-logistic-benchmark/target/kotlin-logistic-benchmark-jar-with-dependencies.jar"),
-    "lua":      LangParams("lua lua-logistic-benchmark/main.lua", [5_620_000, 10_000_000]),
-    "node":     LangParams("npm start --prefix typescript-logistic-benchmark --"),
-    "python":   LangParams("python python-logistic-benchmark/main.py", [10_000_000]),
+    "c":        LangParams("languages/c-logistic-benchmark/c-logistic-benchmark.exe"),
+    "c#":       LangParams("languages/cs-logistic-beanchmark/bin/Debug/net6.0/cs-logistic-beanchmark.exe"),
+    "go":       LangParams("languages/go-logistic-benchmark/go-logistic-benchmark.exe"),
+    "java":     LangParams("java -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar"),
+    "kotlin":   LangParams("java -jar languages/kotlin-logistic-benchmark/target/kotlin-logistic-benchmark-jar-with-dependencies.jar"),
+    "lua":      LangParams("lua languages/lua-logistic-benchmark/main.lua", [5_620_000, 10_000_000]),
+    "node":     LangParams("npm start --prefix languages/typescript-logistic-benchmark --"),
+    "python":   LangParams("python languages/python-logistic-benchmark/main.py", [10_000_000]),
 }
