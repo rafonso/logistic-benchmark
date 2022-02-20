@@ -1,7 +1,7 @@
+import argparse
 import datetime
 import re
 import subprocess
-import sys
 import time
 
 import matplotlib.pyplot as plt
@@ -13,19 +13,42 @@ col_size = 10
 time_re = 'TOTAL_TIME (\d+)'
 
 
-def run_for_interations(languages: dict[str, LangParams],  x0: float, r: float, num_interations: int, repetitions: int) -> dict[int, dict[str, str]]:
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Creates a benchmark"
+    )
+    parser.add_argument("x0", help="first value of series", type=float)
+    parser.add_argument("r", help="R value", type=float)
+    parser.add_argument(
+        "repetitions", help="Number of repetitions to each series", type=int)
+    parser.add_argument("-g", help="Results will be exported to a graphic",
+                        action=argparse.BooleanOptionalAction)
+
+    args = parser.parse_args()
+
+    if not 0.0 <= args.x0 <= 1.0:
+        parser.error("x0 must be between 0.0 and 1.0")
+    if not 0.0 <= args.r <= 4.0:
+        parser.error("r must be between 0.0 and 4.0")
+    if args.repetitions <= 0:
+        parser.error("repetitions must be a positive number")
+
+    return args
+
+
+def run_for_interations(languages: dict[str, LangParams], args: argparse.Namespace, num_interations: int) -> dict[int, dict[str, str]]:
     time_interations = {}
     print(60 * "=")
     print("[{0}] {1} {2}".format(
         get_now(), "inter".rjust(col_size), "{:,}".format(num_interations).rjust(col_size)))
     for language in languages.keys():
         time_interations.update(run_command(
-            language, languages.get(language), x0, r, num_interations, repetitions))
+            language, languages.get(language), args, num_interations))
 
     return {num_interations: time_interations}
 
 
-def run_command(language: str, lang_params: LangParams, x0: float, r: float, num_interations: int, repetitions: int) -> dict[str, str]:
+def run_command(language: str, lang_params: LangParams, args: argparse.Namespace, num_interations: int) -> dict[str, str]:
     # print(60 * "-")
     print("[{0}] {1}".format(
         get_now(), language.rjust(col_size)), end="", flush=True)
@@ -35,7 +58,7 @@ def run_command(language: str, lang_params: LangParams, x0: float, r: float, num
         print()
     else:
         final_command = (lang_params.command + " r {} {} {} {}").format(
-            x0, r, num_interations, repetitions)
+            args.x0, args.r, num_interations, args.repetitions)
         # print(final_command)
         result = subprocess.run(final_command, shell=True, capture_output=True)
         deltaT = re.findall(time_re, str(result.stdout))[0]
@@ -59,7 +82,7 @@ def print_results(results: dict[int, dict], lang_names: list):
         print(line)
 
 
-def plot_results(results: dict[int, dict], languages: dict[str, LangParams], x0: float, r: float, repetitions: int):
+def plot_results(results: dict[int, dict], languages: dict[str, LangParams],  args: argparse.Namespace):
     for lang_name in languages.keys():
         times = []
         for iter in interations:
@@ -71,15 +94,16 @@ def plot_results(results: dict[int, dict], languages: dict[str, LangParams], x0:
         plt.plot(interations, times, label=lang_name)
     plt.legend()
 
-    plt.title(f"x0 = {x0}, r = {r}, Repetitions = {repetitions}")
-    plt.grid(visible = True)
+    plt.title(
+        f"x0 = {args.x0}, r = {args.r}, Repetitions = {args.repetitions}")
+    plt.grid(visible=True)
     plt.xscale("log")
     plt.xlabel("Interations")
     plt.yscale("log")
     plt.ylabel("Time (ms)")
 
     str_now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    file_name = f"../x0={x0}_r={r}_rep={repetitions}_{str_now}.png"
+    file_name = f"../x0={args.x0}_r={args.r}_rep={args.repetitions}_{str_now}.png"
     plt.savefig(file_name)
     print(f"Plot saved at {file_name}")
 
@@ -87,21 +111,19 @@ def plot_results(results: dict[int, dict], languages: dict[str, LangParams], x0:
 def main():
     t0 = time.time()
 
-    x0 = float(sys.argv[1])
-    r = float(sys.argv[2])
-    repetitions = int(sys.argv[3])
+    args = parse_args()
 
     change_work_dir()
 
     results: dict[int, dict[str, str]] = {}
 
     for num_interations in interations:
-        results.update(run_for_interations(
-            languages, x0, r, num_interations, repetitions))
+        results.update(run_for_interations(languages, args, num_interations))
 
     print_results(results, languages.keys())
 
-    plot_results(results, languages, x0, r, repetitions)
+    if args.g:
+        plot_results(results, languages, args)
 
     print_total_time(t0)
 
