@@ -8,26 +8,28 @@ import time
 
 import matplotlib.pyplot as plt
 
-from commons import (LangParams, change_work_dir, get_now, print_total_time,
-                     read_config)
+from commons import (LangParams, UserParams, change_work_dir, get_now,
+                     print_total_time, read_config)
 
 COL_SIZE = 10
 TIME_RE = 'TOTAL_TIME (\d+)'
 OUTPUT_DIR = "output/benchmark"
 
 
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Creates a benchmark"
-    )
+def parse_args() -> UserParams:
+    parser = argparse.ArgumentParser(description="Creates a benchmark")
     parser.add_argument("x0", help="first value of series", type=float)
     parser.add_argument("r", help="R value", type=float)
     parser.add_argument(
         "repetitions", help="Number of repetitions to each series", type=int)
     parser.add_argument("-g", help="Results will be exported to a graphic",
                         action=argparse.BooleanOptionalAction)
-    parser.add_argument("-mr", help="Max repetitions",
+    parser.add_argument("-mi", help="Max Iteractions",
                         type=int, default=sys.maxsize)
+    parser.add_argument("-l", "--languages", nargs="*",
+                        help="Languages to be executed")
+    parser.add_argument("-s", "--languages-to-skip", nargs="*",
+                        help="Languages to be skipped")
 
     args = parser.parse_args()
 
@@ -37,10 +39,11 @@ def parse_args() -> argparse.Namespace:
         parser.error("r must be between 0.0 and 4.0")
     if args.repetitions <= 0:
         parser.error("repetitions must be a positive number")
-    if args.mr <= 0:
+    if args.mi <= 0:
         parser.error("Max repetitions must be a positive number")
 
-    return args
+    return UserParams(x0=args.x0, r=args.r, repetitions=args.repetitions, max_iterations=args.mi,
+                      languages=args.languages, languages_to_skip=args.languages_to_skip, export_to_plot=args.g)
 
 
 def get_interactions(max_interactions: int) -> list[int]:
@@ -60,19 +63,19 @@ def get_interactions(max_interactions: int) -> list[int]:
     return interations
 
 
-def run_for_interations(params: list[LangParams], args: argparse.Namespace, num_interations: int) -> dict[int, dict[str, str]]:
+def run_for_interations(params: list[LangParams], user_params: UserParams, num_interations: int) -> dict[int, dict[str, str]]:
     time_interations = {}
     print(60 * "=")
     print("[{0}] {1} {2}".format(
         get_now(), "inter".rjust(COL_SIZE), "{:,}".format(num_interations).rjust(COL_SIZE)))
     for param in params:
-        time_interations.update(run_command(param, args, num_interations))
+        time_interations.update(run_command(
+            param, user_params, num_interations))
 
     return {num_interations: time_interations}
 
 
-def run_command(param: LangParams, args: argparse.Namespace, num_interations: int) -> dict[str, str]:
-    # print(60 * "-")
+def run_command(param: LangParams, user_params: UserParams, num_interations: int) -> dict[str, str]:
     print("[{0}] {1}".format(
         get_now(), param.name.rjust(COL_SIZE)), end="", flush=True)
 
@@ -81,7 +84,7 @@ def run_command(param: LangParams, args: argparse.Namespace, num_interations: in
         print()
     else:
         final_command = (param.command + " r {} {} {} {}").format(
-            args.x0, args.r, num_interations, args.repetitions)
+            user_params.x0, user_params.r, num_interations, user_params.repetitions)
         result = subprocess.run(final_command, shell=True, capture_output=True)
         deltaT = re.findall(TIME_RE, str(result.stdout))[0]
         print(deltaT.rjust(COL_SIZE))
@@ -104,7 +107,7 @@ def print_results(results: dict[int, dict], params: list[LangParams]):
         print(line)
 
 
-def plot_results(results: dict[int, dict], params: list[LangParams],  args: argparse.Namespace, interactions: list[int]):
+def plot_results(results: dict[int, dict], params: list[LangParams],  user_params: UserParams, interactions: list[int]):
     for param in params:
         times = []
         for iter in interactions:
@@ -117,7 +120,7 @@ def plot_results(results: dict[int, dict], params: list[LangParams],  args: argp
     plt.legend()
 
     plt.title(
-        f"x0 = {args.x0}, r = {args.r}, Repetitions = {args.repetitions}")
+        f"x0 = { user_params.x0}, r = { user_params.r}, Repetitions = { user_params.repetitions}")
     plt.grid(visible=True)
     plt.xscale("log")
     plt.xlabel("Interations")
@@ -125,7 +128,7 @@ def plot_results(results: dict[int, dict], params: list[LangParams],  args: argp
     plt.ylabel("Time (ms)")
 
     str_now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    file_name = f"{OUTPUT_DIR}/plots/x0={args.x0}_r={args.r}_rep={args.repetitions}_{str_now}.png"
+    file_name = f"{OUTPUT_DIR}/plots/x0={user_params.x0}_r={user_params.r}_rep={user_params.repetitions}_{str_now}.png"
     plt.savefig(file_name)
     print(f"Plot saved at {file_name}")
 
@@ -133,21 +136,22 @@ def plot_results(results: dict[int, dict], params: list[LangParams],  args: argp
 def main():
     t0 = time.time()
 
-    args = parse_args()
-    interactions = get_interactions(args.mr)
+    user_params = parse_args()
+    interactions = get_interactions(user_params.max_iterations)
 
     change_work_dir()
-    params = read_config()
+    params = read_config(user_params)
 
     results: dict[int, dict[str, str]] = {}
 
     for num_interations in interactions:
-        results.update(run_for_interations(params, args, num_interations))
+        results.update(run_for_interations(
+            params, user_params, num_interations))
 
     print_results(results, params)
 
-    if args.g:
-        plot_results(results, params, args, interactions)
+    if user_params.export_to_plot:
+        plot_results(results, params, user_params, interactions)
 
     print_total_time(t0)
 
