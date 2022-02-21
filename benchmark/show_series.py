@@ -6,7 +6,7 @@ import subprocess
 import time
 
 from commons import (LangParams, UserParams, change_work_dir, get_now,
-                     print_total_time, read_config)
+                     print_total_time, read_config, now_to_str)
 
 COL_SIZE = 24
 OUTPUT_DIR = "output/series"
@@ -87,8 +87,7 @@ def lines_to_console(lines: list[list[str]]):
 
 
 def lines_to_file(user_params: UserParams, lines: list[list[str]]):
-    str_now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    file_name = f"{OUTPUT_DIR}/x0={user_params.x0}_r={user_params.r}_it={user_params.iter}_{str_now}.csv"
+    file_name = f"{OUTPUT_DIR}/x0={user_params.x0}_r={user_params.r}_it={user_params.iter}_{now_to_str()}.csv"
     with open(file_name, 'w', newline="",  encoding='UTF8') as f:
         writer = csv.writer(f)
         writer.writerows(lines)

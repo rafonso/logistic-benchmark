@@ -10,6 +10,8 @@ from os.path import dirname, normpath
 def get_now():
     return datetime.datetime.now().time()
 
+def now_to_str():
+    return datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 def change_work_dir():
     ''' Change the working dir to the languages one '''
