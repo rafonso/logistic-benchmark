@@ -9,14 +9,33 @@ import time
 import matplotlib.pyplot as plt
 
 from commons import (LangParams, UserParams, change_work_dir, get_now,
-                     print_total_time, read_config, now_to_str)
+                     now_to_str, print_total_time, read_config)
 
-# class BenchmarkResults: 
-#     def __init__(self, interactions: list[int], lang_params: list[LangParams]):
-#         self.interactions = interactions
-#         self.lang_times: dict[str, list[int]] = {}
-#         for lang_param in lang_params:
-#             self.lang_times[lang_param.name] = []
+
+class BenchmarkResults:
+    def __init__(self, lang_params: list[LangParams], interactions: list[int]):
+        self.interactions = interactions
+        self.lang_times: dict[str, list[int]] = {}
+        for lang_param in lang_params:
+            self.lang_times[lang_param.name] = []
+
+    def get_results(self):
+        header = ["Iter"]
+        for name in self.lang_times.keys():
+            header.append(name)
+
+        result = [header]
+        for i, iter in enumerate(self.interactions):
+            line = [str(iter)]
+            for times in self.lang_times.values():
+                line.append(str(times[i]))
+            result.append(line)
+
+        return result
+
+    def __repr__(self):
+        return f"[{self.interactions}, {self.lang_times}]"
+
 
 COL_SIZE = 10
 TIME_RE = 'TOTAL_TIME (\d+)'
@@ -72,81 +91,60 @@ def get_interactions(max_interactions: int) -> list[int]:
     return interations
 
 
-def run_for_interations(params: list[LangParams], user_params: UserParams, num_interations: int) -> dict[int, dict[str, str]]:
-    time_interations = {}
+def run_for_interations(user_params: UserParams, results: BenchmarkResults, lang_params: list[LangParams], num_interations: int):
+
+    def run_command(lang_param: LangParams) -> int:
+        print("[{0}] {1}".format(
+            get_now(), lang_param.name.rjust(COL_SIZE)), end="", flush=True)
+
+        if num_interations > lang_param.max_iter:
+            delta_t = ""
+            print()
+        else:
+            final_command = (lang_param.command + " r {} {} {} {}").format(
+                user_params.x0, user_params.r, num_interations, user_params.repetitions)
+            result = subprocess.run(
+                final_command, shell=True, capture_output=True)
+            delta_t = re.findall(TIME_RE, str(result.stdout))[0]
+            print(delta_t.rjust(COL_SIZE))
+
+        return delta_t
+
     print(60 * "=")
     print("[{0}] {1} {2}".format(
         get_now(), "inter".rjust(COL_SIZE), "{:,}".format(num_interations).rjust(COL_SIZE)))
-    for param in params:
-        time_interations.update(run_command(
-            param, user_params, num_interations))
-
-    return {num_interations: time_interations}
+    for lang_param in lang_params:
+        delta_t = run_command(lang_param)
+        results.lang_times[lang_param.name].append(delta_t)
 
 
-def run_command(param: LangParams, user_params: UserParams, num_interations: int) -> dict[str, str]:
-    print("[{0}] {1}".format(
-        get_now(), param.name.rjust(COL_SIZE)), end="", flush=True)
-
-    if num_interations > param.max_iter:
-        deltaT = ""
-        print()
-    else:
-        final_command = (param.command + " r {} {} {} {}").format(
-            user_params.x0, user_params.r, num_interations, user_params.repetitions)
-        result = subprocess.run(final_command, shell=True, capture_output=True)
-        deltaT = re.findall(TIME_RE, str(result.stdout))[0]
-        print(deltaT.rjust(COL_SIZE))
-
-    return {param.name: deltaT}
-
-
-def print_results(results: dict[int, dict], params: list[LangParams]):
+def print_results(results: BenchmarkResults):
     print(60 * "=")
     print("[{0}] RESULTS".format(get_now()))
-    header = "inter".rjust(COL_SIZE)
-    for param in params:
-        header = header + param.name.rjust(COL_SIZE)
-    print(header)
-    for interation in results.keys():
-        line = str(interation).rjust(COL_SIZE)
-        times = results.get(interation)
-        for param in params:
-            line = line + str(times.get(param.name)).rjust(COL_SIZE)
-        print(line)
 
-def export_results_to_csv(results: dict[int, dict], params: list[LangParams],  user_params: UserParams):
-    lines: list[list[str]] = []
-    
-    header = ["iter"]
-    for param in params:
-        header.append(param.name)
-    lines.append(header)
+    for result_line in results.get_results():
+        for line_item in result_line:
+            print(line_item.rjust(COL_SIZE), end="", flush=True)
+        print()
 
-    for interation in results.keys():
-        line = [interation]
-        times = results.get(interation)
-        for param in params:
-            line.append(str(times.get(param.name)))
-        lines.append(line)
 
+def export_results_to_csv(user_params: UserParams, results: BenchmarkResults):
     file_name = f"{OUTPUT_DIR}/x0={user_params.x0}_r={user_params.r}_it={user_params.iter}_{now_to_str()}.csv"
     with open(file_name, 'w', newline="",  encoding='UTF8') as f:
         writer = csv.writer(f)
-        writer.writerows(lines)
+        writer.writerows(results.get_results())
     print(f"Exporting to {file_name}")
 
 
-def plot_results(results: dict[int, dict], params: list[LangParams],  user_params: UserParams, interactions: list[int]):
-    for param in params:
-        times = []
-        for iter in interactions:
-            str_time = results.get(iter).get(param.name)
+def plot_results(user_params: UserParams, results: BenchmarkResults):
+    for lang, times in results.lang_times.items():
+        times_serie = []
+        for str_time in times:
             if str_time:
-                times.append(int(str_time))
+                times_serie.append(int(str_time))
             else:
-                times.append(None)
-        plt.plot(interactions, times, label=param.name)
+                times_serie.append(None)
+        plt.plot(results.interactions, times_serie, label=lang)
     plt.legend()
 
     plt.title(
@@ -166,24 +164,23 @@ def main():
     t0 = time.time()
 
     user_params = parse_args()
-    interactions = get_interactions(user_params.max_iterations)
 
     change_work_dir()
-    params = read_config(user_params)
+    lang_params = read_config(user_params)
 
-    results: dict[int, dict[str, str]] = {}
+    results = BenchmarkResults(
+        lang_params, get_interactions(user_params.max_iterations))
 
-    for num_interations in interactions:
-        results.update(run_for_interations(
-            params, user_params, num_interations))
+    for num_interations in results.interactions:
+        run_for_interations(user_params, results, lang_params, num_interations)
 
     if user_params.export_to_file:
-        export_results_to_csv(results, params, user_params)
+        export_results_to_csv(user_params, results)
     else:
-        print_results(results, params)
+        print_results(results)
 
     if user_params.export_to_plot:
-        plot_results(results, params, user_params, interactions)
+        plot_results(user_params, results)
 
     print_total_time(t0)
 
