@@ -1,12 +1,42 @@
 import argparse
 import csv
-import datetime
 import statistics
 import subprocess
 import time
 
 from commons import (LangParams, UserParams, change_work_dir, get_now,
-                     print_total_time, read_config, now_to_str)
+                     now_to_str, print_total_time, read_config)
+
+
+class SerieResults:
+    def __init__(self, iter: int):
+        self.lang_series: dict[str, list[float]] = {}
+        self.iter = iter
+
+    def calculate_average(self):
+        results = self.get_results()
+        average: list[float] = []
+        deviation: list[float] = []
+        for i in range(1, self.iter + 1):
+            average.append(statistics.mean(results[i]))
+            deviation.append(statistics.stdev(results[i]))
+        self.lang_series["AVERAGE"] = average
+        self.lang_series["DEVIATION"] = deviation
+
+    def get_results(self):
+        header = []
+        for name in self.lang_series.keys():
+            header.append(name)
+
+        result = [header]
+        for i in range(0, self.iter):
+            line = []
+            for series in self.lang_series.values():
+                line.append(series[i])
+            result.append(line)
+
+        return result
+
 
 COL_SIZE = 24
 OUTPUT_DIR = "output/series"
@@ -28,8 +58,6 @@ def parse_args() -> UserParams:
                         action=argparse.BooleanOptionalAction)
 
     args = parser.parse_args()
-
-    print(args)
 
     if not 0.0 <= args.x0 <= 1.0:
         parser.error("x0 must be between 0.0 and 1.0")
@@ -58,7 +86,7 @@ def run_command(param: LangParams, user_params: UserParams):
     str_time = lines[limits[1] + 1]
     print(str_time.rjust(COL_SIZE))
 
-    return series
+    return list(map(lambda x: float(x), series))
 
 
 def create_output(results: dict, iter: int) -> list[list[str]]:
@@ -79,19 +107,20 @@ def create_output(results: dict, iter: int) -> list[list[str]]:
     return lines
 
 
-def lines_to_console(lines: list[list[str]]):
-    for line in lines:
+def lines_to_console(results: SerieResults):
+    for line in results.get_results():
         for item in line:
             print(str(item).ljust(COL_SIZE), flush=True, end="")
         print()
 
 
-def lines_to_file(user_params: UserParams, lines: list[list[str]]):
+def lines_to_file(user_params: UserParams, results: SerieResults):
     file_name = f"{OUTPUT_DIR}/x0={user_params.x0}_r={user_params.r}_it={user_params.iter}_{now_to_str()}.csv"
     with open(file_name, 'w', newline="",  encoding='UTF8') as f:
         writer = csv.writer(f)
-        writer.writerows(lines)
-    print(f"Exporting to {file_name}")
+        writer.writerows(results.get_results())
+    print("-" * 80)
+    print(f"[{get_now()}] Exporting to {file_name}")
 
 
 def main():
@@ -100,19 +129,19 @@ def main():
     user_params = parse_args()
 
     change_work_dir()
-    params = read_config(user_params)
+    lang_params = read_config(user_params)
 
-    results = {}
-    for param in params:
-        results.update({param.name: run_command(param, user_params)})
+    results = SerieResults(user_params.iter)
 
-    lines = create_output(results, user_params.iter)
+    for param in lang_params:
+        results.lang_series[param.name] = run_command(param, user_params)
 
-    print()
+    results.calculate_average()
+
     if(user_params.export_to_file):
-        lines_to_file(user_params, lines)
+        lines_to_file(user_params, results)
     else:
-        lines_to_console(lines)
+        lines_to_console(results)
 
     print_total_time(t0)
 
