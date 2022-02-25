@@ -1,0 +1,4 @@
+{
+  "name": "ts-deno",
+  "command": "deno run ./languages/typescript-logistic-benchmark/src/deno-index.ts"
+}

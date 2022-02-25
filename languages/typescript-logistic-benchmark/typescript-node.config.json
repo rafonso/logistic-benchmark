@@ -1,4 +1,4 @@
 {
-  "name": "Typescript",
+  "name": "ts-node",
   "command": "npm start --prefix languages/typescript-logistic-benchmark --"
 }

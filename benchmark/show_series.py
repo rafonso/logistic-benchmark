@@ -14,6 +14,8 @@ class SerieResults:
         self.iter = iter
 
     def calculate_average(self):
+        if len(self.lang_series) == 1:
+            return
         results = self.get_results()
         average: list[float] = []
         deviation: list[float] = []
