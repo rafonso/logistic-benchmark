@@ -1,20 +1,22 @@
 use instant::Instant;
 use std::env;
 
-fn calculate<const IT: usize>(x0: f64, r: f64) -> ([f64; IT], u128){
-    let mut x: [f64; IT] = [0.0; IT];
+fn calculate(x0: f64, r: f64, it: i32) -> (std::vec::Vec<f64>, u128) {
+    let mut x: Vec<f64> = Vec::new();
+    let mut last_x = x0;
     let t0 = Instant::now();
-    x[0] = x0;
-    for i in 1..IT {
-        x[i] = r * x[i - 1] * (1.0 - x[i - 1]);
+    x.push(x0);
+    for _i in 1..it {
+        last_x = r * last_x * (1.0 - last_x);
+        x.push(last_x);
     }
     let delta_t = t0.elapsed().as_millis();
 
     return (x, delta_t);
 }
 
-fn simple_action<const IT: usize>(x0: f64, r: f64, show_output: bool) {
-    let (series, delta_t) = calculate::<IT>(x0, r);
+fn simple_action(x0: f64, r: f64, it: i32, show_output: bool) {
+    let (series, delta_t) = calculate(x0, r, it);
 
     if show_output {
         let break_line: String = "-".repeat(40);
@@ -28,13 +30,12 @@ fn simple_action<const IT: usize>(x0: f64, r: f64, show_output: bool) {
     println!("TIME: {} ms", delta_t);
 }
 
-fn repeat_action<const IT: usize, const REP: usize>(x0: f64, r: f64) {
-    let mut times : [u128; REP] = [0; REP];
-
+fn repeat_action(x0: f64, r: f64, it: i32, rep: i32) {
+    let mut times: Vec<u128> = Vec::new();
     let t0 = Instant::now();
-    for i in 0..REP {
-        print!("\r{:?} / {:?}", (i + 1), REP);
-        times[i] = calculate::<IT>(x0, r).1;
+    for i in 0..rep {
+        print!("\r{:04}/{:04}", (i + 1), rep);
+        times.push(calculate(x0, r, it).1);
     }
     let delta_t = t0.elapsed().as_millis();
     println!();
@@ -43,7 +44,7 @@ fn repeat_action<const IT: usize, const REP: usize>(x0: f64, r: f64) {
     for time in times {
         sum += time;
     }
-    let average = sum / (REP as u128);
+    let average = sum / rep as u128;
 
     println!("AVERAGE: {:?} ms", average);
     println!("TOTAL_TIME {:?}", delta_t);
@@ -52,20 +53,16 @@ fn repeat_action<const IT: usize, const REP: usize>(x0: f64, r: f64) {
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    println!("ARGS {:?}", args);
-
     let action: char = args[1].chars().nth(0).unwrap();
     let x0: f64 = args[2].parse::<f64>().unwrap();
     let r: f64 = args[3].parse::<f64>().unwrap();
-    const IT: usize = 100; //args[4].parse::<usize>().unwrap();
-
-    println!("MAX {:?}", usize::MAX);
+    let it: i32 = args[4].parse::<i32>().unwrap();
 
     if action == 's' {
-        let show_output = true;
-        simple_action::<IT>(x0, r, show_output);
+        let show_output = (args.len() == 6) && (args[5].chars().nth(0).unwrap() == 's');
+        simple_action(x0, r, it, show_output);
     } else if action == 'r' {
-        const REP: usize = 100;
-        repeat_action::<IT, REP>(x0, r);
+        let repetitions = args[5].parse::<i32>().unwrap();
+        repeat_action(x0, r, it, repetitions);
     }
 }
