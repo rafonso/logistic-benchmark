@@ -1,4 +1,4 @@
-import {IConsole, repeatAction, simpleAction,  } from "./common.ts";
+import { IConsole, repeatAction, simpleAction } from './common.ts';
 
 const denoConsole: IConsole = {
   print: (...str: string[]) => {
@@ -9,7 +9,6 @@ const denoConsole: IConsole = {
     console.log();
   }
 }
-
 
 /************************************
  * MAIN

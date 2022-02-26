@@ -1,6 +1,5 @@
 import { IConsole, repeatAction, simpleAction } from "./common";
 
-
 const nodeConsole: IConsole = {
   print: (...str: string[]) => {
     process.stdout.write(str.join(" "));
@@ -9,6 +8,7 @@ const nodeConsole: IConsole = {
     console.log(str.join(" "));
   }
 }
+
 
 /************************************
  * MAIN
