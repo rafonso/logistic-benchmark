@@ -2,7 +2,7 @@ use instant::Instant;
 use std::env;
 
 fn calculate(x0: f64, r: f64, it: i32) -> (std::vec::Vec<f64>, u128) {
-    let mut x: Vec<f64> = Vec::new();
+    let mut x: Vec<f64> = Vec::with_capacity(it as usize);
     let mut last_x = x0;
     let t0 = Instant::now();
     x.push(x0);
@@ -31,7 +31,7 @@ fn simple_action(x0: f64, r: f64, it: i32, show_output: bool) {
 }
 
 fn repeat_action(x0: f64, r: f64, it: i32, rep: i32) {
-    let mut times: Vec<u128> = Vec::new();
+    let mut times: Vec<u128> = Vec::with_capacity(rep as usize);
     let t0 = Instant::now();
     for i in 0..rep {
         print!("\r{:04}/{:04}", (i + 1), rep);
