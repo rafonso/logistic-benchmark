@@ -1,5 +1,5 @@
 {
   "name": "C",
   "command": "languages/c-logistic-benchmark/c-logistic-benchmark.exe",
-  "maxIter": 6000000
+  "maxIter": 10000000
 }
