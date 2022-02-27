@@ -52,6 +52,8 @@ def parse_args() -> UserParams:
                         action=argparse.BooleanOptionalAction)
     parser.add_argument("-g", help="Results will be exported to a graphic",
                         action=argparse.BooleanOptionalAction)
+    parser.add_argument("-ni", help="Min Iteractions",
+                        type=int, default=0)
     parser.add_argument("-mi", help="Max Iteractions",
                         type=int, default=sys.maxsize)
     parser.add_argument("-l", "--languages", nargs="*",
@@ -67,26 +69,35 @@ def parse_args() -> UserParams:
         parser.error("r must be between 0.0 and 4.0")
     if args.repetitions <= 0:
         parser.error("repetitions must be a positive number")
+    if args.ni < 0:
+        parser.error("Min repetitions must be a positive number")
     if args.mi <= 0:
         parser.error("Max repetitions must be a positive number")
+    if args.ni > args.mi:
+        parser.error("Min repetitions lesser than Max repetitions")
 
-    return UserParams(x0=args.x0, r=args.r, repetitions=args.repetitions, max_iterations=args.mi,
+    return UserParams(x0=args.x0, r=args.r, repetitions=args.repetitions, min_iterations=args.ni, max_iterations=args.mi,
                       languages=args.languages, languages_to_skip=args.languages_to_skip, export_to_plot=args.g, export_to_file=args.f)
 
 
-def get_interactions(max_interactions: int) -> list[int]:
+def get_interactions(min_interactions: int, max_interactions: int) -> list[int]:
     qdrt_10 = math.sqrt(math.sqrt(10))
     roots_10 = [1 / (qdrt_10*qdrt_10*qdrt_10), 1 /
                 (qdrt_10*qdrt_10), 1 / (qdrt_10), 1.0]
     powers_10 = [100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000]
 
-    interations = [10]
+    if 10 >= min_interactions:
+        interations = [10]
+    else:
+        interations = []
+
     for pow_10 in powers_10:
         for root_10 in roots_10:
             interation = int(root_10 * pow_10)
             if interation > max_interactions:
                 return interations
-            interations.append(interation)
+            if interation >= min_interactions:
+                interations.append(interation)
 
     return interations
 
@@ -169,7 +180,7 @@ def main():
     lang_params = read_config(user_params)
 
     results = BenchmarkResults(
-        lang_params, get_interactions(user_params.max_iterations))
+        lang_params, get_interactions(user_params.min_iterations, user_params.max_iterations))
 
     for num_interations in results.interactions:
         run_for_interations(user_params, results, lang_params, num_interations)

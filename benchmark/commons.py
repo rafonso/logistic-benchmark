@@ -43,7 +43,7 @@ class LangParams:
 
 class UserParams:
     def __init__(self, x0: float, r: float, iter: int = 0, repetitions: int = 0,  languages: list[str] = [],
-                 languages_to_skip: list[str] = [], export_to_file: bool = False, export_to_plot: bool = False, max_iterations: int = sys.maxsize):
+                 languages_to_skip: list[str] = [], export_to_file: bool = False, export_to_plot: bool = False, min_iterations = 0, max_iterations: int = sys.maxsize):
         self.x0 = x0
         self.r = r
         self.iter = iter
@@ -51,6 +51,7 @@ class UserParams:
         self.languages = languages
         self.languages_to_skip = languages_to_skip
         self.export_to_file = export_to_file
+        self.min_iterations = min_iterations
         self.max_iterations = max_iterations
         self.export_to_plot = export_to_plot
 
