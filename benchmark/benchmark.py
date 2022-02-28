@@ -37,7 +37,7 @@ class BenchmarkResults:
         return f"[{self.interactions}, {self.lang_times}]"
 
 
-COL_SIZE = 10
+COL_SIZE = 11
 TIME_RE = 'TOTAL_TIME (\d+)'
 OUTPUT_DIR = "output/benchmark"
 
@@ -106,7 +106,7 @@ def run_for_interations(user_params: UserParams, results: BenchmarkResults, lang
 
     def run_command(lang_param: LangParams) -> int:
         print("[{0}] {1}".format(
-            get_now(), lang_param.name.rjust(COL_SIZE)), end="", flush=True)
+            get_now(), lang_param.name.rjust(2*COL_SIZE)), end="", flush=True)
 
         if num_interations > lang_param.max_iter:
             delta_t = ""
@@ -123,7 +123,7 @@ def run_for_interations(user_params: UserParams, results: BenchmarkResults, lang
 
     print(60 * "=")
     print("[{0}] {1} {2}".format(
-        get_now(), "inter".rjust(COL_SIZE), "{:,}".format(num_interations).rjust(COL_SIZE)))
+        get_now(), "ITERACTIONS".rjust(2*COL_SIZE), "{:,}".format(num_interations).rjust(COL_SIZE - 1)))
     for lang_param in lang_params:
         delta_t = run_command(lang_param)
         results.lang_times[lang_param.name].append(delta_t)
