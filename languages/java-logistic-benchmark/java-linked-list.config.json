@@ -1,0 +1,4 @@
+{
+  "name": "java-linked-list",
+  "command": "java -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar ll"
+}

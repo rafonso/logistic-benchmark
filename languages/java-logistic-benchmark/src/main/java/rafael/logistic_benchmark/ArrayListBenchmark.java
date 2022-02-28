@@ -3,7 +3,7 @@ package rafael.logistic_benchmark;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListBenchmark extends Benchmark {
+public class ArrayListBenchmark extends Benchmark {
     @Override
     protected ProcessorResult calculate(double x0, double r, int iter) {
         List<Double> series = new ArrayList<>();
