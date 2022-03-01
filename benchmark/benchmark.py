@@ -174,8 +174,8 @@ def plot_results(user_params: BeanchmarkParams, results: BenchmarkResults):
     plt.yscale("log")
     plt.ylabel("Time (ms)")
 
-    file_name = f"{OUTPUT_DIR}/plots/x0={user_params.x0}_r={user_params.r}_rep={user_params.repetitions}_{now_to_str()}.png"
-    plt.savefig(file_name)
+    file_name = f"{OUTPUT_DIR}/plots/x0={user_params.x0}_r={user_params.r}_rep={user_params.repetitions}_{now_to_str()}.svg"
+    plt.savefig(file_name, format="svg")
     print(f"Plot saved at {file_name}")
 
 
