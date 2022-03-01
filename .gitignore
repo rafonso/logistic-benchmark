@@ -1,7 +1,5 @@
 **/.idea/
 **/__pycache__/
-
-*.csv
-*.png
+**/output/
 
 *.stackdump

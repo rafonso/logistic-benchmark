@@ -15,13 +15,14 @@ from commons import (LangParams, UserParams, change_work_dir, get_now,
 
 class BeanchmarkParams(UserParams):
     def __init__(self, x0: float, r: float,  languages: list[str] = [], languages_to_skip: list[str] = [], export_to_file: bool = False, repetitions: int = 0,
-                 export_to_plot: bool = False, min_iterations=0, max_iterations: int = sys.maxsize):
+                 export_to_plot: bool = False, min_iterations=0, max_iterations: int = sys.maxsize, graphic_scale_type: str = "log"):
         UserParams.__init__(self, x0, r, languages,
                             languages_to_skip, export_to_file)
         self.repetitions = repetitions
         self.export_to_plot = export_to_plot
         self.min_iterations = min_iterations
         self.max_iterations = max_iterations
+        self.graphic_scale_type = graphic_scale_type
 
 
 class BenchmarkResults:
@@ -64,14 +65,16 @@ def parse_args() -> BeanchmarkParams:
                         action=argparse.BooleanOptionalAction)
     parser.add_argument("-g", help="Results will be exported to a graphic",
                         action=argparse.BooleanOptionalAction)
+    parser.add_argument("-gs", help="Graphic scale type",
+                        choices=["linear", "log"], default="log")
     parser.add_argument("-ni", help="Min Iteractions",
                         type=int, default=0)
     parser.add_argument("-mi", help="Max Iteractions",
                         type=int, default=sys.maxsize)
-    parser.add_argument("-l", "--languages", nargs="*",
-                        help="Languages to be executed")
-    parser.add_argument("-s", "--languages-to-skip", nargs="*",
-                        help="Languages to be skipped")
+    parser.add_argument("-l", "--languages",
+                        help="Languages to be executed", nargs="*")
+    parser.add_argument("-s", "--languages-to-skip",
+                        help="Languages to be skipped", nargs="*")
 
     args = parser.parse_args()
 
@@ -86,7 +89,8 @@ def parse_args() -> BeanchmarkParams:
             "Min repetitions should be lesser than Max repetitions and greater then 0.")
 
     return BeanchmarkParams(x0=args.x0, r=args.r, repetitions=args.repetitions, min_iterations=args.ni, max_iterations=args.mi,
-                            languages=args.languages, languages_to_skip=args.languages_to_skip, export_to_plot=args.g, export_to_file=args.f)
+                            languages=args.languages, languages_to_skip=args.languages_to_skip, export_to_plot=args.g, export_to_file=args.f,
+                            graphic_scale_type=args.gs)
 
 
 def get_interactions(min_interactions: int, max_interactions: int) -> list[int]:
@@ -166,9 +170,9 @@ def plot_results(user_params: BeanchmarkParams, results: BenchmarkResults):
     plt.title(
         f"x0 = { user_params.x0}, r = { user_params.r}, Repetitions = { user_params.repetitions}")
     plt.grid(visible=True)
-    plt.xscale("log")
+    plt.xscale(user_params.graphic_scale_type)
     plt.xlabel("Interations")
-    plt.yscale("log")
+    plt.yscale(user_params.graphic_scale_type)
     plt.ylabel("Time (ms)")
 
     file_name = f"{OUTPUT_DIR}/plots/x0={user_params.x0}_r={user_params.r}_rep={user_params.repetitions}_{now_to_str()}.svg"
