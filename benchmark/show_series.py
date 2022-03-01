@@ -4,6 +4,8 @@ import statistics
 import subprocess
 import time
 
+from tabulate import tabulate
+
 from commons import (LangParams, UserParams, change_work_dir, get_now,
                      now_to_str, print_total_time, read_config)
 
@@ -117,10 +119,7 @@ def create_output(results: dict, iter: int) -> list[list[str]]:
 
 
 def lines_to_console(results: SeriesResult):
-    for line in results.get_results():
-        for item in line:
-            print(str(item).ljust(COL_SIZE), flush=True, end="")
-        print()
+    print(tabulate(results.get_results(), headers="firstrow", tablefmt="psql", floatfmt=".18f"))
 
 
 def lines_to_file(user_params: SeriesParams, results: SeriesResult):

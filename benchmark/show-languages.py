@@ -3,6 +3,8 @@ import json
 from os import chdir
 from os.path import dirname, normpath
 
+from tabulate import tabulate
+
 from commons import LangParams
 
 
@@ -19,16 +21,8 @@ files = glob.glob('./languages/**/*.config.json', recursive=True)
 params = list(map(lambda file_path: load_json(file_path), files))
 params.sort(key=lambda lp: lp.name)
 
-max_len_name = max(map(lambda cmd: len(cmd), map(lambda param: param.name   , params)))
-max_len_cmd  = max(map(lambda cmd: len(cmd), map(lambda param: param.command, params)))
+header = ["NAME", "MAX ITER", "COMMAND"]
+table = list(
+    map(lambda param: [param.name, param.max_iter, param.command], params))
 
-header_format = "│ " +"{:^" + str(max_len_name) + "} │ {:^10} │ {:^" + str(max_len_cmd) + "} │"
-str_format    = "│ " +"{:<" + str(max_len_name) + "} │ {:>10} │ {:<" + str(max_len_cmd) + "} │"
-
-print("┌─" +("─" * max_len_name) + "─┬─" + ("─" * 10) + "─┬─" + ("─" * max_len_cmd)  + "─┐")
-print(header_format.format("NAME", "MAX ITER", "COMMAND"))
-print("├─" +("─" * max_len_name) + "─┼─" + ("─" * 10) + "─┼─" + ("─" * max_len_cmd)  + "─┤")
-for param in params:
-  str_max_iter = "{:,}".format(param.max_iter) if param.max_iter else ""
-  print(str_format.format(param.name, str_max_iter, param.command))
-print("└─" +("─" * max_len_name)  + "─┴─" + ("─" * 10)+ "─┴─" + ("─" * max_len_cmd) + "─┘")
+print(tabulate(table, header, tablefmt="psql"))

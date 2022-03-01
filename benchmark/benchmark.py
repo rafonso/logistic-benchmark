@@ -7,6 +7,7 @@ import sys
 import time
 
 import matplotlib.pyplot as plt
+from tabulate import tabulate
 
 from commons import (LangParams, UserParams, change_work_dir, get_now,
                      now_to_str, print_total_time, read_config)
@@ -140,11 +141,7 @@ def run_for_interations(user_params: BeanchmarkParams, results: BenchmarkResults
 def print_results(results: BenchmarkResults):
     print(60 * "=")
     print("[{0}] RESULTS".format(get_now()))
-
-    for result_line in results.get_results():
-        for line_item in result_line:
-            print(line_item.rjust(COL_SIZE), end="", flush=True)
-        print()
+    print(tabulate(results.get_results(), headers="firstrow", tablefmt="psql"))
 
 
 def export_results_to_csv(user_params: BeanchmarkParams, results: BenchmarkResults):
