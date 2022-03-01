@@ -1,4 +1,5 @@
 {
   "name": "Kotlin",
-  "command": "java -jar languages/kotlin-logistic-benchmark/target/kotlin-logistic-benchmark-jar-with-dependencies.jar"
+  "command": "java -jar languages/kotlin-logistic-benchmark/target/kotlin-logistic-benchmark-jar-with-dependencies.jar",
+  "color": "#F2860C"
 }

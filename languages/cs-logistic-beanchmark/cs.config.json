@@ -1,4 +1,5 @@
 {
   "name": "C#",
-  "command": "languages/cs-logistic-beanchmark/bin/Debug/net6.0/cs-logistic-beanchmark.exe"
+  "command": "languages/cs-logistic-beanchmark/bin/Debug/net6.0/cs-logistic-beanchmark.exe",
+  "color": "#652076"
 }

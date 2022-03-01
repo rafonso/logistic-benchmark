@@ -33,14 +33,16 @@ def print_total_time(t0: float):
 
 
 class LangParams:
-    def __init__(self, name: str, cmd: str = "", max_iter: int = sys.maxsize) -> None:
+    def __init__(self, name: str, cmd: str = "", max_iter: int = sys.maxsize, color: str = None, linestyle: str = "-") -> None:
         self.name = name
         self.command = normpath(cmd)
         self.max_iter = max_iter
         self.series: list[float] = []
+        self.color = color
+        self.linestyle = linestyle
 
     def __repr__(self):
-        return f"[{self.name}: '{self.command}', {self.max_iter}]"
+        return f"[{self.name}: '{self.command}', {self.max_iter}, {self.color}]"
 
 
 class UserParams:
@@ -52,16 +54,24 @@ class UserParams:
         self.languages_to_skip = languages_to_skip
         self.export_to_file = export_to_file
 
-
-def read_config(user_params: UserParams) -> list[LangParams]:
+def get_json_config_files():
     def load_json(file_name):
         with open(file_name, 'r') as json_file:
             json_param = json.load(json_file)
-            return LangParams(json_param["name"], json_param["command"], json_param.get("maxIter", sys.maxsize))
+            return LangParams(json_param["name"], json_param["command"], json_param.get("maxIter", None), json_param.get("color", None), json_param.get("linestyle", "solid"))
 
     files = glob.glob('./languages/**/*.config.json', recursive=True)
     params = list(map(lambda file_path: load_json(file_path), files))
     params.sort(key=lambda lp: lp.name)
+    return params
+
+
+def read_config(user_params: UserParams) -> list[LangParams]:
+    params = get_json_config_files()
+
+    for param in params:
+        if not param.max_iter:
+            param.max_iter = sys.maxsize
 
     if user_params.languages:
         params = list(

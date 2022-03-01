@@ -29,8 +29,12 @@ class BenchmarkResults:
     def __init__(self, lang_params: list[LangParams], interactions: list[int]):
         self.interactions = interactions
         self.lang_times: dict[str, list[int]] = {}
+        self.colors: dict[str, str] = {}
+        self.linestyle: dict[str, str] = {}
         for lang_param in lang_params:
             self.lang_times[lang_param.name] = []
+            self.colors[lang_param.name] = lang_param.color
+            self.linestyle[lang_param.name] = lang_param.linestyle
 
     def get_results(self):
         header = ["Iter"]
@@ -164,7 +168,8 @@ def plot_results(user_params: BeanchmarkParams, results: BenchmarkResults):
                 times_serie.append(int(str_time))
             else:
                 times_serie.append(None)
-        plt.plot(results.interactions, times_serie, label=lang)
+        plt.plot(results.interactions, times_serie, label=lang,
+                 color=results.colors.get(lang), linestyle=results.linestyle[lang])
     plt.legend()
 
     plt.title(

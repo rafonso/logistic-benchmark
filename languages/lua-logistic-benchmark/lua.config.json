@@ -1,5 +1,6 @@
 {
   "name": "Lua",
   "command": "lua languages/lua-logistic-benchmark/main.lua",
-  "maxIter": 5000000
+  "maxIter": 5000000,
+  "color": "#00007C"
 }

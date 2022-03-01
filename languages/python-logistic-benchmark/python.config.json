@@ -1,4 +1,5 @@
 {
   "name": "Python",
-  "command": "python languages/python-logistic-benchmark/main.py"
+  "command": "python languages/python-logistic-benchmark/main.py",
+  "color": "#F7CC40"
 }

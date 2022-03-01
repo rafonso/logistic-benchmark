@@ -1,4 +1,5 @@
 {
   "name": "Go",
-  "command": "languages/go-logistic-benchmark/go-logistic-benchmark.exe"
+  "command": "languages/go-logistic-benchmark/go-logistic-benchmark.exe",
+  "color": "#70C8D6"
 }

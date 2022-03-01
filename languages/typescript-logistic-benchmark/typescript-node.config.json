@@ -1,4 +1,5 @@
 {
   "name": "ts-node",
-  "command": "npm start --prefix languages/typescript-logistic-benchmark --"
+  "command": "npm start --prefix languages/typescript-logistic-benchmark --",
+  "color": "#0076C6"
 }

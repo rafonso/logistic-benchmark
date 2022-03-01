@@ -1,4 +1,6 @@
 {
   "name": "java-array-list",
-  "command": "java -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar al"
+  "command": "java -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar al",
+  "color": "#F0931C",
+  "linestyle": "--"
 }

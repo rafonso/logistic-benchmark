@@ -1,4 +1,6 @@
 {
   "name": "java-prealloc-list",
-  "command": "java -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar pa"
+  "command": "java -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar pa",
+  "color": "#F0931C",
+  "linestyle": "-."
 }
