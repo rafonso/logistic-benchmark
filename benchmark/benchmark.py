@@ -12,6 +12,17 @@ from commons import (LangParams, UserParams, change_work_dir, get_now,
                      now_to_str, print_total_time, read_config)
 
 
+class BeanchmarkParams(UserParams):
+    def __init__(self, x0: float, r: float,  languages: list[str] = [], languages_to_skip: list[str] = [], export_to_file: bool = False, repetitions: int = 0,
+                 export_to_plot: bool = False, min_iterations=0, max_iterations: int = sys.maxsize):
+        UserParams.__init__(self, x0, r, languages,
+                            languages_to_skip, export_to_file)
+        self.repetitions = repetitions
+        self.export_to_plot = export_to_plot
+        self.min_iterations = min_iterations
+        self.max_iterations = max_iterations
+
+
 class BenchmarkResults:
     def __init__(self, lang_params: list[LangParams], interactions: list[int]):
         self.interactions = interactions
@@ -42,7 +53,7 @@ TIME_RE = 'TOTAL_TIME (\d+)'
 OUTPUT_DIR = "output/benchmark"
 
 
-def parse_args() -> UserParams:
+def parse_args() -> BeanchmarkParams:
     parser = argparse.ArgumentParser(description="Creates a benchmark")
     parser.add_argument("x0", help="first value of series", type=float)
     parser.add_argument("r", help="R value", type=float)
@@ -69,15 +80,12 @@ def parse_args() -> UserParams:
         parser.error("r must be between 0.0 and 4.0")
     if args.repetitions <= 0:
         parser.error("repetitions must be a positive number")
-    if args.ni < 0:
-        parser.error("Min repetitions must be a positive number")
-    if args.mi <= 0:
-        parser.error("Max repetitions must be a positive number")
-    if args.ni > args.mi:
-        parser.error("Min repetitions lesser than Max repetitions")
+    if not 0 <= args.ni < args.mi:
+        parser.error(
+            "Min repetitions should be lesser than Max repetitions and greater then 0.")
 
-    return UserParams(x0=args.x0, r=args.r, repetitions=args.repetitions, min_iterations=args.ni, max_iterations=args.mi,
-                      languages=args.languages, languages_to_skip=args.languages_to_skip, export_to_plot=args.g, export_to_file=args.f)
+    return BeanchmarkParams(x0=args.x0, r=args.r, repetitions=args.repetitions, min_iterations=args.ni, max_iterations=args.mi,
+                            languages=args.languages, languages_to_skip=args.languages_to_skip, export_to_plot=args.g, export_to_file=args.f)
 
 
 def get_interactions(min_interactions: int, max_interactions: int) -> list[int]:
@@ -102,7 +110,7 @@ def get_interactions(min_interactions: int, max_interactions: int) -> list[int]:
     return interations
 
 
-def run_for_interations(user_params: UserParams, results: BenchmarkResults, lang_params: list[LangParams], num_interations: int):
+def run_for_interations(user_params: BeanchmarkParams, results: BenchmarkResults, lang_params: list[LangParams], num_interations: int):
 
     def run_command(lang_param: LangParams) -> int:
         print("[{0}] {1}".format(
@@ -139,7 +147,7 @@ def print_results(results: BenchmarkResults):
         print()
 
 
-def export_results_to_csv(user_params: UserParams, results: BenchmarkResults):
+def export_results_to_csv(user_params: BeanchmarkParams, results: BenchmarkResults):
     file_name = f"{OUTPUT_DIR}/x0={user_params.x0}_r={user_params.r}_it={user_params.iter}_{now_to_str()}.csv"
     with open(file_name, 'w', newline="",  encoding='UTF8') as f:
         writer = csv.writer(f)
@@ -147,7 +155,7 @@ def export_results_to_csv(user_params: UserParams, results: BenchmarkResults):
     print(f"Exporting to {file_name}")
 
 
-def plot_results(user_params: UserParams, results: BenchmarkResults):
+def plot_results(user_params: BeanchmarkParams, results: BenchmarkResults):
     for lang, times in results.lang_times.items():
         times_serie = []
         for str_time in times:
