@@ -1,5 +1,7 @@
 {
   "name": "ts-node",
+  "code": "ts-node",
+  "description": "Typescript running at\nNode using array\nwith preallocated size",
   "command": "npm start --prefix languages/typescript-logistic-benchmark --",
   "color": "#0076C6"
 }

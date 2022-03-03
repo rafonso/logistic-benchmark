@@ -1,5 +1,7 @@
 {
   "name": "ts-deno",
+  "code": "ts-deno",
+  "description": "Typescript running at\nDeno using array\nwith preallocated size",
   "command": "deno run ./languages/typescript-logistic-benchmark/src/deno-index.ts",
   "color": "#0076C6",
   "linestyle": "--"

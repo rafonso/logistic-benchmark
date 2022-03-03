@@ -1,5 +1,7 @@
 {
   "name": "C#",
+  "code": "c#",
+  "description": "C# using array\nwith preallocated size",
   "command": "languages/cs-logistic-beanchmark/bin/Debug/net6.0/cs-logistic-beanchmark.exe",
   "color": "#652076"
 }

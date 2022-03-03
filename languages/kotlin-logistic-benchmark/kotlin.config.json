@@ -1,5 +1,7 @@
 {
   "name": "Kotlin",
+  "code": "kotlin",
+  "description": "Kotlin using Double Array\nwith preallocated size",
   "command": "java -jar languages/kotlin-logistic-benchmark/target/kotlin-logistic-benchmark-jar-with-dependencies.jar",
   "color": "#F2860C"
 }

@@ -1,5 +1,7 @@
 {
   "name": "Python",
+  "code": "python",
+  "description": "Python using List\nwith preallocated size",
   "command": "python languages/python-logistic-benchmark/main.py",
   "color": "#F7CC40"
 }

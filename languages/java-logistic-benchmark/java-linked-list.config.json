@@ -1,5 +1,7 @@
 {
   "name": "java-linked-list",
+  "code": "java-linked-list",
+  "description": "Java with empty\nLinked List",
   "command": "java -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar ll",
   "color": "#F0931C",
   "linestyle": ":"

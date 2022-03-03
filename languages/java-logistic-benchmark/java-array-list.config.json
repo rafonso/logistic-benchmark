@@ -1,5 +1,7 @@
 {
   "name": "java-array-list",
+  "code": "java-array-list",
+  "description": "Java with empty\nArray List",
   "command": "java -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar al",
   "color": "#F0931C",
   "linestyle": "--"

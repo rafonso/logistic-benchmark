@@ -1,5 +1,7 @@
 {
   "name": "Rust",
+  "code": "rust",
+  "description": "Rust using Vector\nwith preallocated capacity",
   "command": "languages/rust-logistic-benchmark/target/debug/rust-logistic-benchmark.exe",
   "color": "#DD3516"
 }

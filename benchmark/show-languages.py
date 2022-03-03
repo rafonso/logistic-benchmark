@@ -23,7 +23,7 @@ def parse_args() -> ShowParams:
 
 
 def get_header(show_params: ShowParams) -> list[str]:
-    header = ["NAME"]
+    header = ["CODE", "NAME", "DESCRIPTION"]
     if(show_params.show_all):
         header.extend(("MAX ITER", "COLOR", "LINE STYLE", "COMMAND"))
 
@@ -32,19 +32,19 @@ def get_header(show_params: ShowParams) -> list[str]:
 
 def get_table(params: list[LangParams], show_params: ShowParams) -> list[list[str]]:
     if show_params.show_all:
-        return list(map(lambda param: [param.name, param.max_iter, param.color, param.linestyle, param.command], params))
+        return list(map(lambda param: [param.code, param.name, param.description, param.max_iter, param.color, param.linestyle, param.command], params))
     else:
-        return list(map(lambda param: [param.name], params))
+        return list(map(lambda param: [param.code, param.name, param.description], params))
 
 
 def main():
     change_work_dir()
-    
+
     show_params = parse_args()
     header = get_header(show_params)
     params = get_json_config_files()
     table = get_table(params, show_params)
-    
+
     print(tabulate(table, header, tablefmt="psql"))
 
 

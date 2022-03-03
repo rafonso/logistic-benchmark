@@ -1,5 +1,7 @@
 {
   "name": "Lua",
+  "code": "lua",
+  "description": "Lua with empty table",
   "command": "lua languages/lua-logistic-benchmark/main.lua",
   "maxIter": 5000000,
   "color": "#00007C"

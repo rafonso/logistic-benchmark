@@ -1,5 +1,7 @@
 {
   "name": "Go",
+  "code": "go",
+  "description": "Go using array with \npreallocated size",
   "command": "languages/go-logistic-benchmark/go-logistic-benchmark.exe",
   "color": "#70C8D6"
 }
