@@ -76,9 +76,9 @@ def parse_args() -> BeanchmarkParams:
     parser.add_argument("-mi", help="Max Iteractions",
                         type=int, default=sys.maxsize)
     parser.add_argument("-l", "--languages",
-                        help="Languages to be executed", nargs="*")
+                        help="Codes of Languages to be executed", nargs="*")
     parser.add_argument("-s", "--languages-to-skip",
-                        help="Languages to be skipped", nargs="*")
+                        help="Codes of Languages to be skipped", nargs="*")
 
     args = parser.parse_args()
 

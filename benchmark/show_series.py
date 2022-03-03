@@ -62,9 +62,9 @@ def parse_args() -> SeriesParams:
     parser.add_argument(
         "iter", help="Number of Interactions to each series. The series size.", type=int)
     parser.add_argument("-l", "--languages", nargs="*",
-                        help="Languages to be executed")
+                        help="Codes of Languages to be executed")
     parser.add_argument("-s", "--languages-to-skip", nargs="*",
-                        help="Languages to be skipped")
+                        help="Codes of Languages to be skipped")
     parser.add_argument("-f", help="export the series to a CSV file",
                         action=argparse.BooleanOptionalAction)
 

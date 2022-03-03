@@ -80,10 +80,10 @@ def read_config(user_params: UserParams) -> list[LangParams]:
 
     if user_params.languages:
         params = list(
-            filter(lambda param: param.name in user_params.languages, params))
+            filter(lambda param: param.code in user_params.languages, params))
     if user_params.languages_to_skip:
         params = list(
-            filter(lambda param: param.name not in user_params.languages_to_skip, params))
+            filter(lambda param: param.code not in user_params.languages_to_skip, params))
 
     assert bool(params), "Filtered params are empty"
 
