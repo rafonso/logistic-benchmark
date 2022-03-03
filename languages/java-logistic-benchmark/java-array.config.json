@@ -1,5 +1,5 @@
 {
-  "name": "java-array",
+  "name": "Java Array",
   "code": "java-array",
   "description": "Java using array\nwith preallocated size",
   "command": "java -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar ar",

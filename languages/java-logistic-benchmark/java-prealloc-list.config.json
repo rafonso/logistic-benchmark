@@ -1,5 +1,5 @@
 {
-  "name": "java-prealloc-list",
+  "name": "Java Array List\nPrealloc Size",
   "code": "java-prealloc-list",
   "description": "Java using Array List\nwith preallocated size",
   "command": "java -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar pa",
