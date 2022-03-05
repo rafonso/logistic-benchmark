@@ -24,6 +24,11 @@ class BeanchmarkParams(UserParams):
         self.max_iterations = max_iterations
         self.graphic_scale_type = graphic_scale_type
 
+    def is_linear_plotting(self):
+        return (self.graphic_scale_type == "both") or (self.graphic_scale_type == "linear")
+
+    def is_log_plotting(self):
+        return (self.graphic_scale_type == "both") or (self.graphic_scale_type == "log")
 
 class BenchmarkResults:
     def __init__(self, lang_params: list[LangParams], interactions: list[int]):
@@ -70,7 +75,7 @@ def parse_args() -> BeanchmarkParams:
     parser.add_argument("-g", help="Results will be exported to a graphic",
                         action=argparse.BooleanOptionalAction)
     parser.add_argument("-gs", help="Graphic scale type",
-                        choices=["linear", "log"], default="log")
+                        choices=["linear", "log", "both"], default="log")
     parser.add_argument("-ni", help="Min Iteractions",
                         type=int, default=0)
     parser.add_argument("-mi", help="Max Iteractions",
@@ -161,28 +166,39 @@ def export_results_to_csv(user_params: BeanchmarkParams, results: BenchmarkResul
 
 
 def plot_results(user_params: BeanchmarkParams, results: BenchmarkResults):
-    for lang, times in results.lang_times.items():
-        times_serie = []
-        for str_time in times:
-            if str_time:
-                times_serie.append(int(str_time))
-            else:
-                times_serie.append(None)
-        plt.plot(results.interactions, times_serie, label=lang,
-                 color=results.colors.get(lang), linestyle=results.linestyle[lang])
-    plt.legend()
 
-    plt.title(
-        f"x0 = { user_params.x0}, r = { user_params.r}, Repetitions = { user_params.repetitions}")
-    plt.grid(visible=True)
-    plt.xscale(user_params.graphic_scale_type)
-    plt.xlabel("Interations")
-    plt.yscale(user_params.graphic_scale_type)
-    plt.ylabel("Time (ms)")
+    def fill_series():
+        for lang, times in results.lang_times.items():
+            times_serie = []
+            for str_time in times:
+                if str_time:
+                    times_serie.append(int(str_time))
+                else:
+                    times_serie.append(None)
+            plt.plot(results.interactions, times_serie, label=lang,
+                    color=results.colors.get(lang), linestyle=results.linestyle[lang])
 
-    file_name = f"{OUTPUT_DIR}/plots/x0={user_params.x0}_r={user_params.r}_rep={user_params.repetitions}_{now_to_str()}.svg"
-    plt.savefig(file_name, format="svg")
-    print(f"Plot saved at {file_name}")
+    def basic_config():
+        plt.legend()
+        plt.title(f"x0 = { user_params.x0}, r = { user_params.r}, Repetitions = { user_params.repetitions}")
+        plt.grid(visible=True, which="both")
+        plt.xlabel("Interations")
+        plt.ylabel("Time (ms)")
+        return f"{OUTPUT_DIR}/plots/x0={user_params.x0}_r={user_params.r}_rep={user_params.repetitions}_{now_to_str()}_TYPE.svg" 
+
+    def save_plot(file_name_base: str, scale_type: str):
+        plt.xscale(scale_type)
+        plt.yscale(scale_type)
+        file_name = file_name_base.replace("TYPE", scale_type)
+        plt.savefig(file_name, format="svg")
+        print(f"{scale_type.capitalize()} plot saved at {file_name}")
+
+    fill_series()
+    file_name_base = basic_config()
+    if user_params.is_linear_plotting():
+        save_plot(file_name_base, "linear")
+    if user_params.is_log_plotting():
+        save_plot(file_name_base, "log")
 
 
 def main():
