@@ -63,6 +63,9 @@ COL_SIZE = 11
 TIME_RE = 'TOTAL_TIME (\d+)'
 OUTPUT_DIR = "output/benchmark"
 
+name_width = 3*COL_SIZE
+separator = (17 + 1 + name_width + COL_SIZE) * "="
+
 
 def parse_args() -> BeanchmarkParams:
     parser = argparse.ArgumentParser(description="Creates a benchmark")
@@ -126,9 +129,10 @@ def get_interactions(min_interactions: int, max_interactions: int) -> list[int]:
 
 def run_for_interations(user_params: BeanchmarkParams, results: BenchmarkResults, lang_params: list[LangParams], num_interations: int):
 
+
     def run_command(lang_param: LangParams) -> int:
         print("[{0}] {1}".format(
-            get_now(), lang_param.name.rjust(2*COL_SIZE)), end="", flush=True)
+            get_now(), lang_param.name.replace("\n", " ").rjust(name_width)), end="", flush=True)
 
         if num_interations > lang_param.max_iter:
             delta_t = ""
@@ -143,26 +147,25 @@ def run_for_interations(user_params: BeanchmarkParams, results: BenchmarkResults
 
         return delta_t
 
-    print(60 * "=")
+    print(separator)
     print("[{0}] {1} {2}".format(
-        get_now(), "ITERACTIONS".rjust(2*COL_SIZE), "{:,}".format(num_interations).rjust(COL_SIZE - 1)))
+        get_now(), "ITERACTIONS".rjust(name_width), "{:,}".format(num_interations).rjust(COL_SIZE - 1)))
     for lang_param in lang_params:
         delta_t = run_command(lang_param)
         results.lang_times[lang_param.name].append(delta_t)
 
 
 def print_results(results: BenchmarkResults):
-    print(60 * "=")
     print("[{0}] RESULTS".format(get_now()))
     print(tabulate(results.get_results(), headers="firstrow", tablefmt="psql"))
 
 
 def export_results_to_csv(user_params: BeanchmarkParams, results: BenchmarkResults):
-    file_name = f"{OUTPUT_DIR}/x0={user_params.x0}_r={user_params.r}_it={user_params.iter}_{now_to_str()}.csv"
+    file_name = f"{OUTPUT_DIR}/x0={user_params.x0}_r={user_params.r}_it={user_params.repetitions}_{now_to_str()}.csv"
     with open(file_name, 'w', newline="",  encoding='UTF8') as f:
         writer = csv.writer(f)
         writer.writerows(results.get_results())
-    print(f"Exporting to {file_name}")
+    print(f"[{get_now()}] Exporting to {file_name}")
 
 
 def plot_results(user_params: BeanchmarkParams, results: BenchmarkResults):
@@ -191,7 +194,7 @@ def plot_results(user_params: BeanchmarkParams, results: BenchmarkResults):
         plt.yscale(scale_type)
         file_name = file_name_base.replace("TYPE", scale_type)
         plt.savefig(file_name, format="svg")
-        print(f"{scale_type.capitalize()} plot saved at {file_name}")
+        print(f"[{get_now()}] {scale_type.capitalize()} plot saved at {file_name}")
 
     fill_series()
     file_name_base = basic_config()
@@ -214,6 +217,7 @@ def main():
 
     for num_interations in results.interactions:
         run_for_interations(user_params, results, lang_params, num_interations)
+    print(separator)
 
     if user_params.export_to_file:
         export_results_to_csv(user_params, results)
