@@ -1,0 +1,7 @@
+{
+  "name": "Clojure",
+  "code": "clojure",
+  "description": "Clojure using Vector",
+  "command": "java -jar languages/clojure-logistic-benchmark/target/clojure-logistic-benchmark.jar",
+  "color": "#63B132"
+}
