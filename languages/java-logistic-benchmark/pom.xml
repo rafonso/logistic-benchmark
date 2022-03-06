@@ -47,6 +47,34 @@
                 </executions>
 
             </plugin>
+            <plugin>
+                <!--
+                Sources:
+                https://www.baeldung.com/jni
+                https://medium.com/geekculture/a-simple-guide-to-java-native-interface-jni-using-native-maven-plugin-e01f4077a8a5
+                -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-jni-headers</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>${project.build.sourceDirectory}</workingDirectory>
+                            <executable>javac</executable>
+                            <arguments>
+                                <argument>-h</argument>
+                                <argument>${project.basedir}/src/main/native/include</argument>
+                                <argument>./rafael/logistic_benchmark/benchmarks/NativeDoubleArrayGenerator.java</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>

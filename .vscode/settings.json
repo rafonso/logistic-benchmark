@@ -1,3 +1,11 @@
 {
-  "C_Cpp.errorSquiggles": "Disabled"
+  "C_Cpp.errorSquiggles": "Disabled",
+  "files.associations": {
+    "chrono": "c",
+    "stdlib.h": "c",
+    "rafael_logistic_benchmark_benchmarks_nativedoublearraygenerator.h": "c",
+    "jni.h": "c"
+  },
+  "svg.preview.background": "transparent",
+  "java.configuration.updateBuildConfiguration": "interactive"
 }
