@@ -1,4 +1,4 @@
-package rafael.logistic_benchmark;
+package rafael.logistic_benchmark.benchmarks;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -6,7 +6,17 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
-abstract class Benchmark {
+public abstract class Benchmark {
+
+    public static Benchmark getBenchmark(String benchmarkOption) {
+        return switch (benchmarkOption) {
+            case JavaDoubleArrayGenerator.CODE -> new ArrayBenchmark(new JavaDoubleArrayGenerator());
+            case ArrayListBenchmark.CODE -> new ArrayListBenchmark();
+            case LinkedListBenchmark.CODE -> new LinkedListBenchmark();
+            case PreallocArrayListBenchmark.CODE -> new PreallocArrayListBenchmark();
+            default -> throw new IllegalArgumentException("Invalid benchmark option: " + benchmarkOption);
+        };
+    }
 
     protected record ProcessorResult(double[] seriesArray, Collection<Double> seriesCollection, long time) {
         double[] toArray() {
@@ -18,21 +28,7 @@ abstract class Benchmark {
 
     protected abstract ProcessorResult calculate(double x0, double r, int iter);
 
-    /*
-    ProcessorResult calculate(double x0, double r, int iter) {
-        double[] series = new double[iter];
-
-        long t0 = System.currentTimeMillis();
-        series[0] = x0;
-        IntStream.range(1, iter).forEach(i -> series[i] = r * series[i - 1] * (1.0 - series[i - 1]));
-        long time = System.currentTimeMillis() - t0;
-
-        return new ProcessorResult(series, null, time);
-    }
-
-     */
-
-    void simpleAction(double x0, double r, int iter, boolean showSeries) {
+    public void simpleAction(double x0, double r, int iter, boolean showSeries) {
         var result =  calculate(x0, r, iter);
 
         if(showSeries){
@@ -44,7 +40,7 @@ abstract class Benchmark {
         System.out.println("TIME: " + result.time() +" ms");
     }
 
-    void repeatAction(double x0, double r, int iter, int repetitions) {
+    public void repeatAction(double x0, double r, int iter, int repetitions) {
         long[] times = new long[repetitions];
 
         // warming
@@ -58,6 +54,7 @@ abstract class Benchmark {
         long time = System.currentTimeMillis() - t0;
         System.out.println();
 
+        @SuppressWarnings("OptionalGetWithoutIsPresent")
         var average = LongStream.of(times).average().getAsDouble();
 
         System.out.println("AVERAGE " + average +" ms");

@@ -1,8 +1,11 @@
-package rafael.logistic_benchmark;
+package rafael.logistic_benchmark.benchmarks;
 
 import java.util.stream.IntStream;
 
 final public class JavaDoubleArrayGenerator implements DoubleArrayGenerator {
+
+    static final String CODE = "ar";
+
     @Override
     public double[] createSeries(double x0, double r, int iter) {
         double[] series = new double[iter];

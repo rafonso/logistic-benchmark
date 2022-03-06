@@ -1,12 +1,15 @@
-package rafael.logistic_benchmark;
+package rafael.logistic_benchmark.benchmarks;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-public class ArrayListBenchmark extends Benchmark {
+class LinkedListBenchmark extends Benchmark {
+
+    static final String CODE = "ll";
+
     @Override
     protected ProcessorResult calculate(double x0, double r, int iter) {
-        List<Double> series = new ArrayList<>();
+        List<Double> series = new LinkedList<>();
 
         long t0 = System.currentTimeMillis();
         double x = x0;

@@ -1,4 +1,4 @@
-package rafael.logistic_benchmark;
+package rafael.logistic_benchmark.benchmarks;
 
 final class NativeDoubleArrayGenerator implements DoubleArrayGenerator {
 

@@ -1,6 +1,6 @@
-package rafael.logistic_benchmark;
+package rafael.logistic_benchmark.benchmarks;
 
-public class ArrayBenchmark extends Benchmark {
+class ArrayBenchmark extends Benchmark {
 
     private final DoubleArrayGenerator generator;
 
