@@ -2,6 +2,12 @@ package rafael.logistic_benchmark.benchmarks;
 
 final class NativeDoubleArrayGenerator implements DoubleArrayGenerator {
 
+    static final String CODE = "na";
+
+    static {
+        System.loadLibrary("generate_series_native");
+    }
+
     private native double[] generateSeries(double x0, double r, int iter);
 
     @Override

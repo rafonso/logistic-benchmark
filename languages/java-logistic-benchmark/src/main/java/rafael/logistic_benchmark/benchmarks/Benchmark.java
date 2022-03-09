@@ -10,6 +10,7 @@ public abstract class Benchmark {
 
     public static Benchmark getBenchmark(String benchmarkOption) {
         return switch (benchmarkOption) {
+            case NativeDoubleArrayGenerator.CODE -> new ArrayBenchmark(new NativeDoubleArrayGenerator());
             case JavaDoubleArrayGenerator.CODE -> new ArrayBenchmark(new JavaDoubleArrayGenerator());
             case ArrayListBenchmark.CODE -> new ArrayListBenchmark();
             case LinkedListBenchmark.CODE -> new LinkedListBenchmark();
