@@ -88,3 +88,10 @@ The main part receives the command line arguments to extract the parameters and 
   - [Python](languages/python-logistic-benchmark/README.md)
   - [Rust](languages/rust-logistic-benchmark/README.md)
   - [TypeScript](languages/typescript-logistic-benchmark/README.md)
+
+## Graphics
+### All Languages, until 10,000,000
+![](./assets/all_langs-log.svg)
+![](./assets/all_langs-linear.svg)
+### All Languages, until 100,000
+![](./assets/all_langs-until_100,000-log.svg)
