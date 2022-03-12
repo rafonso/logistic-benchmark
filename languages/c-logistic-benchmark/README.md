@@ -8,6 +8,8 @@ To create the array I had to use `malloc` function from `stdlib.h`. When we crea
 
 Its execution time is one of fastest, mainly when series size is lesser than 10,000. However when the series size is 10,000,000, although its time is 10 seconds, I observed that my machine runs out of memory enough. My Spotfy sound crackles during these 10 seconds.
 
+Initially it was developed with Visual Studio 2022. However I changed to GCC because its generated executable is faster than the one created by Visual Studio.
+
 ## Graphics
 ### General execution
 ![](./assets/x0=0.1_r=3.91_rep=100_2022-03-11_19-04-30_log.svg)

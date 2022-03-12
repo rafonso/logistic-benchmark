@@ -2,7 +2,7 @@
 
 ## Development Environment
   - Clojure 1.10.3
-  - IntelliJ 2021.3.2
+  - IntelliJ 2021.3.2 with [Cursive 1.12](https://cursive-ide.com/)
 
 ## Highlights
 Since I have no experience clojure, I had to use a lot of trial and error. Initially I tried use [`double-array`](https://clojuredocs.org/clojure.core/double-array), but it did not work (I need remember why) . So I used [`vector`](https://clojuredocs.org/clojure.core/vector).
