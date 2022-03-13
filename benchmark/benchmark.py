@@ -1,6 +1,7 @@
 import argparse
 import csv
 import math
+import random
 import re
 import subprocess
 import sys
@@ -63,8 +64,8 @@ COL_SIZE = 11
 TIME_RE = 'TOTAL_TIME (\d+)'
 OUTPUT_DIR = "output/benchmark"
 
-name_width = 3*COL_SIZE
-separator = (17 + 1 + name_width + COL_SIZE) * "="
+NAME_WIDTH = 3*COL_SIZE
+SEPARATOR = (17 + 1 + NAME_WIDTH + COL_SIZE) * "="
 
 
 def parse_args() -> BeanchmarkParams:
@@ -132,7 +133,7 @@ def run_for_interations(user_params: BeanchmarkParams, results: BenchmarkResults
 
     def run_command(lang_param: LangParams) -> int:
         print("[{0}] {1}".format(
-            get_now(), lang_param.name.replace("\n", " ").rjust(name_width)), end="", flush=True)
+            get_now(), lang_param.name.replace("\n", " ").rjust(NAME_WIDTH)), end="", flush=True)
 
         if num_interations > lang_param.max_iter:
             delta_t = ""
@@ -147,10 +148,13 @@ def run_for_interations(user_params: BeanchmarkParams, results: BenchmarkResults
 
         return delta_t
 
-    print(separator)
+    print(SEPARATOR)
     print("[{0}] {1} {2}".format(
-        get_now(), "ITERACTIONS".rjust(name_width), "{:,}".format(num_interations).rjust(COL_SIZE - 1)))
-    for lang_param in lang_params:
+        get_now(), "ITERACTIONS".rjust(NAME_WIDTH), "{:,}".format(num_interations).rjust(COL_SIZE - 1)))
+    # Source: https://stackoverflow.com/questions/9770668/scramble-python-list
+    indexes = sorted(range(len(lang_params)), key = lambda x: random.random() ) 
+    for index in indexes:
+        lang_param = lang_params[index]
         delta_t = run_command(lang_param)
         results.lang_times[lang_param.name].append(delta_t)
 
@@ -217,7 +221,7 @@ def main():
 
     for num_interations in results.interactions:
         run_for_interations(user_params, results, lang_params, num_interations)
-    print(separator)
+    print(SEPARATOR)
 
     if user_params.export_to_file:
         export_results_to_csv(user_params, results)

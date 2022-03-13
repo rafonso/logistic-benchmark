@@ -1,5 +1,6 @@
 import argparse
 import csv
+import random
 import statistics
 import subprocess
 import time
@@ -141,8 +142,11 @@ def main():
 
     results = SeriesResult(user_params.iter)
 
-    for param in lang_params:
-        results.lang_series[param.name] = run_command(param, user_params)
+    # Source: https://stackoverflow.com/questions/9770668/scramble-python-list
+    indexes = sorted(range(len(lang_params)), key = lambda x: random.random() ) 
+    for index in indexes:
+        lang_param = lang_params[index]
+        results.lang_series[lang_param.name] = run_command(lang_param, user_params)
 
     results.calculate_average()
 
