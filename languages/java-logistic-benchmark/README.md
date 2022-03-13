@@ -55,5 +55,9 @@ without initial size.
 ![Java and C and Clojure Kotlin - Linear](./assets/java_c_clojure_kotlin-linear.svg)
 ### Until 100,000 interactions
 ![Java and C and Clojure Kotlin Until 100,000 - Log](./assets/java_c_clojure_kotlin-until_100,000-log.svg)
-![Java and C and Kotlin Until 100,000 - Linear](./assets/java_c_kotlin-until_100,000-linear.svg)
+![Java and C and Clojure and Kotlin Until 100,000 - Linear](./assets/java_c_clojure_kotlin-until_100,000-linear.svg)
+### Until 10,000 interactions
+![Java and C and Clojure Kotlin Until 100,00 - Log](./assets/java_c_clojure_kotlin-until_10,000-log.svg)
+![Java and C and Kotlin Until 10,000 - Linear](./assets/java_c_clojure_kotlin-until_10,000-linear.svg)
+
 

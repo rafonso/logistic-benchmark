@@ -1,7 +1,7 @@
 # logistic-benchmark
 My goal here is compare how different languages behave while creating a sequence for [Logist Map](https://en.wikipedia.org/wiki/Logistic_map).
 
-# BAsic implementation
+# Basic implementation
 The code below comes from [Typescript implementation](languages/typescript-logistic-benchmark/src/index.ts), but all implementation follow the same schema:
 ```typescript
 
@@ -82,16 +82,20 @@ The main part receives the command line arguments to extract the parameters and 
   - [Clojure](languages/clojure-logistic-benchmark/README.md)
   - [C#](languages/cs-logistic-beanchmark/README.md)
   - [Go](languages/go-logistic-benchmark/README.md)
+  - Groovy (Pending)
   - [Java](languages/java-logistic-benchmark/README.md)
   - [Kotlin](languages/kotlin-logistic-benchmark/README.md)
   - [Lua](languages/lua-logistic-benchmark/README.md)
   - [Python](languages/python-logistic-benchmark/README.md)
   - [Rust](languages/rust-logistic-benchmark/README.md)
+  - Scala (Pending)
   - [TypeScript](languages/typescript-logistic-benchmark/README.md)
 
 ## Graphics
-### All Languages, until 10,000,000
+### All Languages
 ![](./assets/all_langs-log.svg)
 ![](./assets/all_langs-linear.svg)
 ### All Languages, until 100,000
 ![](./assets/all_langs-until_100,000-log.svg)
+### All Languages, until 10,000
+![](./assets/all_langs-until_10,000-log.svg)

@@ -7,11 +7,14 @@
   [r iter t0 series i x]
   (if (= i iter)
     [series (- (System/currentTimeMillis) t0)]
-    (recur r iter t0 (conj series x) (+ i 1) (* (* r x) (- 1.0 x)))))
+    (do
+      (aset-double series i x)
+      (recur r iter t0 series (+ i 1) (* (* r x) (- 1.0 x)))))
+  )
 
 (defn calculate
   [x0 r iter]
-  (calculate1 r iter (System/currentTimeMillis) [] 0 x0))
+  (calculate1 r iter (System/currentTimeMillis) (double-array iter) 0 x0))
 
 (defn simple-action
   [x0 r iter show-series]
