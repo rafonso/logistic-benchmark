@@ -88,7 +88,7 @@ The main part receives the command line arguments to extract the parameters and 
   - [Lua](languages/lua-logistic-benchmark/README.md)
   - [Python](languages/python-logistic-benchmark/README.md)
   - [Rust](languages/rust-logistic-benchmark/README.md)
-  - Scala (Pending)
+  - [Scala](languages/scala-logistic-benchmark/README.md)
   - [TypeScript](languages/typescript-logistic-benchmark/README.md)
 
 ## Graphics
