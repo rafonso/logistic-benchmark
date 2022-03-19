@@ -78,19 +78,19 @@ In `simpleAction`, `calculate` is called and the series is printed to output (if
 The main part receives the command line arguments to extract the parameters and execute the processing.
 
 ## Implementations
-  - [C](languages/c-logistic-benchmark/README.md)
-  - [Clojure](languages/clojure-logistic-benchmark/README.md)
-  - [C#](languages/cs-logistic-beanchmark/README.md)
-  - [Go](languages/go-logistic-benchmark/README.md)
+  - [C](languages/c-logistic-benchmark/)
+  - [Clojure](languages/clojure-logistic-benchmark/)
+  - [C#](languages/cs-logistic-beanchmark/)
+  - [Go](languages/go-logistic-benchmark/)
   - Groovy (Pending)
-  - [Java](languages/java-logistic-benchmark/README.md)
-  - [Kotlin](languages/kotlin-logistic-benchmark/README.md)
-  - [Kotlin Native](languages/kotlin_native_logistic_benchmark/README.md)
-  - [Lua](languages/lua-logistic-benchmark/README.md)
-  - [Python](languages/python-logistic-benchmark/README.md)
-  - [Rust](languages/rust-logistic-benchmark/README.md)
-  - [Scala](languages/scala-logistic-benchmark/README.md)
-  - [TypeScript](languages/typescript-logistic-benchmark/README.md)
+  - [Java](languages/java-logistic-benchmark/)
+  - [Kotlin](languages/kotlin-logistic-benchmark/)
+  - [Kotlin Native](languages/kotlin_native_logistic_benchmark/)
+  - [Lua](languages/lua-logistic-benchmark/)
+  - [Python](languages/python-logistic-benchmark/)
+  - [Rust](languages/rust-logistic-benchmark/)
+  - [Scala](languages/scala-logistic-benchmark/)
+  - [TypeScript](languages/typescript-logistic-benchmark/)
 
 ## Graphics
 ### All Languages
