@@ -15,8 +15,9 @@ from commons import (LangParams, UserParams, change_work_dir, get_now,
 
 
 class BeanchmarkParams(UserParams):
-    def __init__(self, x0: float, r: float,  languages: list[str] = [], languages_to_skip: list[str] = [], export_to_file: bool = False, repetitions: int = 0,
-                 export_to_plot: bool = False, min_iterations=0, max_iterations: int = sys.maxsize, graphic_scale_type: str = "log"):
+    def __init__(self, x0: float, r: float,  languages: list[str] = [], languages_to_skip: list[str] = [],
+                 export_to_file: bool = False, repetitions: int = 0, export_to_plot: bool = False, min_iterations=0, 
+                 max_iterations: int = sys.maxsize, graphic_scale_type: str = "log", graphic_file_extension: str = "png"):
         UserParams.__init__(self, x0, r, languages,
                             languages_to_skip, export_to_file)
         self.repetitions = repetitions
@@ -24,12 +25,14 @@ class BeanchmarkParams(UserParams):
         self.min_iterations = min_iterations
         self.max_iterations = max_iterations
         self.graphic_scale_type = graphic_scale_type
+        self.graphic_file_extension = graphic_file_extension
 
     def is_linear_plotting(self):
         return (self.graphic_scale_type == "both") or (self.graphic_scale_type == "linear")
 
     def is_log_plotting(self):
         return (self.graphic_scale_type == "both") or (self.graphic_scale_type == "log")
+
 
 class BenchmarkResults:
     def __init__(self, lang_params: list[LangParams], interactions: list[int]):
@@ -78,6 +81,8 @@ def parse_args() -> BeanchmarkParams:
                         action=argparse.BooleanOptionalAction)
     parser.add_argument("-g", help="Results will be exported to a graphic",
                         action=argparse.BooleanOptionalAction)
+    parser.add_argument("-gf", help="graphic file extension",
+                        choices=["png", "svg"], default="png")
     parser.add_argument("-gs", help="Graphic scale type",
                         choices=["linear", "log", "both"], default="log")
     parser.add_argument("-ni", help="Min Iteractions",
@@ -103,7 +108,7 @@ def parse_args() -> BeanchmarkParams:
 
     return BeanchmarkParams(x0=args.x0, r=args.r, repetitions=args.repetitions, min_iterations=args.ni, max_iterations=args.mi,
                             languages=args.languages, languages_to_skip=args.languages_to_skip, export_to_plot=args.g, export_to_file=args.f,
-                            graphic_scale_type=args.gs)
+                            graphic_scale_type=args.gs, graphic_file_extension=args.gf)
 
 
 def get_interactions(min_interactions: int, max_interactions: int) -> list[int]:
@@ -130,7 +135,6 @@ def get_interactions(min_interactions: int, max_interactions: int) -> list[int]:
 
 def run_for_interations(user_params: BeanchmarkParams, results: BenchmarkResults, lang_params: list[LangParams], num_interations: int):
 
-
     def run_command(lang_param: LangParams) -> int:
         print("[{0}] {1}".format(
             get_now(), lang_param.name.replace("\n", " ").rjust(NAME_WIDTH)), end="", flush=True)
@@ -152,7 +156,7 @@ def run_for_interations(user_params: BeanchmarkParams, results: BenchmarkResults
     print("[{0}] {1} {2}".format(
         get_now(), "ITERACTIONS".rjust(NAME_WIDTH), "{:,}".format(num_interations).rjust(COL_SIZE - 1)))
     # Source: https://stackoverflow.com/questions/9770668/scramble-python-list
-    indexes = sorted(range(len(lang_params)), key = lambda x: random.random() ) 
+    indexes = sorted(range(len(lang_params)), key=lambda x: random.random())
     for index in indexes:
         lang_param = lang_params[index]
         delta_t = run_command(lang_param)
@@ -183,21 +187,22 @@ def plot_results(user_params: BeanchmarkParams, results: BenchmarkResults):
                 else:
                     times_serie.append(None)
             plt.plot(results.interactions, times_serie, label=lang,
-                    color=results.colors.get(lang), linestyle=results.linestyle[lang])
+                     color=results.colors.get(lang), linestyle=results.linestyle[lang])
 
     def basic_config():
         plt.legend()
-        plt.title(f"x0 = { user_params.x0}, r = { user_params.r}, Repetitions = { user_params.repetitions}")
+        plt.title(
+            f"x0 = { user_params.x0}, r = { user_params.r}, Repetitions = { user_params.repetitions}")
         plt.grid(visible=True, which="both")
         plt.xlabel("Interations")
         plt.ylabel("Time (ms)")
-        return f"{OUTPUT_DIR}/plots/x0={user_params.x0}_r={user_params.r}_rep={user_params.repetitions}_{now_to_str()}_TYPE.svg" 
+        return f"{OUTPUT_DIR}/plots/x0={user_params.x0}_r={user_params.r}_rep={user_params.repetitions}_{now_to_str()}_TYPE.{user_params.graphic_file_extension}"
 
     def save_plot(file_name_base: str, scale_type: str):
         plt.xscale(scale_type)
         plt.yscale(scale_type)
         file_name = file_name_base.replace("TYPE", scale_type)
-        plt.savefig(file_name, format="svg")
+        plt.savefig(file_name, format=user_params.graphic_file_extension)
         print(f"[{get_now()}] {scale_type.capitalize()} plot saved at {file_name}")
 
     fill_series()
