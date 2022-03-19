@@ -85,6 +85,7 @@ The main part receives the command line arguments to extract the parameters and 
   - Groovy (Pending)
   - [Java](languages/java-logistic-benchmark/README.md)
   - [Kotlin](languages/kotlin-logistic-benchmark/README.md)
+  - [Kotlin Native](languages/kotlin_native_logistic_benchmark/README.md)
   - [Lua](languages/lua-logistic-benchmark/README.md)
   - [Python](languages/python-logistic-benchmark/README.md)
   - [Rust](languages/rust-logistic-benchmark/README.md)

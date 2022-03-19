@@ -1,7 +1,7 @@
 {
   "name": "Scala",
   "code": "scala",
-  "description": "Scala using Double Array/nwith preallocated size",
+  "description": "Scala using Double Array\nwith preallocated size",
   "command": "java -jar languages/scala-logistic-benchmark/target/scala-logistic-benchmark-jar-with-dependencies.jar",
   "color": "#DC322F"
 }
