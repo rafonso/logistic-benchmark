@@ -7,7 +7,7 @@
   - IntelliJ 2021.3.2
 
 ## Highlights
-After configure the project, I just copied the code from [Kotlin Project](../kotlin-logistic-benchmark/README.md).
+After configure the project, I just copied the code from [Kotlin Project](../kotlin-logistic-benchmark/).
 
 Compared with Kotlin JVM, it is faster until approximately 50,000 interactions. 
 After this the times become similar. 
