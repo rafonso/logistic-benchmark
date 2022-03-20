@@ -2,6 +2,6 @@
   "name": "Java Native Array",
   "code": "java-native",
   "description": "Java using call\nto native code",
-  "command": "java -Djava.library.path=languages/java-logistic-benchmark/generate_series_native/x64/Debug -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar na ",
+  "command": "java -Djava.library.path=languages/java-logistic-benchmark/generate_series_native/x64/Release -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar na ",
   "color": "#A57E6A"
 }

@@ -2,7 +2,7 @@
   "name": "Java Mixed Array",
   "code": "java-mixed",
   "description": "Java calling Native until \n50,000 interactions and Java after",
-  "command": "java -Djava.library.path=languages/java-logistic-benchmark/generate_series_native/x64/Debug -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar ma ",
+  "command": "java -Djava.library.path=languages/java-logistic-benchmark/generate_series_native/x64/Release -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar ma ",
   "color": "#A57E6A",
   "linestyle": "--"
 }
