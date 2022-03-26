@@ -32,32 +32,34 @@ class BeanchmarkParams(UserParams):
 
 
 @dataclass
+class LangResults:
+    color: str
+    line_style: str
+    times: list[int] = field(default_factory=list)
+
+
+@dataclass
 class BenchmarkResults:
     lang_params: InitVar[list[LangParams]]
     interactions: list[int]
-    lang_times: dict[str, list[int]] = field(init=False)
-    colors: dict[str, str] = field(init=False)
-    linestyle: dict[str, str] = field(init=False)
+    results: dict[str, LangResults] = field(init=False)
 
     def __post_init__(self, lang_params: list[LangParams]):
-        self.lang_times: dict[str, list[int]] = {}
-        self.colors: dict[str, str] = {}
-        self.linestyle: dict[str, str] = {}
+        self.results = {}
         for lang_param in lang_params:
-            self.lang_times[lang_param.name] = []
-            self.colors[lang_param.name] = lang_param.color
-            self.linestyle[lang_param.name] = lang_param.linestyle
+            self.results[lang_param.name] = LangResults(
+                lang_param.color, lang_param.linestyle)
 
     def get_results(self):
         header = ["Iter"]
-        for name in self.lang_times.keys():
+        for name in self.results.keys():
             header.append(name)
 
         result = [header]
         for i, iter in enumerate(self.interactions):
             line = [str(iter)]
-            for times in self.lang_times.values():
-                line.append(str(times[i]))
+            for lang_result in self.results.values():
+                line.append(str(lang_result.times[i]))
             result.append(line)
 
         return result
@@ -160,7 +162,7 @@ def run_for_interations(user_params: BeanchmarkParams, results: BenchmarkResults
     for index in indexes:
         lang_param = lang_params[index]
         delta_t = run_command(lang_param)
-        results.lang_times[lang_param.name].append(delta_t)
+        results.results[lang_param.name].times.append(delta_t)
 
 
 def print_results(results: BenchmarkResults):
@@ -179,15 +181,15 @@ def export_results_to_csv(user_params: BeanchmarkParams, results: BenchmarkResul
 def plot_results(user_params: BeanchmarkParams, results: BenchmarkResults):
 
     def fill_series():
-        for lang, times in results.lang_times.items():
+        for lang, result in results.results.items():
             times_serie = []
-            for str_time in times:
+            for str_time in result.times:
                 if str_time:
                     times_serie.append(int(str_time))
                 else:
                     times_serie.append(None)
             plt.plot(results.interactions, times_serie, label=lang,
-                     color=results.colors.get(lang), linestyle=results.linestyle[lang])
+                     color=result.color, linestyle=result.line_style)
 
     def basic_config():
         plt.legend()
