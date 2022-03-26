@@ -6,6 +6,7 @@ import re
 import subprocess
 import sys
 import time
+from dataclasses import InitVar, dataclass, field
 
 import matplotlib.pyplot as plt
 from tabulate import tabulate
@@ -14,18 +15,14 @@ from commons import (LangParams, UserParams, change_work_dir, get_now,
                      now_to_str, print_total_time, read_config)
 
 
+@dataclass
 class BeanchmarkParams(UserParams):
-    def __init__(self, x0: float, r: float,  languages: list[str] = [], languages_to_skip: list[str] = [],
-                 export_to_file: bool = False, repetitions: int = 0, export_to_plot: bool = False, min_iterations=0, 
-                 max_iterations: int = sys.maxsize, graphic_scale_type: str = "log", graphic_file_extension: str = "png"):
-        UserParams.__init__(self, x0, r, languages,
-                            languages_to_skip, export_to_file)
-        self.repetitions = repetitions
-        self.export_to_plot = export_to_plot
-        self.min_iterations = min_iterations
-        self.max_iterations = max_iterations
-        self.graphic_scale_type = graphic_scale_type
-        self.graphic_file_extension = graphic_file_extension
+    repetitions: int = 0
+    export_to_plot: bool = False
+    min_iterations: int = 0
+    max_iterations: int = sys.maxsize
+    graphic_scale_type: str = "log"
+    graphic_file_extension: str = "png"
 
     def is_linear_plotting(self):
         return (self.graphic_scale_type == "both") or (self.graphic_scale_type == "linear")
@@ -34,9 +31,15 @@ class BeanchmarkParams(UserParams):
         return (self.graphic_scale_type == "both") or (self.graphic_scale_type == "log")
 
 
+@dataclass
 class BenchmarkResults:
-    def __init__(self, lang_params: list[LangParams], interactions: list[int]):
-        self.interactions = interactions
+    lang_params: InitVar[list[LangParams]]
+    interactions: list[int]
+    lang_times: dict[str, list[int]] = field(init=False)
+    colors: dict[str, str] = field(init=False)
+    linestyle: dict[str, str] = field(init=False)
+
+    def __post_init__(self, lang_params: list[LangParams]):
         self.lang_times: dict[str, list[int]] = {}
         self.colors: dict[str, str] = {}
         self.linestyle: dict[str, str] = {}
@@ -58,9 +61,6 @@ class BenchmarkResults:
             result.append(line)
 
         return result
-
-    def __repr__(self):
-        return f"[{self.interactions}, {self.lang_times}]"
 
 
 COL_SIZE = 11

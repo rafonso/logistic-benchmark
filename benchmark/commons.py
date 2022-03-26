@@ -3,6 +3,7 @@ import glob
 import json
 import sys
 import time
+from dataclasses import InitVar, dataclass, field
 from os import chdir
 from os.path import dirname, normpath
 
@@ -32,29 +33,29 @@ def print_total_time(t0: float):
     print(f"[{get_now()}] TOTAL TIME: {delta_t} ms")
 
 
+@dataclass
 class LangParams:
-    def __init__(self, name: str, code: str, description: str, cmd: str = "", max_iter: int = sys.maxsize, color: str = None, linestyle: str = "-") -> None:
-        self.name = name
-        self.code = code
-        self.description = description
+    name: str
+    code: str
+    description: str
+    cmd: InitVar[str] = ""
+    max_iter: int = sys.maxsize
+    color: str = None
+    linestyle: str = "-"
+    command: str = field(init=False)
+    series: list[float] = field(default_factory=list)
+
+    def __post_init__(self, cmd: str):
         self.command = normpath(cmd)
-        self.max_iter = max_iter
-        self.series: list[float] = []
-        self.color = color
-        self.linestyle = linestyle
-
-    def __repr__(self):
-        return f"[{self.name}: '{self.command}', {self.max_iter}, {self.color}]"
 
 
+@dataclass
 class UserParams:
-    def __init__(self, x0: float, r: float, languages: list[str] = [], languages_to_skip: list[str] = [], export_to_file: bool = False):
-        self.x0 = x0
-        self.r = r
-        self.iter = iter
-        self.languages = languages
-        self.languages_to_skip = languages_to_skip
-        self.export_to_file = export_to_file
+    x0: float
+    r: float
+    languages: list[str] = field(default_factory=list)
+    languages_to_skip: list[str] = field(default_factory=list)
+    export_to_file: bool = False
 
 
 def get_json_config_files():
@@ -62,7 +63,9 @@ def get_json_config_files():
         with open(file_name, 'r') as json_file:
             json_param = json.load(json_file)
             return LangParams(json_param["name"], json_param.get("code", None), json_param.get("description", None),
-                              json_param["command"], json_param.get("maxIter", None), json_param.get("color", None), 
+                              json_param["command"],
+                              json_param.get("maxIter", None),
+                              json_param.get("color", None),
                               json_param.get("linestyle", "solid"))
 
     files = glob.glob('./languages/**/*.config.json', recursive=True)

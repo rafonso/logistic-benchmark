@@ -4,6 +4,7 @@ import random
 import statistics
 import subprocess
 import time
+from dataclasses import dataclass, field
 
 from tabulate import tabulate
 
@@ -11,17 +12,15 @@ from commons import (LangParams, UserParams, change_work_dir, get_now,
                      now_to_str, print_total_time, read_config)
 
 
+@dataclass
 class SeriesParams(UserParams):
-    def __init__(self, x0: float, r: float, languages: list[str] = [], languages_to_skip: list[str] = [], export_to_file: bool = False, iter: int = 0):
-        UserParams.__init__(self, x0, r, languages,
-                            languages_to_skip, export_to_file)
-        self.iter = iter
+    iter: int = 0
 
 
+@dataclass
 class SeriesResult:
-    def __init__(self, iter: int):
-        self.lang_series: dict[str, list[float]] = {}
-        self.iter = iter
+    iter: int
+    lang_series: dict[str, list[float]] = field(default_factory=dict)
 
     def calculate_average(self):
         if len(self.lang_series) == 1:
@@ -120,7 +119,8 @@ def create_output(results: dict, iter: int) -> list[list[str]]:
 
 
 def lines_to_console(results: SeriesResult):
-    print(tabulate(results.get_results(), headers="firstrow", tablefmt="psql", floatfmt=".18f"))
+    print(tabulate(results.get_results(), headers="firstrow",
+          tablefmt="psql", floatfmt=".18f"))
 
 
 def lines_to_file(user_params: SeriesParams, results: SeriesResult):
@@ -143,10 +143,11 @@ def main():
     results = SeriesResult(user_params.iter)
 
     # Source: https://stackoverflow.com/questions/9770668/scramble-python-list
-    indexes = sorted(range(len(lang_params)), key = lambda x: random.random() ) 
+    indexes = sorted(range(len(lang_params)), key=lambda x: random.random())
     for index in indexes:
         lang_param = lang_params[index]
-        results.lang_series[lang_param.name] = run_command(lang_param, user_params)
+        results.lang_series[lang_param.name] = run_command(
+            lang_param, user_params)
 
     results.calculate_average()
 

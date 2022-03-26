@@ -1,13 +1,14 @@
 import argparse
+from dataclasses import dataclass
 
 from tabulate import tabulate
 
 from commons import LangParams, change_work_dir, get_json_config_files
 
 
+@dataclass
 class ShowParams:
-    def __init__(self, show_all: bool):
-        self.show_all = show_all
+    show_all: bool
 
 
 def parse_args() -> ShowParams:
