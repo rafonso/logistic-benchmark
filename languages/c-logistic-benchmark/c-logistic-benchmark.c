@@ -43,6 +43,7 @@ void simple_action(const double x0, const double r, const int it, int show_serie
 	}
 
 	printf("TIME: %d ms", result.time);
+	free(result.series);
 }
 
 void repeat_action(const double x0, const double r, const int it, int repetitions)
@@ -56,8 +57,10 @@ void repeat_action(const double x0, const double r, const int it, int repetition
 		for (int i = 0; i < repetitions; i++)
 		{
 			printf("\r%5d / %5d", (i + 1), repetitions);
-			times[i] = generate(x0, r, it).time;
+			Result result = generate(x0, r, it);
+			times[i] = result.time;
 			totalTime += times[i];
+			free(result.series);
 		}
 		printf("\n");
 		long deltaT = clock() - t0;
@@ -65,6 +68,11 @@ void repeat_action(const double x0, const double r, const int it, int repetition
 
 		printf("AVERAGE %d ms\n", average);
 		printf("TOTAL_TIME %d\n", deltaT);
+	}
+	if (it >= 100)
+	{
+		// If it < 100 it crashes. I don't understand why.
+		free(times);
 	}
 }
 

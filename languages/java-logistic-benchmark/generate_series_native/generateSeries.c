@@ -17,6 +17,8 @@ JNIEXPORT jdoubleArray JNICALL Java_rafael_logistic_1benchmark_benchmarks_Native
 		jdoubleArray doubleArray = (*env)->NewDoubleArray(env, iter);
 		(*env)->SetDoubleArrayRegion(env, doubleArray, 0, iter, (const jdouble*)x);
 
+		free(x);
+
 		return doubleArray;
 	}
 

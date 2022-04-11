@@ -6,7 +6,7 @@
 ## Highlights
 To create the array I had to use `malloc` function from `stdlib.h`. When we create a array in C such as `double[] series = double[size];` this size must be a constant, not coming from a variable (such as `int size = 1000;`). Therefore I had to appeal to `malloc` to create a `double` pointer with requested size.
 
-Its execution time is one of fastest, mainly when series size is lesser than 10,000. However when the series size is 10,000,000, although its time is 10 seconds, I observed that my machine runs out of memory enough. My Spotfy sound crackles during these 10 seconds.
+Its execution time is one of fastest, mainly when series size is lesser than 10,000. 
 
 Initially it was developed with Visual Studio 2022. However I changed to GCC because its generated executable is faster than the one created by Visual Studio.
 
