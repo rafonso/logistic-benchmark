@@ -9,8 +9,8 @@ from dataclasses import dataclass, field
 
 from tabulate import tabulate
 
-from commons import (OUTPUT_DIR, LangParams, UserParams, change_work_dir,
-                     get_now, now_to_str, print_total_time, read_config)
+from commons import (OUTPUT_DIR, LangParams, UserParams, change_work_dir, log,
+                     now_to_str, print_total_time, read_config)
 
 
 @dataclass
@@ -82,8 +82,7 @@ def parse_args() -> SeriesParams:
 
 
 def run_command(param: LangParams, user_params: SeriesParams):
-    print("[{0}] {1}".format(
-        get_now(), param.name.rjust(COL_SIZE)), flush=True, end="")
+    log(f"{param.name.rjust(COL_SIZE)}", False)
     final_command = (param.command +
                      " s {} {} {} s").format(user_params.x0, user_params.r, user_params.iter)
     result = subprocess.run(final_command, shell=True, capture_output=True)
@@ -133,7 +132,7 @@ def lines_to_file(user_params: SeriesParams, results: SeriesResult):
         writer = csv.writer(f)
         writer.writerows(results.get_results())
     print("-" * 80)
-    print(f"[{get_now()}] Exporting to {file_name}")
+    log(f"Exporting to {file_name}")
 
 
 def main():

@@ -12,8 +12,8 @@ from dataclasses import InitVar, dataclass, field
 import matplotlib.pyplot as plt
 from tabulate import tabulate
 
-from commons import (OUTPUT_DIR, LangParams, UserParams, change_work_dir,
-                     get_now, now_to_str, print_total_time, read_config)
+from commons import (OUTPUT_DIR, LangParams, UserParams, change_work_dir, log,
+                     now_to_str, print_total_time, read_config)
 
 
 @dataclass
@@ -141,8 +141,7 @@ def get_interactions(min_interactions: int, max_interactions: int) -> list[int]:
 def run_for_interactions(user_params: BenchmarkParams, results: BenchmarkResults, lang_params: list[LangParams], num_interactions: int):
 
     def run_command(lang_param: LangParams) -> int:
-        print("[{0}] {1}".format(
-            get_now(), lang_param.name.replace("\n", " ").rjust(NAME_WIDTH)), end="", flush=True)
+        log(lang_param.name.replace("\n", " ").rjust(NAME_WIDTH), False)
 
         if num_interactions > lang_param.max_iter:
             delta_t = ""
@@ -158,8 +157,8 @@ def run_for_interactions(user_params: BenchmarkParams, results: BenchmarkResults
         return delta_t
 
     print(SEPARATOR)
-    print("[{0}] {1} {2}".format(
-        get_now(), "INTERACTIONS".rjust(NAME_WIDTH), "{:,}".format(num_interactions).rjust(COL_SIZE - 1)))
+    log("{0} {1}".format(
+        "INTERACTIONS".rjust(NAME_WIDTH), "{:,}".format(num_interactions).rjust(COL_SIZE - 1)))
     # Source: https://stackoverflow.com/questions/9770668/scramble-python-list
     indexes = sorted(range(len(lang_params)), key=lambda x: random.random())
     for index in indexes:
@@ -169,7 +168,7 @@ def run_for_interactions(user_params: BenchmarkParams, results: BenchmarkResults
 
 
 def print_results(results: BenchmarkResults):
-    print("[{0}] RESULTS".format(get_now()))
+    log("RESULTS")
     print(tabulate(results.get_results(), headers="firstrow", tablefmt="psql"))
 
 
@@ -181,7 +180,7 @@ def export_results_to_csv(user_params: BenchmarkParams, results: BenchmarkResult
     with open(file_name, 'w', newline="",  encoding='UTF8') as f:
         writer = csv.writer(f)
         writer.writerows(results.get_results())
-    print(f"[{get_now()}] Exporting to {file_name}")
+    log(f"Exporting to {file_name}")
 
 
 def plot_results(user_params: BenchmarkParams, results: BenchmarkResults):
@@ -214,7 +213,7 @@ def plot_results(user_params: BenchmarkParams, results: BenchmarkResults):
         plt.yscale(scale_type)
         file_name = file_name_base.replace("TYPE", scale_type)
         plt.savefig(file_name, format=user_params.graphic_file_extension)
-        print(f"[{get_now()}] {scale_type.capitalize()} plot saved at {file_name}")
+        log(f"{scale_type.capitalize()} plot saved at {file_name}")
 
     fill_series()
     file_name_base = basic_config()

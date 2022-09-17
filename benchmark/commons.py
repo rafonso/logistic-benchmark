@@ -9,9 +9,6 @@ from os.path import dirname, normpath
 
 OUTPUT_DIR = "output"
 
-def get_now():
-    return datetime.datetime.now().time()
-
 
 def now_to_str():
     return datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -31,7 +28,13 @@ def print_total_time(t0: float):
     """
     delta_t = int((time.time() - t0) * 1000)
     print("=" * 60)
-    print(f"[{get_now()}] TOTAL TIME: {delta_t} ms")
+    log(f"TOTAL TIME: {delta_t} ms")
+
+
+def log(msg: str, breakLine: bool = True):
+    now_str = datetime.datetime.now().time()
+    separator = "\n" if breakLine else ""
+    print(f"[{now_str}] " + msg, flush=not breakLine, end=separator)
 
 
 @dataclass
