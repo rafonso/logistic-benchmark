@@ -1,5 +1,6 @@
 import argparse
 import csv
+import os
 import random
 import statistics
 import subprocess
@@ -8,8 +9,8 @@ from dataclasses import dataclass, field
 
 from tabulate import tabulate
 
-from commons import (LangParams, UserParams, change_work_dir, get_now,
-                     now_to_str, print_total_time, read_config)
+from commons import (OUTPUT_DIR, LangParams, UserParams, change_work_dir,
+                     get_now, now_to_str, print_total_time, read_config)
 
 
 @dataclass
@@ -50,7 +51,7 @@ class SeriesResult:
 
 
 COL_SIZE = 24
-OUTPUT_DIR = "output/series"
+SERIES_DIR = f"{OUTPUT_DIR}/series"
 
 
 def parse_args() -> SeriesParams:
@@ -124,7 +125,10 @@ def lines_to_console(results: SeriesResult):
 
 
 def lines_to_file(user_params: SeriesParams, results: SeriesResult):
-    file_name = f"{OUTPUT_DIR}/x0={user_params.x0}_r={user_params.r}_it={user_params.iter}_{now_to_str()}.csv"
+    if not os.path.exists(SERIES_DIR):
+        os.makedirs(SERIES_DIR, True)
+
+    file_name = f"{SERIES_DIR}/x0={user_params.x0}_r={user_params.r}_it={user_params.iter}_{now_to_str()}.csv"
     with open(file_name, 'w', newline="",  encoding='UTF8') as f:
         writer = csv.writer(f)
         writer.writerows(results.get_results())

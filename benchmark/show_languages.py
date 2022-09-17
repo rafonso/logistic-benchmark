@@ -15,7 +15,7 @@ def parse_args() -> ShowParams:
     parser = argparse.ArgumentParser(
         description="Show Languages parameters"
     )
-    parser.add_argument("-a", "--show-all", help="Show all details (e.g. color, max iteractions, command)",
+    parser.add_argument("-a", "--show-all", help="Show all details (e.g. color, max interactions, command)",
                         action=argparse.BooleanOptionalAction)
 
     args = parser.parse_args()

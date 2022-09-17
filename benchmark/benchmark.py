@@ -1,6 +1,7 @@
 import argparse
 import csv
 import math
+import os
 import random
 import re
 import subprocess
@@ -11,12 +12,12 @@ from dataclasses import InitVar, dataclass, field
 import matplotlib.pyplot as plt
 from tabulate import tabulate
 
-from commons import (LangParams, UserParams, change_work_dir, get_now,
-                     now_to_str, print_total_time, read_config)
+from commons import (OUTPUT_DIR, LangParams, UserParams, change_work_dir,
+                     get_now, now_to_str, print_total_time, read_config)
 
 
 @dataclass
-class BeanchmarkParams(UserParams):
+class BenchmarkParams(UserParams):
     repetitions: int = 0
     export_to_plot: bool = False
     min_iterations: int = 0
@@ -67,13 +68,15 @@ class BenchmarkResults:
 
 COL_SIZE = 11
 TIME_RE = 'TOTAL_TIME (\d+)'
-OUTPUT_DIR = "output/benchmark"
+BENCHMARK_DIR = f"{OUTPUT_DIR}/benchmark"
+PLOTS_DIR = f"{BENCHMARK_DIR}/plots"
+REPORTS_DIR = f"{BENCHMARK_DIR}/reports"
 
 NAME_WIDTH = 3*COL_SIZE
 SEPARATOR = (17 + 1 + NAME_WIDTH + COL_SIZE) * "="
 
 
-def parse_args() -> BeanchmarkParams:
+def parse_args() -> BenchmarkParams:
     parser = argparse.ArgumentParser(description="Creates a benchmark")
     parser.add_argument("x0", help="first value of series", type=float)
     parser.add_argument("r", help="R value", type=float)
@@ -87,9 +90,9 @@ def parse_args() -> BeanchmarkParams:
                         choices=["png", "svg"], default="png")
     parser.add_argument("-gs", help="Graphic scale type",
                         choices=["linear", "log", "both"], default="log")
-    parser.add_argument("-ni", help="Min Iteractions",
+    parser.add_argument("-ni", help="Min Interactions",
                         type=int, default=0)
-    parser.add_argument("-mi", help="Max Iteractions",
+    parser.add_argument("-mi", help="Max Interactions",
                         type=int, default=sys.maxsize)
     parser.add_argument("-l", "--languages",
                         help="Codes of Languages to be executed", nargs="*")
@@ -108,9 +111,9 @@ def parse_args() -> BeanchmarkParams:
         parser.error(
             "Min repetitions should be lesser than Max repetitions and greater then 0.")
 
-    return BeanchmarkParams(x0=args.x0, r=args.r, repetitions=args.repetitions, min_iterations=args.ni, max_iterations=args.mi,
-                            languages=args.languages, languages_to_skip=args.languages_to_skip, export_to_plot=args.g, export_to_file=args.f,
-                            graphic_scale_type=args.gs, graphic_file_extension=args.gf)
+    return BenchmarkParams(x0=args.x0, r=args.r, repetitions=args.repetitions, min_iterations=args.ni, max_iterations=args.mi,
+                           languages=args.languages, languages_to_skip=args.languages_to_skip, export_to_plot=args.g, export_to_file=args.f,
+                           graphic_scale_type=args.gs, graphic_file_extension=args.gf)
 
 
 def get_interactions(min_interactions: int, max_interactions: int) -> list[int]:
@@ -120,33 +123,33 @@ def get_interactions(min_interactions: int, max_interactions: int) -> list[int]:
     powers_10 = [100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000]
 
     if 10 >= min_interactions:
-        interations = [10]
+        interactions = [10]
     else:
-        interations = []
+        interactions = []
 
     for pow_10 in powers_10:
         for root_10 in roots_10:
-            interation = int(root_10 * pow_10)
-            if interation > max_interactions:
-                return interations
-            if interation >= min_interactions:
-                interations.append(interation)
+            interaction = int(root_10 * pow_10)
+            if interaction > max_interactions:
+                return interactions
+            if interaction >= min_interactions:
+                interactions.append(interaction)
 
-    return interations
+    return interactions
 
 
-def run_for_interations(user_params: BeanchmarkParams, results: BenchmarkResults, lang_params: list[LangParams], num_interations: int):
+def run_for_interactions(user_params: BenchmarkParams, results: BenchmarkResults, lang_params: list[LangParams], num_interactions: int):
 
     def run_command(lang_param: LangParams) -> int:
         print("[{0}] {1}".format(
             get_now(), lang_param.name.replace("\n", " ").rjust(NAME_WIDTH)), end="", flush=True)
 
-        if num_interations > lang_param.max_iter:
+        if num_interactions > lang_param.max_iter:
             delta_t = ""
             print()
         else:
             final_command = (lang_param.command + " r {} {} {} {}").format(
-                user_params.x0, user_params.r, num_interations, user_params.repetitions)
+                user_params.x0, user_params.r, num_interactions, user_params.repetitions)
             result = subprocess.run(
                 final_command, shell=True, capture_output=True)
             delta_t = re.findall(TIME_RE, str(result.stdout))[0]
@@ -156,7 +159,7 @@ def run_for_interations(user_params: BeanchmarkParams, results: BenchmarkResults
 
     print(SEPARATOR)
     print("[{0}] {1} {2}".format(
-        get_now(), "ITERACTIONS".rjust(NAME_WIDTH), "{:,}".format(num_interations).rjust(COL_SIZE - 1)))
+        get_now(), "INTERACTIONS".rjust(NAME_WIDTH), "{:,}".format(num_interactions).rjust(COL_SIZE - 1)))
     # Source: https://stackoverflow.com/questions/9770668/scramble-python-list
     indexes = sorted(range(len(lang_params)), key=lambda x: random.random())
     for index in indexes:
@@ -170,15 +173,18 @@ def print_results(results: BenchmarkResults):
     print(tabulate(results.get_results(), headers="firstrow", tablefmt="psql"))
 
 
-def export_results_to_csv(user_params: BeanchmarkParams, results: BenchmarkResults):
-    file_name = f"{OUTPUT_DIR}/x0={user_params.x0}_r={user_params.r}_it={user_params.repetitions}_{now_to_str()}.csv"
+def export_results_to_csv(user_params: BenchmarkParams, results: BenchmarkResults):
+    if not os.path.exists(REPORTS_DIR):
+        os.makedirs(REPORTS_DIR, True)
+
+    file_name = f"{REPORTS_DIR}/x0={user_params.x0}_r={user_params.r}_it={user_params.repetitions}_{now_to_str()}.csv"
     with open(file_name, 'w', newline="",  encoding='UTF8') as f:
         writer = csv.writer(f)
         writer.writerows(results.get_results())
     print(f"[{get_now()}] Exporting to {file_name}")
 
 
-def plot_results(user_params: BeanchmarkParams, results: BenchmarkResults):
+def plot_results(user_params: BenchmarkParams, results: BenchmarkResults):
 
     def fill_series():
         for lang, result in results.results.items():
@@ -196,9 +202,12 @@ def plot_results(user_params: BeanchmarkParams, results: BenchmarkResults):
         plt.title(
             f"x0 = { user_params.x0}, r = { user_params.r}, Repetitions = { user_params.repetitions}")
         plt.grid(visible=True, which="both")
-        plt.xlabel("Interations")
+        plt.xlabel("Interactions")
         plt.ylabel("Time (ms)")
-        return f"{OUTPUT_DIR}/plots/x0={user_params.x0}_r={user_params.r}_rep={user_params.repetitions}_{now_to_str()}_TYPE.{user_params.graphic_file_extension}"
+        if not os.path.exists(PLOTS_DIR):
+            os.makedirs(PLOTS_DIR, True)
+
+        return f"{PLOTS_DIR}/x0={user_params.x0}_r={user_params.r}_rep={user_params.repetitions}_{now_to_str()}_TYPE.{user_params.graphic_file_extension}"
 
     def save_plot(file_name_base: str, scale_type: str):
         plt.xscale(scale_type)
@@ -226,8 +235,9 @@ def main():
     results = BenchmarkResults(
         lang_params, get_interactions(user_params.min_iterations, user_params.max_iterations))
 
-    for num_interations in results.interactions:
-        run_for_interations(user_params, results, lang_params, num_interations)
+    for num_interactions in results.interactions:
+        run_for_interactions(user_params, results,
+                             lang_params, num_interactions)
     print(SEPARATOR)
 
     if user_params.export_to_file:

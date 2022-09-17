@@ -7,6 +7,7 @@ from dataclasses import InitVar, dataclass, field
 from os import chdir
 from os.path import dirname, normpath
 
+OUTPUT_DIR = "output"
 
 def get_now():
     return datetime.datetime.now().time()

@@ -4,7 +4,8 @@
     "chrono": "c",
     "stdlib.h": "c",
     "rafael_logistic_benchmark_benchmarks_nativedoublearraygenerator.h": "c",
-    "jni.h": "c"
+    "jni.h": "c",
+    "xlocale": "c"
   },
   "svg.preview.background": "transparent",
   "java.configuration.updateBuildConfiguration": "interactive"
