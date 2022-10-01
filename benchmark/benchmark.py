@@ -24,6 +24,7 @@ class BenchmarkParams(UserParams):
     max_iterations: int = sys.maxsize
     graphic_scale_type: str = "log"
     graphic_file_extension: str = "png"
+    show_command: bool = False
 
     def is_linear_plotting(self):
         return (self.graphic_scale_type == "both") or (self.graphic_scale_type == "linear")
@@ -67,6 +68,7 @@ class BenchmarkResults:
 
 
 COL_SIZE = 11
+COMMAND_COL_SIZE = 240
 TIME_RE = 'TOTAL_TIME (\d+)'
 BENCHMARK_DIR = f"{OUTPUT_DIR}/benchmark"
 PLOTS_DIR = f"{BENCHMARK_DIR}/plots"
@@ -98,6 +100,8 @@ def parse_args() -> BenchmarkParams:
                         help="Codes of Languages to be executed", nargs="*")
     parser.add_argument("-s", "--languages-to-skip",
                         help="Codes of Languages to be skipped", nargs="*")
+    parser.add_argument("-c", help="Show commands (just to debug)",
+                        action=argparse.BooleanOptionalAction)
 
     args = parser.parse_args()
 
@@ -113,7 +117,7 @@ def parse_args() -> BenchmarkParams:
 
     return BenchmarkParams(x0=args.x0, r=args.r, repetitions=args.repetitions, min_iterations=args.ni, max_iterations=args.mi,
                            languages=args.languages, languages_to_skip=args.languages_to_skip, export_to_plot=args.g, export_to_file=args.f,
-                           graphic_scale_type=args.gs, graphic_file_extension=args.gf)
+                           graphic_scale_type=args.gs, graphic_file_extension=args.gf, show_command=args.c)
 
 
 def get_interactions(min_interactions: int, max_interactions: int) -> list[int]:
@@ -149,6 +153,9 @@ def run_for_interactions(user_params: BenchmarkParams, results: BenchmarkResults
         else:
             final_command = (lang_param.command + " r {} {} {} {}").format(
                 user_params.x0, user_params.r, num_interactions, user_params.repetitions)
+            if user_params.show_command:
+                print((f"\t'{final_command}'").ljust(
+                    COMMAND_COL_SIZE), flush=True, end="")
             result = subprocess.run(
                 final_command, shell=True, capture_output=True)
             delta_t = re.findall(TIME_RE, str(result.stdout))[0]
@@ -187,13 +194,13 @@ def plot_results(user_params: BenchmarkParams, results: BenchmarkResults):
 
     def fill_series():
         for lang, result in results.results.items():
-            times_serie = []
+            times_series = []
             for str_time in result.times:
                 if str_time:
-                    times_serie.append(int(str_time))
+                    times_series.append(int(str_time))
                 else:
-                    times_serie.append(None)
-            plt.plot(results.interactions, times_serie, label=lang,
+                    times_series.append(None)
+            plt.plot(results.interactions, times_series, label=lang,
                      color=result.color, linestyle=result.line_style)
 
     def basic_config():
