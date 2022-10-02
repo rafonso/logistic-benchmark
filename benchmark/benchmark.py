@@ -24,7 +24,8 @@ class BenchmarkParams(UserParams):
     max_iterations: int = sys.maxsize
     graphic_scale_type: str = "log"
     graphic_file_extension: str = "png"
-    show_command: bool = False
+    show_command: bool = False,
+    show_code: bool = False
 
     def is_linear_plotting(self):
         return (self.graphic_scale_type == "both") or (self.graphic_scale_type == "linear")
@@ -68,6 +69,7 @@ class BenchmarkResults:
 
 
 COL_SIZE = 11
+CODE_COL_SIZE = 20
 COMMAND_COL_SIZE = 240
 TIME_RE = 'TOTAL_TIME (\d+)'
 BENCHMARK_DIR = f"{OUTPUT_DIR}/benchmark"
@@ -100,7 +102,9 @@ def parse_args() -> BenchmarkParams:
                         help="Codes of Languages to be executed", nargs="*")
     parser.add_argument("-s", "--languages-to-skip",
                         help="Codes of Languages to be skipped", nargs="*")
-    parser.add_argument("-c", help="Show commands (just to debug)",
+    parser.add_argument("-comm", help="Show commands (just to debug)",
+                        action=argparse.BooleanOptionalAction)
+    parser.add_argument("-code", help="Show language codes (just to debug)",
                         action=argparse.BooleanOptionalAction)
 
     args = parser.parse_args()
@@ -117,7 +121,7 @@ def parse_args() -> BenchmarkParams:
 
     return BenchmarkParams(x0=args.x0, r=args.r, repetitions=args.repetitions, min_iterations=args.ni, max_iterations=args.mi,
                            languages=args.languages, languages_to_skip=args.languages_to_skip, export_to_plot=args.g, export_to_file=args.f,
-                           graphic_scale_type=args.gs, graphic_file_extension=args.gf, show_command=args.c)
+                           graphic_scale_type=args.gs, graphic_file_extension=args.gf, show_command=args.comm, show_code=args.code)
 
 
 def get_interactions(min_interactions: int, max_interactions: int) -> list[int]:
@@ -151,11 +155,15 @@ def run_for_interactions(user_params: BenchmarkParams, results: BenchmarkResults
             delta_t = ""
             print()
         else:
-            final_command = (lang_param.command + " r {} {} {} {}").format(
-                user_params.x0, user_params.r, num_interactions, user_params.repetitions)
+            final_command = f"{lang_param.command} r {user_params.x0} {user_params.r} {num_interactions} {user_params.repetitions}"
+
+            if user_params.show_code:
+                print((f"\t{lang_param.code}").ljust(
+                    CODE_COL_SIZE), flush=True, end="")
             if user_params.show_command:
                 print((f"\t'{final_command}'").ljust(
                     COMMAND_COL_SIZE), flush=True, end="")
+
             result = subprocess.run(
                 final_command, shell=True, capture_output=True)
             delta_t = re.findall(TIME_RE, str(result.stdout))[0]
