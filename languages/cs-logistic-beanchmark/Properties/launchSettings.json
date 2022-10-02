@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "cs-logistic-beanchmark": {
-      "commandName": "Project",
-      "commandLineArgs": "s 0.1 3.91 100 s"
-    }
-  }
-}
