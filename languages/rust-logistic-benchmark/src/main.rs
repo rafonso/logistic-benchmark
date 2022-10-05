@@ -21,9 +21,7 @@ fn simple_action(x0: f64, r: f64, it: i32, show_output: bool) {
     if show_output {
         let break_line: String = "-".repeat(40);
         println!("{}", break_line);
-        for x in series {
-            println!("{}", x);
-        }
+        series.into_iter().for_each(|x| println!("{}", x));
         println!("{}", break_line);
     }
 
@@ -40,11 +38,10 @@ fn repeat_action(x0: f64, r: f64, it: i32, rep: i32) {
     let delta_t = t0.elapsed().as_millis();
     println!();
 
-    let mut sum = 0;
-    for time in times {
-        sum += time;
-    }
-    let average = sum / rep as u128;
+    let average = times
+        .into_iter()
+        .reduce(|a, b| a + b)
+        .map(|sum| sum / rep as u128);
 
     println!("AVERAGE: {:?} ms", average);
     println!("TOTAL_TIME {:?}", delta_t);
