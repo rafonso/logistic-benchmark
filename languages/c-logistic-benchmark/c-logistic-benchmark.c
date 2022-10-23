@@ -1,20 +1,20 @@
 // To compile : g++ -o c-logistic-benchmark.exe c-logistic-benchmark.c
-#include <chrono>
+#include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef struct
+struct Result
 {
 	double *series;
 	int series_size;
-	long time;
-} Result;
+	time_t time;
+};
 
-Result generate(const double x0, const double r, const int it)
+struct Result generate(const double x0, const double r, const int it)
 {
 	double *x = (double *)malloc(it * sizeof(double));
 
-	long t0 = clock();
+	time_t t0 = time(NULL);
 	if (x)
 	{
 		x[0] = x0;
@@ -23,14 +23,14 @@ Result generate(const double x0, const double r, const int it)
 			x[i] = r * x[i - 1] * (1.0 - x[i - 1]);
 		}
 	}
-	long deltaT = clock() - t0;
+	time_t deltaT = time(NULL) - t0;
 
-	return {x, it, deltaT};
+	return (struct Result){x, it, deltaT};
 }
 
 void simple_action(const double x0, const double r, const int it, int show_series)
 {
-	Result result = generate(x0, r, it);
+	struct Result result = generate(x0, r, it);
 
 	if (show_series)
 	{
@@ -42,42 +42,48 @@ void simple_action(const double x0, const double r, const int it, int show_serie
 		printf("----------------------------------------\n");
 	}
 
-	printf("TIME: %d ms", result.time);
+	printf("TIME: %lld ms", result.time);
 	free(result.series);
 }
 
 void repeat_action(const double x0, const double r, const int it, int repetitions)
 {
-	long *times = (long *)malloc(it * sizeof(long));
-
-	if (times)
+	time_t *times = (time_t *)malloc(it * sizeof(time_t) + 1);
+	if (!times)
 	{
-		long t0 = clock();
-		long totalTime = 0;
-		for (int i = 0; i < repetitions; i++)
-		{
-			printf("\r%5d / %5d", (i + 1), repetitions);
-			Result result = generate(x0, r, it);
-			times[i] = result.time;
-			totalTime += times[i];
-			free(result.series);
-		}
-		printf("\n");
-		long deltaT = clock() - t0;
-		long average = totalTime / repetitions;
+		fprintf(stderr, "It was not possible allocate array!");
+		return;
+	}
 
-		printf("AVERAGE %d ms\n", average);
-		printf("TOTAL_TIME %d\n", deltaT);
-	}
-	if (it >= 100)
+	time_t t0 = time(NULL);
+	time_t totalTime = 0;
+	for (int i = 0; i < repetitions; i++)
 	{
-		// If it < 100 it crashes. I don't understand why.
-		free(times);
+		printf("\r%5d / %5d", (i + 1), repetitions);
+		struct Result result = generate(x0, r, it);
+		times[i] = result.time;
+		totalTime += times[i];
+		free(result.series);
 	}
+	printf("\n");
+	time_t deltaT = time(NULL) - t0;
+	time_t average = totalTime / repetitions;
+
+	printf("AVERAGE %d ms\n", average);
+	printf("TOTAL_TIME %lld\n", deltaT);
+
+	// free(times);
 }
 
 int main(int argc, char *argv[])
 {
+
+	if (argc < 4)
+	{
+		fprintf(stderr, "You need 4 arguments to run");
+		exit(1);
+	}
+
 	char action = argv[1][0];
 	double x0 = atof(argv[2]);
 	double r = atof(argv[3]);
