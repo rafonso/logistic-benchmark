@@ -3,5 +3,6 @@
   "code": "rust",
   "description": "Rust using Vector\nwith preallocated capacity",
   "command": "languages/rust-logistic-benchmark/target/release/rust-logistic-benchmark.exe",
-  "color": "#DD3516"
+  "color": "#DD3516",
+  "linestyle": "--"
 }
