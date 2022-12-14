@@ -1,0 +1,8 @@
+{
+  "name": "Python with pypy",
+  "code": "pypy",
+  "description": "Python running with pypy using List\nwith preallocated size",
+  "command": "pypy languages/python-logistic-benchmark/main.py",
+  "color": "#F7CC40",
+  "linestyle": "-."
+}
