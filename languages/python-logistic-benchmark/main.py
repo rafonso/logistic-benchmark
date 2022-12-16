@@ -31,14 +31,14 @@ def repeat_action(x0, r, it, repetitions):
 
     t0 = time.time()
     for i in range(0, repetitions):
-        print(f'\r{i + 1}\t/\t{repetitions}', end="", flush=True)
+        print("\r{0}\t/\t{1}".format((i + 1), repetitions))
         times[i] = calculate(x0, r, it)[1]
     deltaT = int((time.time() - t0) * 1000)
     print()
 
     average = sum(times) / len(times)
 
-    print(f'AVERAGE: {average} ms')
+    print("AVERAGE: {0} ms".format(average))
     print("TOTAL_TIME " + str(deltaT))
 
 

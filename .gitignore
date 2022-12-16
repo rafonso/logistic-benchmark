@@ -4,5 +4,6 @@
 /.vscode
 /.clj-kondo
 /.lsp
+/.jython_cache
 
 *.stackdump

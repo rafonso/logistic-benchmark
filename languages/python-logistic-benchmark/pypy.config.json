@@ -1,5 +1,5 @@
 {
-  "name": "Python with pypy",
+  "name": "Pypy",
   "code": "pypy",
   "description": "Python running with pypy using List\nwith preallocated size",
   "command": "pypy languages/python-logistic-benchmark/main.py",

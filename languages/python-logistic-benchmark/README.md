@@ -3,6 +3,7 @@
 ## Development Environment
   - [Python](https://www.python.org/) [3.10.1](https://www.python.org/downloads/release/python-3101/)
   - [PyPy](https://www.pypy.org/) [3.9](https://www.pypy.org/download.html)
+  - [Jython](https://www.jython.org) [2.7.3](https://www.jython.org/download)
   - VS Code
 
 ## Highlights
@@ -12,6 +13,9 @@ It was possible to use a list with predetermined size. However at the end it was
 
 ### [Basic script with Pypy](./main.py)
 Instead using basic CPython, it was running with [Pypy](https://www.pypy.org/index.html). This time, for it executed much faster thanks to JIT compiler.
+
+### [Basic script with Jython](./main.py)
+Instead using basic CPython, it was running with [Jython](https://www.jython.org/index). The final time was bit bigger than executable. Also I realized that it consumes a bit more of CPU.
 
 ### [Native Executable](./setup.py)
 Creates a native executable from Basic Script. The time as practically the same as basic script.
