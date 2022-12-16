@@ -166,8 +166,8 @@ def run_for_interactions(user_params: BenchmarkParams, results: BenchmarkResults
 
             result = subprocess.run(
                 final_command, shell=True, capture_output=True)
-            delta_t = re.findall(TIME_RE, str(result.stdout))[0]
-            print(delta_t.rjust(COL_SIZE))
+            delta_t = int(re.findall(TIME_RE, str(result.stdout))[0])
+            print("{:,}".format(delta_t).rjust(COL_SIZE))
 
         return delta_t
 
