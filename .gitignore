@@ -2,5 +2,7 @@
 **/__pycache__/
 **/output/
 /.vscode
+/.clj-kondo
+/.lsp
 
 *.stackdump
