@@ -77,7 +77,8 @@ PLOTS_DIR = f"{BENCHMARK_DIR}/plots"
 REPORTS_DIR = f"{BENCHMARK_DIR}/reports"
 
 NAME_WIDTH = 3*COL_SIZE
-SEPARATOR = (17 + 1 + NAME_WIDTH + COL_SIZE) * "="
+SEPARATOR_SIZE = (17 + 1 + NAME_WIDTH + COL_SIZE)
+SEPARATOR = SEPARATOR_SIZE * "="
 
 
 def parse_args() -> BenchmarkParams:
@@ -165,7 +166,7 @@ def run_for_interactions(user_params: BenchmarkParams, results: BenchmarkResults
                     COMMAND_COL_SIZE), flush=True, end="")
 
             result = subprocess.run(
-                final_command, shell=True, capture_output=True)
+                final_command, shell=True, capture_output=True, check=True)
             delta_t = int(re.findall(TIME_RE, str(result.stdout))[0])
             print("{:,}".format(delta_t).rjust(COL_SIZE))
 
@@ -238,6 +239,15 @@ def plot_results(user_params: BenchmarkParams, results: BenchmarkResults):
         save_plot(file_name_base, "log")
 
 
+def process_error(e: subprocess.CalledProcessError):
+    print()
+    print(("-"*20) + " EXECUTION ERROR " + ("-"*20))
+    print("- COMMAND:")
+    print(e.cmd)
+    print("- MESSAGE:")
+    print(e.stderr.decode())
+
+
 def main():
     t0 = time.time()
 
@@ -246,21 +256,24 @@ def main():
     change_work_dir()
     lang_params = read_config(user_params)
 
-    results = BenchmarkResults(
-        lang_params, get_interactions(user_params.min_iterations, user_params.max_iterations))
+    try:
+        results = BenchmarkResults(
+            lang_params, get_interactions(user_params.min_iterations, user_params.max_iterations))
 
-    for num_interactions in results.interactions:
-        run_for_interactions(user_params, results,
-                             lang_params, num_interactions)
-    print(SEPARATOR)
+        for num_interactions in results.interactions:
+            run_for_interactions(user_params, results,
+                                 lang_params, num_interactions)
+        print(SEPARATOR)
 
-    if user_params.export_to_file:
-        export_results_to_csv(user_params, results)
-    else:
-        print_results(results)
+        if user_params.export_to_file:
+            export_results_to_csv(user_params, results)
+        else:
+            print_results(results)
 
-    if user_params.export_to_plot:
-        plot_results(user_params, results)
+        if user_params.export_to_plot:
+            plot_results(user_params, results)
+    except subprocess.CalledProcessError as e:
+        process_error(e)
 
     print_total_time(t0)
 
