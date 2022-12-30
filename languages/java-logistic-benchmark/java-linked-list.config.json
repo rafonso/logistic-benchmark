@@ -2,7 +2,8 @@
   "name": "Java Linked List",
   "code": "java-linked-list",
   "description": "Java with empty\nLinked List",
-  "command": "java -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar ll",
+  "maxIter": 2000000,
+  "command": "java -jar mlanguages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar ll",
   "color": "#F0931C",
   "linestyle": ":"
 }

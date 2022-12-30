@@ -41,7 +41,7 @@ function repeat_action(x0, r, iter, repetitions)
   local delta_t = math.floor((socket.gettime() - t0) * 1000)
   print()
 
-  local average = math.floor(total_time/ repetitions)
+  local average = math.floor(total_time / repetitions)
 
   print("AVERAGE " .. average .. " ms")
   print("TOTAL_TIME " .. delta_t)
@@ -61,6 +61,5 @@ function main()
     repeat_action(x0, r, iter, repetitions)
   end
 end
-
 
 main()

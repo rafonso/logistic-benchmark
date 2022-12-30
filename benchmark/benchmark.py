@@ -240,12 +240,12 @@ def plot_results(user_params: BenchmarkParams, results: BenchmarkResults):
 
 
 def process_error(e: subprocess.CalledProcessError):
-    print()
-    print(("-"*20) + " EXECUTION ERROR " + ("-"*20))
-    print("- COMMAND:")
-    print(e.cmd)
-    print("- MESSAGE:")
-    print(e.stderr.decode())
+    print(f"""
+---------------------- EXECUTION ERROR ----------------------
+- COMMAND:
+{e.cmd}
+- MESSAGE:
+{e.stderr.decode()}""")
 
 
 def main():
