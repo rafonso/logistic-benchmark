@@ -1,0 +1,7 @@
+{
+  "name": "Ruby",
+  "code": "ruby",
+  "description": "Ruby using Array\nwith preallocated size",
+  "command": "ruby languages/ruby-logistic-benchmark/main.rb",
+  "color": "#791730"
+}

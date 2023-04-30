@@ -88,6 +88,7 @@ The main part receives the command line arguments to extract the parameters and 
   - [Kotlin Native](languages/kotlin_native_logistic_benchmark/)
   - [Lua](languages/lua-logistic-benchmark/)
   - [Python](languages/python-logistic-benchmark/)
+  - [Ruby](languages/ruby-logistic-benchmark/)
   - [Rust](languages/rust-logistic-benchmark/)
   - [Scala](languages/scala-logistic-benchmark/)
   - [TypeScript](languages/typescript-logistic-benchmark/)
