@@ -1,15 +1,15 @@
-require "socket"
 require "io"
 
 function calculate(x0, r, iter)
   local x = {}
 
-  local t0 = socket.gettime()
+  -- Time returns seconds, not milliseconds
+  local t0 = os.time() 
   x[0] = x0
   for i = 1, iter - 1 do
     x[i] = r * x[i - 1] * (1.0 - x[i - 1])
   end
-  local delta_t = math.floor((socket.gettime() - t0) * 1000)
+  local delta_t = (os.time() - t0) * 1000
 
   return x, delta_t
 end
@@ -32,13 +32,14 @@ function repeat_action(x0, r, iter, repetitions)
   local times = {}
 
   local total_time = 0
-  local t0 = socket.gettime()
+  -- Time returns seconds, not milliseconds
+  local t0 = os.time()
   for i = 0, (repetitions - 1) do
     io.write(string.format("\r%5d / %5d", (i + 1), repetitions))
     values, times[i] = calculate(x0, r, iter)
     total_time = total_time + times[i]
   end
-  local delta_t = math.floor((socket.gettime() - t0) * 1000)
+  local delta_t = math.floor((os.time() - t0) * 1000)
   print()
 
   local average = math.floor(total_time / repetitions)

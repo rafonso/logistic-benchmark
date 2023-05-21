@@ -1,33 +1,35 @@
 ###############################################################
 # TO          BUILD: docker build --force-rm -t logistic-benchmark-image . 
-# TO RUN ITERACTIVE: docker run -it logistic-benchmark-image
+# TO RUN ITERACTIVE: docker run -v .\output:/app/output -it logistic-benchmark-image
 ###############################################################
 
-# Imagem base
+# Image base
 FROM python:3.9
 
-# Definir diretório de trabalho
+# Define work directory
 WORKDIR /app
 
-# Copiar os diretórios "benchmark" e "languages"
+# Copy directories "benchmark" e "languages"
 COPY benchmark benchmark
 COPY languages languages
+VOLUME /app/output
 
-# Instalar o bash
-RUN apt-get update && apt-get install -y bash
+# UPDATE & UPGRADE
+RUN apt update && apt upgrade -y
+
+# Install bash
+RUN apt install -y bash
 
 ###########################################################
 # PYTHON - CONFIGURATION - BEGIN
 ###########################################################
 
-# Copiar arquivos de requisitos
+# Install dependencies
 COPY requirements.txt .
-
-# Instalar dependências
 RUN pip install --no-cache-dir -r requirements.txt && rm requirements.txt
 
-# Instalar dependências para suporte CUDA
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Install dependencies to support CUDA
+RUN apt update && apt install -y --no-install-recommends \
     build-essential \
     libssl-dev \
     libffi-dev \
@@ -50,7 +52,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Instalar PyPy
+# Install PyPy
 RUN wget -O - https://downloads.python.org/pypy/pypy3.9-v7.3.11-linux64.tar.bz2 | tar -xj \
     && mv pypy3.9-v7.3.11-linux64 /opt/ \
     && ln -s /opt/pypy3.9-v7.3.11-linux64/bin/pypy /usr/local/bin/pypy
@@ -59,6 +61,25 @@ RUN wget -O - https://downloads.python.org/pypy/pypy3.9-v7.3.11-linux64.tar.bz2 
 # PYTHON - CONFIGURATION - END
 ###########################################################
 
+RUN apt update
+
+###########################################################
+# LUA 5.1
+###########################################################
+
+RUN apt install -y lua5.1
+
+###########################################################
+# RUBY
+###########################################################
+
+RUN apt install -y ruby
+
+###########################################################
+# C compile
+###########################################################
+
+RUN g++ -o languages/c-logistic-benchmark/c-logistic-benchmark.exe languages/c-logistic-benchmark/c-logistic-benchmark.c
 
 # Definir o comando padrão para abrir o prompt do Bash
 CMD [ "bash" ]
