@@ -1,0 +1,8 @@
+{
+  "name": "Groovy Untyped",
+  "code": "groovy-untyped",
+  "description": "Untyped Groovy Script using Array\nwith preallocated size",
+  "command": "groovy languages/groovy-logistic-benchmark/src/main/groovy/Untyped.groovy",
+  "color": "#286B86",
+  "linestyle": "--"
+}
