@@ -1,20 +1,44 @@
 // To compile : g++ -o c-logistic-benchmark.exe c-logistic-benchmark.c
-#include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <sys/time.h>
+#endif
+
+// Code created by ChatGPT
+long long getMilliseconds()
+{
+#ifdef _WIN32
+	FILETIME ft;
+	GetSystemTimeAsFileTime(&ft);
+	long long ms = ft.dwHighDateTime;
+	ms <<= 32;
+	ms |= ft.dwLowDateTime;
+	ms /= 10000;
+	return ms;
+#else
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	long long ms = tv.tv_sec * 1000LL + tv.tv_usec / 1000;
+	return ms;
+#endif
+}
 
 struct Result
 {
 	double *series;
 	int series_size;
-	time_t time;
+	long long time;
 };
 
 struct Result generate(const double x0, const double r, const int it)
 {
 	double *x = (double *)malloc(it * sizeof(double));
 
-	time_t t0 = time(NULL);
+	long long t0 = getMilliseconds();
 	if (x)
 	{
 		x[0] = x0;
@@ -23,7 +47,7 @@ struct Result generate(const double x0, const double r, const int it)
 			x[i] = r * x[i - 1] * (1.0 - x[i - 1]);
 		}
 	}
-	time_t deltaT = time(NULL) - t0;
+	long long deltaT = getMilliseconds() - t0;
 
 	return (struct Result){x, it, deltaT};
 }
@@ -48,15 +72,15 @@ void simple_action(const double x0, const double r, const int it, int show_serie
 
 void repeat_action(const double x0, const double r, const int it, int repetitions)
 {
-	time_t *times = (time_t *)malloc(it * sizeof(time_t) + 1);
+	long long *times = (long long *)malloc(it * sizeof(long long) + 1);
 	if (!times)
 	{
 		fprintf(stderr, "It was not possible allocate array!");
 		return;
 	}
 
-	time_t t0 = time(NULL);
-	time_t totalTime = 0;
+	long long t0 = getMilliseconds();
+	long long totalTime = 0;
 	for (int i = 0; i < repetitions; i++)
 	{
 		printf("\r%5d / %5d", (i + 1), repetitions);
@@ -66,7 +90,7 @@ void repeat_action(const double x0, const double r, const int it, int repetition
 		free(result.series);
 	}
 	printf("\n");
-	time_t deltaT = time(NULL) - t0;
+	long long deltaT = getMilliseconds() - t0;
 	time_t average = totalTime / repetitions;
 
 	printf("AVERAGE %d ms\n", average);
