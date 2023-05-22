@@ -18,7 +18,7 @@ VOLUME /app/output
 RUN apt update && apt upgrade -y
 
 # Install bash
-RUN apt install -y bash
+RUN apt install -y bash nano
 
 ###########################################################
 # PYTHON - CONFIGURATION - BEGIN
@@ -66,20 +66,22 @@ RUN apt update
 ###########################################################
 # LUA 5.1
 ###########################################################
-
-RUN apt install -y lua5.1
+RUN apt install -y lua5.1 lua-socket
 
 ###########################################################
 # RUBY
 ###########################################################
-
 RUN apt install -y ruby
 
 ###########################################################
 # C compile
 ###########################################################
-
 RUN g++ -o languages/c-logistic-benchmark/c-logistic-benchmark.exe languages/c-logistic-benchmark/c-logistic-benchmark.c
+
+###########################################################
+# GO
+###########################################################
+# RUN apt install -y golang
 
 # Definir o comando padrão para abrir o prompt do Bash
 CMD [ "bash" ]
