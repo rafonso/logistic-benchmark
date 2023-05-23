@@ -79,6 +79,17 @@ RUN apt install -y ruby
 RUN g++ -o languages/c-logistic-benchmark/c-logistic-benchmark.exe languages/c-logistic-benchmark/c-logistic-benchmark.c
 
 ###########################################################
+# RUST
+###########################################################
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o rustup.sh && \
+    sh rustup.sh -y 
+# Configura o ambiente do Rust
+ENV PATH="/root/.cargo/bin:${PATH}"
+RUN cargo build --manifest-path languages/rust-logistic-benchmark/Cargo.toml --release
+# Remove extension "exe" from executable name in config.json file
+RUN sed -i "s/rust-logistic-benchmark\.exe/rust-logistic-benchmark/" languages/rust-logistic-benchmark/rust.config.json
+
+###########################################################
 # GO
 ###########################################################
 # RUN apt install -y golang
