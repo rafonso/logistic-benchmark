@@ -76,7 +76,8 @@ RUN apt install -y ruby
 ###########################################################
 # C compile
 ###########################################################
-RUN g++ -o languages/c-logistic-benchmark/c-logistic-benchmark.exe languages/c-logistic-benchmark/c-logistic-benchmark.c
+RUN g++ -o languages/c-logistic-benchmark/c-logistic-benchmark languages/c-logistic-benchmark/c-logistic-benchmark.c
+RUN sed -i "s/c-logistic-benchmark\.exe/c-logistic-benchmark/" languages/c-logistic-benchmark/c.config.json
 
 ###########################################################
 # RUST
