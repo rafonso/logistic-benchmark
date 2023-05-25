@@ -93,7 +93,14 @@ RUN sed -i "s/rust-logistic-benchmark\.exe/rust-logistic-benchmark/" languages/r
 ###########################################################
 # GO
 ###########################################################
-# RUN apt install -y golang
+RUN wget https://golang.org/dl/go1.19.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go1.19.linux-amd64.tar.gz && \
+    rm go1.19.linux-amd64.tar.gz
+ENV PATH="/usr/local/go/bin:${PATH}"
+WORKDIR /app/languages/go-logistic-benchmark
+RUN go build
+WORKDIR /app
+RUN sed -i "s/go-logistic-benchmark\.exe/go-logistic-benchmark/" languages/go-logistic-benchmark/go.config.json
 
 # Definir o comando padrão para abrir o prompt do Bash
 CMD [ "bash" ]
