@@ -102,5 +102,18 @@ RUN go build
 WORKDIR /app
 RUN sed -i "s/go-logistic-benchmark\.exe/go-logistic-benchmark/" languages/go-logistic-benchmark/go.config.json
 
+###########################################################
+# C#
+###########################################################
+RUN wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+RUN dpkg -i packages-microsoft-prod.deb
+RUN apt update
+RUN apt install -y apt-transport-https
+RUN apt update
+RUN apt install -y dotnet-sdk-6.0
+RUN dotnet publish languages/cs-logistic-beanchmark/cs-logistic-beanchmark.sln \
+    --configuration Release --output languages/cs-logistic-beanchmark/
+RUN sed -Ei "s/(cs-logistic-beanchmark)\.exe/\1/" languages/cs-logistic-beanchmark/cs.config.json
+
 # Definir o comando padrão para abrir o prompt do Bash
 CMD [ "bash" ]
