@@ -83,7 +83,7 @@ RUN sed -Ei "s/(c-logistic-benchmark)\.exe/\1/" languages/c-logistic-benchmark/c
 # RUST
 ###########################################################
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o rustup.sh && \
-    sh rustup.sh -y 
+    sh rustup.sh -y && rm rustup.sh
 # Configura o ambiente do Rust
 ENV PATH="/root/.cargo/bin:${PATH}"
 RUN cargo build --manifest-path languages/rust-logistic-benchmark/Cargo.toml --release
@@ -111,9 +111,20 @@ RUN apt update
 RUN apt install -y apt-transport-https
 RUN apt update
 RUN apt install -y dotnet-sdk-6.0
+RUN rm packages-microsoft-prod.deb
 RUN dotnet publish languages/cs-logistic-benchmark/cs-logistic-benchmark.sln \
     --configuration Release --output languages/cs-logistic-benchmark/
 RUN sed -Ei "s/(cs-logistic-benchmark)\.exe/\1/" languages/cs-logistic-benchmark/cs.config.json
+
+###########################################################
+# NODE.JS AND DENO
+###########################################################
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt install -y nodejs
+RUN npm install -g typescript@4.5.5
+RUN curl -fsSL https://deno.land/x/install/install.sh | sh -s v1.19.1
+ENV DENO_INSTALL="/root/.deno"
+ENV PATH="$DENO_INSTALL/bin:$PATH"
 
 # Definir o comando padrão para abrir o prompt do Bash
 CMD [ "bash" ]
