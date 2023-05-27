@@ -77,7 +77,7 @@ RUN apt install -y ruby
 # C compile
 ###########################################################
 RUN g++ -o languages/c-logistic-benchmark/c-logistic-benchmark languages/c-logistic-benchmark/c-logistic-benchmark.c
-RUN sed -i "s/c-logistic-benchmark\.exe/c-logistic-benchmark/" languages/c-logistic-benchmark/c.config.json
+RUN sed -Ei "s/(c-logistic-benchmark)\.exe/\1/" languages/c-logistic-benchmark/c.config.json
 
 ###########################################################
 # RUST
@@ -88,7 +88,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o rustup.sh && \
 ENV PATH="/root/.cargo/bin:${PATH}"
 RUN cargo build --manifest-path languages/rust-logistic-benchmark/Cargo.toml --release
 # Remove extension "exe" from executable name in config.json file
-RUN sed -i "s/rust-logistic-benchmark\.exe/rust-logistic-benchmark/" languages/rust-logistic-benchmark/rust.config.json
+RUN sed -Ei "s/(rust-logistic-benchmark)\.exe/\1/" languages/rust-logistic-benchmark/rust.config.json
 
 ###########################################################
 # GO
@@ -100,7 +100,7 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 WORKDIR /app/languages/go-logistic-benchmark
 RUN go build
 WORKDIR /app
-RUN sed -i "s/go-logistic-benchmark\.exe/go-logistic-benchmark/" languages/go-logistic-benchmark/go.config.json
+RUN sed -Ei "s/(go-logistic-benchmark)\.exe/\1/" languages/go-logistic-benchmark/go.config.json
 
 ###########################################################
 # C#
