@@ -111,9 +111,9 @@ RUN apt update
 RUN apt install -y apt-transport-https
 RUN apt update
 RUN apt install -y dotnet-sdk-6.0
-RUN dotnet publish languages/cs-logistic-beanchmark/cs-logistic-beanchmark.sln \
-    --configuration Release --output languages/cs-logistic-beanchmark/
-RUN sed -Ei "s/(cs-logistic-beanchmark)\.exe/\1/" languages/cs-logistic-beanchmark/cs.config.json
+RUN dotnet publish languages/cs-logistic-benchmark/cs-logistic-benchmark.sln \
+    --configuration Release --output languages/cs-logistic-benchmark/
+RUN sed -Ei "s/(cs-logistic-benchmark)\.exe/\1/" languages/cs-logistic-benchmark/cs.config.json
 
 # Definir o comando padrão para abrir o prompt do Bash
 CMD [ "bash" ]

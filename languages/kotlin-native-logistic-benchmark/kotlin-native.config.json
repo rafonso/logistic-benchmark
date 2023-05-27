@@ -2,7 +2,7 @@
   "name": "Kotlin Native",
   "code": "kotlin-native",
   "description": "Kotlin Native using Double Array\nwith preallocated size",
-  "command": "languages/kotlin_native_logistic_benchmark/build/bin/logistic_benchmark/releaseExecutable/kotlin_native_logistic_benchmark.exe",
+  "command": "languages/kotlin-native-logistic-benchmark/build/bin/logistic_benchmark/releaseExecutable/kotlin_native_logistic_benchmark.exe",
   "color": "#FF007F",
   "linestyle": "--"
 }

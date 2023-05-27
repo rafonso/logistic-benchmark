@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cs-logistic-beanchmark", "cs-logistic-beanchmark.csproj", "{89DBC9F7-9B8E-4898-816F-C438FBF2635D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cs-logistic-benchmark", "cs-logistic-benchmark.csproj", "{89DBC9F7-9B8E-4898-816F-C438FBF2635D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
