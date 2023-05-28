@@ -3,6 +3,5 @@
   "code": "c",
   "description": "C using array \ncreated with malloc",
   "command": "languages/c-logistic-benchmark/c-logistic-benchmark.exe",
-  "maxIter": 10000000,
   "color": "#5B69B8"
 }
