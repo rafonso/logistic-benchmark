@@ -183,7 +183,9 @@ RUN mvn install -f languages/java-logistic-benchmark/pom.xml
 RUN mvn install -f languages/kotlin-logistic-benchmark/pom.xml
 # Kotlin native
 WORKDIR /app/languages/kotlin-native-logistic-benchmark
-RUN gradle
+RUN gradle clean
+RUN gradle build
+RUN sed -Ei "s/(kotlin_native_logistic_benchmark)\.exe/\1.kexe/" kotlin-native.config.json
 WORKDIR /app
 # Scala
 RUN mvn install -f languages/scala-logistic-benchmark/pom.xml 
