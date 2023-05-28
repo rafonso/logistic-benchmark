@@ -42,8 +42,8 @@
         r        (Double/parseDouble (get cli-args 2))
         iter     (Integer/parseInt   (get cli-args 3))]
     (cond
-      (= action "s") ((let [show-series (and (= (count cli-args) 5) (= (get cli-args 4) "s"))]
-                        (simple-action x0 r iter show-series)))
-      (= action "r") ((let [repetitions (Integer/parseInt (get cli-args 4))]
-                        (repeat-action x0 r iter repetitions)))
+      (= action "s") (let [show-series (and (= (count cli-args) 5) (= (get cli-args 4) "s"))]
+                        (simple-action x0 r iter show-series))
+      (= action "r") (let [repetitions (Integer/parseInt (get cli-args 4))]
+                        (repeat-action x0 r iter repetitions))
       :else          (println "No defined action defined. Arguments: " cli-args))))
