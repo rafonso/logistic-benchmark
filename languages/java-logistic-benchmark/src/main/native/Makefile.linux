@@ -1,0 +1,23 @@
+# Nome da DLL/SO
+TARGET = generate_series_native
+
+# Diretório de saída
+OUTPUT_DIR = ../../../target
+
+# Configuração do compilador
+CC = gcc
+CFLAGS = -shared -o $(OUTPUT_DIR)/$(TARGET).so
+
+# Diretórios de inclusão do JNI
+JNI_INCLUDES = -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
+
+# Arquivos de origem
+SRCS = generateSeries.c
+
+# Geração da DLL/SO
+all:
+        $(CC) $(CFLAGS) $(JNI_INCLUDES) $(SRCS)
+
+# Limpeza dos arquivos gerados
+#clean:
+#    rm -rf $(OUTPUT_DIR)

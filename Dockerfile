@@ -134,7 +134,7 @@ RUN apt-get update && apt-get install -y \
     gnupg2 \
     software-properties-common \
     openjdk-17-jdk
-
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 # Install Maven 3.8
 RUN wget https://dlcdn.apache.org/maven/maven-3/3.9.2/binaries/apache-maven-3.9.2-bin.tar.gz && \
     tar xzf apache-maven-3.9.2-bin.tar.gz && \
@@ -179,6 +179,12 @@ RUN sed -Ei "s/java -jar c:\/java\/jython2\.7\.3\/jython\.jar/jython/" languages
 # Java
 RUN mvn install -f languages/java-logistic-benchmark/pom.xml 
 # PENDING java native
+WORKDIR /app/languages/java-logistic-benchmark/src/main/native/ 
+RUN rm Makefile
+RUN mv Makefile.linux Makefile
+RUN sed -Ei "s/        /\t/" Makefile
+RUN make
+WORKDIR /app
 # Kotlin
 RUN mvn install -f languages/kotlin-logistic-benchmark/pom.xml
 # Kotlin native

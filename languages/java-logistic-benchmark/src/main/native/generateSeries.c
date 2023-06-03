@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 JNIEXPORT jdoubleArray JNICALL Java_rafael_logistic_1benchmark_benchmarks_NativeDoubleArrayGenerator_generateSeries(JNIEnv *env,
-                                                                                                                    jobject thiz, jdouble x0, jdouble r, jint iter)
+                                                                                                                    jobject thiz, jdouble x0, jdouble r, jint it)
 {
   double *x = (double *)malloc(it * sizeof(double));
 
