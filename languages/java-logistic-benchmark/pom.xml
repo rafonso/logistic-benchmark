@@ -68,7 +68,7 @@
                             <executable>javac</executable>
                             <arguments>
                                 <argument>-h</argument>
-                                <argument>${project.basedir}/src/main/native/include</argument>
+                                <argument>${project.basedir}/generate_series_native</argument>
                                 <argument>./rafael/logistic_benchmark/benchmarks/NativeDoubleArrayGenerator.java</argument>
                             </arguments>
                         </configuration>

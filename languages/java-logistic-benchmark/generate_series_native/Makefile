@@ -1,8 +1,8 @@
 # Nome da DLL/SO
-TARGET = generate_series_native
+TARGET = libgenerate_series_native
 
 # Diretório de saída
-OUTPUT_DIR = ../../../target
+OUTPUT_DIR = ../target/native
 
 # Configuração do compilador
 CC = gcc

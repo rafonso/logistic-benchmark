@@ -1,5 +1,5 @@
 ###############################################################
-# TO          BUILD: docker build --force-rm -t logistic-benchmark-image . 
+# TO          BUILD: docker build --force-rm -t logistic-benchmark-image .
 # TO RUN ITERACTIVE: docker run -v .\output:/app/output -it logistic-benchmark-image
 ###############################################################
 
@@ -178,10 +178,9 @@ RUN sed -Ei "s/java -jar c:\/java\/jython2\.7\.3\/jython\.jar/jython/" languages
 
 # Java
 RUN mvn install -f languages/java-logistic-benchmark/pom.xml 
-# PENDING java native
-WORKDIR /app/languages/java-logistic-benchmark/src/main/native/ 
-RUN rm Makefile
-RUN mv Makefile.linux Makefile
+# Create Java native SO
+WORKDIR /app/languages/java-logistic-benchmark/generate_series_native
+RUN mkdir ../target/native
 RUN sed -Ei "s/        /\t/" Makefile
 RUN make
 WORKDIR /app
