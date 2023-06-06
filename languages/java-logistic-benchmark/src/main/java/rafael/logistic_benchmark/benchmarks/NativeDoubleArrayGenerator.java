@@ -5,7 +5,7 @@ final class NativeDoubleArrayGenerator implements DoubleArrayGenerator {
     static final String CODE = "na";
 
     static {
-        System.loadLibrary("generate_series_native");
+        System.loadLibrary("GenerateSeriesNative");
     }
 
     private native double[] generateSeries(double x0, double r, int iter);

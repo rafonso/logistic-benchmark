@@ -1,5 +1,5 @@
 # Nome da DLL/SO
-TARGET = libgenerate_series_native
+TARGET = libGenerateSeriesNative
 
 # Diretório de saída
 OUTPUT_DIR = ../target/native
