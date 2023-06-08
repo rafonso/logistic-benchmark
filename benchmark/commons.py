@@ -1,6 +1,7 @@
 import datetime
 import glob
 import json
+import subprocess
 import sys
 import time
 from dataclasses import InitVar, dataclass, field
@@ -95,3 +96,12 @@ def read_config(user_params: UserParams) -> list[LangParams]:
     assert bool(params), "Filtered params are empty"
 
     return params
+
+
+def process_error(e: subprocess.CalledProcessError):
+    print(f"""
+---------------------- EXECUTION ERROR ----------------------
+- COMMAND:
+{e.cmd}
+- MESSAGE:
+{e.stderr.decode()}""")

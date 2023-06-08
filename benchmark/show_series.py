@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from tabulate import tabulate
 
 from commons import (OUTPUT_DIR, LangParams, UserParams, change_work_dir, log,
-                     now_to_str, print_total_time, read_config)
+                     now_to_str, print_total_time, read_config, process_error)
 
 
 @dataclass
@@ -85,7 +85,7 @@ def run_command(param: LangParams, user_params: SeriesParams):
     log(f"{param.name.rjust(COL_SIZE)}", False)
     final_command = (param.command +
                      " s {} {} {} s").format(user_params.x0, user_params.r, user_params.iter)
-    result = subprocess.run(final_command, shell=True, capture_output=True)
+    result = subprocess.run(final_command, shell=True, capture_output=True, check=True)
 
     lines = result.stdout.splitlines()
     for i in range(0, len(lines)):
@@ -143,21 +143,24 @@ def main():
     change_work_dir()
     lang_params = read_config(user_params)
 
-    results = SeriesResult(user_params.iter)
+    try:
+        results = SeriesResult(user_params.iter)
 
-    # Source: https://stackoverflow.com/questions/9770668/scramble-python-list
-    indexes = sorted(range(len(lang_params)), key=lambda x: random.random())
-    for index in indexes:
-        lang_param = lang_params[index]
-        results.lang_series[lang_param.name] = run_command(
-            lang_param, user_params)
+        # Source: https://stackoverflow.com/questions/9770668/scramble-python-list
+        indexes = sorted(range(len(lang_params)), key=lambda x: random.random())
+        for index in indexes:
+            lang_param = lang_params[index]
+            results.lang_series[lang_param.name] = run_command(
+                lang_param, user_params)
 
-    results.calculate_average()
+        results.calculate_average()
 
-    if(user_params.export_to_file):
-        lines_to_file(user_params, results)
-    else:
-        lines_to_console(results)
+        if(user_params.export_to_file):
+            lines_to_file(user_params, results)
+        else:
+            lines_to_console(results)
+    except subprocess.CalledProcessError as e: # subprocess.CalledProcessError as
+        process_error(e)
 
     print_total_time(t0)
 

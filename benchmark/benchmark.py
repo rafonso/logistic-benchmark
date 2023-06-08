@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from tabulate import tabulate
 
 from commons import (OUTPUT_DIR, LangParams, UserParams, change_work_dir, log,
-                     now_to_str, print_total_time, read_config)
+                     now_to_str, print_total_time, read_config, process_error)
 
 
 @dataclass
@@ -237,15 +237,6 @@ def plot_results(user_params: BenchmarkParams, results: BenchmarkResults):
         save_plot(file_name_base, "linear")
     if user_params.is_log_plotting():
         save_plot(file_name_base, "log")
-
-
-def process_error(e: subprocess.CalledProcessError):
-    print(f"""
----------------------- EXECUTION ERROR ----------------------
-- COMMAND:
-{e.cmd}
-- MESSAGE:
-{e.stderr.decode()}""")
 
 
 def main():
