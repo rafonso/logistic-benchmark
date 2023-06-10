@@ -2,6 +2,7 @@ import argparse
 import csv
 import math
 import os
+import platform
 import random
 import re
 import subprocess
@@ -10,10 +11,9 @@ import time
 from dataclasses import InitVar, dataclass, field
 
 import matplotlib.pyplot as plt
-from tabulate import tabulate
-
 from commons import (OUTPUT_DIR, LangParams, UserParams, change_work_dir, log,
-                     now_to_str, print_total_time, read_config, process_error)
+                     now_to_str, print_total_time, process_error, read_config)
+from tabulate import tabulate
 
 
 @dataclass
@@ -215,14 +215,14 @@ def plot_results(user_params: BenchmarkParams, results: BenchmarkResults):
     def basic_config():
         plt.legend()
         plt.title(
-            f"x0 = { user_params.x0}, r = { user_params.r}, Repetitions = { user_params.repetitions}")
+            f"x0 = { user_params.x0}, r = { user_params.r}, Repetitions = { user_params.repetitions}, OS = {platform.system()}")
         plt.grid(visible=True, which="both")
         plt.xlabel("Interactions")
         plt.ylabel("Time (ms)")
         if not os.path.exists(PLOTS_DIR):
             os.makedirs(PLOTS_DIR, True)
 
-        return f"{PLOTS_DIR}/x0={user_params.x0}_r={user_params.r}_rep={user_params.repetitions}_{now_to_str()}_TYPE.{user_params.graphic_file_extension}"
+        return f"{PLOTS_DIR}/x0={user_params.x0}_r={user_params.r}_rep={user_params.repetitions}_{now_to_str()}_{platform.system()}_TYPE.{user_params.graphic_file_extension}"
 
     def save_plot(file_name_base: str, scale_type: str):
         plt.xscale(scale_type)
