@@ -1,0 +1,7 @@
+{
+  "name": "Pascal",
+  "code": "pascal",
+  "description": "Pascal",
+  "command": "languages/pascal-logistic-benchmark/pascal-logistic-benchmark.exe",
+  "color": "#5B6900"
+}

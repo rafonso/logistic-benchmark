@@ -66,13 +66,14 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && rm requirements.txt
 
 # Install PyPy
-RUN wget -O - https://downloads.python.org/pypy/pypy3.9-v7.3.11-linux64.tar.bz2 | tar -xj \
-    && mv pypy3.9-v7.3.11-linux64 /opt/ \
-    && ln -s /opt/pypy3.9-v7.3.11-linux64/bin/pypy /usr/local/bin/pypy
+RUN wget -O - https://downloads.python.org/pypy/pypy3.9-v7.3.11-linux64.tar.bz2 | tar -xj && \
+    mv pypy3.9-v7.3.11-linux64 /opt/ && \
+    ln -s /opt/pypy3.9-v7.3.11-linux64/bin/pypy /usr/local/bin/pypy
 
 # Install & configure Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o rustup.sh && \
-    sh rustup.sh -y && rm rustup.sh
+    sh rustup.sh -y && \
+    rm rustup.sh
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Install & configure Go
@@ -82,8 +83,8 @@ RUN wget https://golang.org/dl/go1.19.linux-amd64.tar.gz && \
 ENV PATH="/usr/local/go/bin:${PATH}"
 
 # Install & configure Node.js and Deno
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
-    && apt install -y nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt install -y nodejs
 RUN npm install -g typescript@4.5.5
 RUN curl -fsSL https://deno.land/x/install/install.sh | sh -s v1.19.1
 ENV DENO_INSTALL="/root/.deno"

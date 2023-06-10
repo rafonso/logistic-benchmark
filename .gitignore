@@ -8,3 +8,6 @@
 
 *.stackdump
 .vscode/settings.json
+*.o
+*.ppu
+*.exe

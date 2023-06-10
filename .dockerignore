@@ -12,6 +12,7 @@
 **/*.exe
 **/*.iml
 **/*.o
+**/*.ppu
 **/*.stackdump
 **/assets/
 **/bin/
