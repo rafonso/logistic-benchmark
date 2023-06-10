@@ -168,7 +168,6 @@ RUN sed -Ei "s/(cs-logistic-benchmark)\.exe/\1/" languages/cs-logistic-benchmark
 
 # Java
 RUN mvn install -f languages/java-logistic-benchmark/pom.xml 
-
 # Create Java native SO
 WORKDIR /app/languages/java-logistic-benchmark/generate_series_native
 RUN mkdir ../target/native
@@ -178,6 +177,14 @@ WORKDIR /app
 
 # Kotlin
 RUN mvn install -f languages/kotlin-logistic-benchmark/pom.xml
+
+# Kotlin with native
+RUN mvn install -f languages/kotlin-with-native-logistic-benchmark/pom.xml
+# Create Kotlin native SO
+WORKDIR /app/languages/kotlin-with-native-logistic-benchmark/generate_series_native
+RUN mkdir ../target/native
+RUN make
+WORKDIR /app
 
 # Kotlin native
 WORKDIR /app/languages/kotlin-native-logistic-benchmark
