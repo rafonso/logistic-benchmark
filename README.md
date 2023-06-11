@@ -93,7 +93,8 @@ The main part receives the command line arguments to extract the parameters and 
   - [Ruby](languages/ruby-logistic-benchmark/)
   - [Rust](languages/rust-logistic-benchmark/)
   - [Scala](languages/scala-logistic-benchmark/)
-  - [TypeScript](languages/typescript-logistic-benchmark/)
+  - [TypeScript - Deno](languages/typescript-deno-logistic-benchmark/)
+  - [TypeScript - Node](languages/typescript-node-logistic-benchmark/)
 
 ## Graphics
 ### All Languages
