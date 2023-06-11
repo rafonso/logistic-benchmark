@@ -6,7 +6,7 @@
   "scripts": {
     "prepare": "tsc",
     "build": "tsc",
-    "start": "ts-node src/node-index.ts",
+    "start": "ts-node src/index.ts",
     "run": "node "
   },
   "keywords": [],

@@ -1,3 +1,14 @@
+// import { IConsole, repeatAction, simpleAction } from "./common";
+
+// const nodeConsole: IConsole = {
+//   print: (...str: string[]) => {
+//     process.stdout.write(str.join(" "));
+//   },
+//   log: (...str: string[]) => {
+//     console.log(str.join(" "));
+//   }
+// }
+
 
 interface ProcessResult {
   readonly series: number[];
@@ -34,7 +45,7 @@ export function repeatAction(x0: number, r: number, interactions: number, repeti
 
   const t0 = Date.now();
   for (let i = 0; i < repetitions; i++) {
-    Deno.writeAllSync(Deno.stdout, new TextEncoder().encode(`\r${i + 1}\t/\t${repetitions}`));
+    process.stdout.write(`\r${i + 1}\t/\t${repetitions}`)
     times[i] = calculate(x0, r, interactions).time;
   }
   const time = Date.now() - t0;
@@ -50,15 +61,15 @@ export function repeatAction(x0: number, r: number, interactions: number, repeti
  * MAIN
  ************************************/
 
-const action =        Deno.args[0];
-const x0 = parseFloat(Deno.args[1]);
-const r =  parseFloat(Deno.args[2]);
-const iter = parseInt(Deno.args[3]);
+const action = process.argv[2];
+const x0 = parseFloat(process.argv[3]);
+const r =  parseFloat(process.argv[4]);
+const iter = parseInt(process.argv[5]);
 
 if(action === "s") {
-  const showSeries = (Deno.args.length === 5) && (Deno.args[4] === "s");
+  const showSeries = (process.argv.length === 7) && (process.argv[6] === "s");
   simpleAction(x0, r, iter, showSeries);
 } else if(action === "r") {
-  const repetitions = parseInt(Deno.args[4]);
+  const repetitions = parseInt(process.argv[6]);
   repeatAction(x0, r, iter, repetitions);
 }
