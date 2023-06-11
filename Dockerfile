@@ -173,6 +173,11 @@ RUN dotnet publish languages/cs-logistic-benchmark/cs-logistic-benchmark.sln \
     --configuration Release --output languages/cs-logistic-benchmark/
 RUN sed -Ei "s/(cs-logistic-benchmark)\.exe/\1/" languages/cs-logistic-benchmark/cs.config.json
 
+# Node
+WORKDIR /app/languages/typescript-node-logistic-benchmark
+RUN npm install
+WORKDIR /app
+
 # Java
 RUN mvn install -f languages/java-logistic-benchmark/pom.xml 
 # Create Java native SO
