@@ -4,5 +4,5 @@
   "description": "Java using Array List\nwith preallocated size",
   "command": "java -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar pa",
   "color": "#F0931C",
-  "linestyle": "-."
+  "linestyle": "(0, (5, 1))"
 }

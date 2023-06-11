@@ -209,8 +209,10 @@ def plot_results(user_params: BenchmarkParams, results: BenchmarkResults):
                     times_series.append(int(str_time))
                 else:
                     times_series.append(None)
+            line_style = eval(result.line_style) if re.findall(
+                "^\(.*\)$", result.line_style) else result.line_style
             plt.plot(results.interactions, times_series, label=lang,
-                     color=result.color, linestyle=result.line_style)
+                     color=result.color, linestyle=line_style)
 
     def basic_config():
         plt.legend()

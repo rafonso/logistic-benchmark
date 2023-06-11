@@ -5,5 +5,5 @@
   "maxIter": 2000000,
   "command": "java -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar ll",
   "color": "#F0931C",
-  "linestyle": ":"
+  "linestyle": "(0, (3, 1, 1, 1))"
 }

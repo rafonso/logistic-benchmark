@@ -4,5 +4,5 @@
   "description": "Kotlin Native using Double Array\nwith preallocated size",
   "command": "languages/kotlin-native-logistic-benchmark/build/bin/logistic_benchmark/releaseExecutable/kotlin_native_logistic_benchmark.exe",
   "color": "#FF007F",
-  "linestyle": "--"
+  "linestyle": ":"
 }

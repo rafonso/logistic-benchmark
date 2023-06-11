@@ -4,5 +4,5 @@
   "description": "Compiled python using List\nwith preallocated size",
   "command": "languages/python-logistic-benchmark/dist/main.exe",
   "color": "#F7CC40",
-  "linestyle": "--"
+  "linestyle": ":"
 }

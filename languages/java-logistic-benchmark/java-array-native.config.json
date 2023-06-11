@@ -3,5 +3,6 @@
   "code": "java-native",
   "description": "Java using call\nto native code",
   "command": "java -Djava.library.path=languages/java-logistic-benchmark/target/native -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar na ",
-  "color": "#A57E6A"
+  "color": "#F0931C",
+  "linestyle": ":"
 }

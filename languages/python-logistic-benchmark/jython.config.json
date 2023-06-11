@@ -3,6 +3,7 @@
   "code": "jython",
   "description": "Jython using List\nwith preallocated size",
   "command": "java -jar c:/java/jython2.7.3/jython.jar languages/python-logistic-benchmark/main.py",
-  "color": "#f3af2e",
-  "linestyle": ":"
+  "maxIter": 100000,
+  "color": "#F7CC40",
+  "linestyle": "(0, (3, 1, 1, 1))"
 }

@@ -3,6 +3,6 @@
   "code": "java-mixed",
   "description": "Java calling Native until \n50,000 interactions and Java after",
   "command": "java -Djava.library.path=languages/java-logistic-benchmark/target/native -jar languages/java-logistic-benchmark/target/java-logistic-benchmark-jar-with-dependencies.jar ma ",
-  "color": "#A57E6A",
-  "linestyle": "--"
+  "color": "#F0931C",
+  "linestyle": "-."
 }

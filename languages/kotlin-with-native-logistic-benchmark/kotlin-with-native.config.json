@@ -3,5 +3,6 @@
   "code": "kotlin-with-native",
   "description": "Kotlin JVM call native library",
   "command": "java -Djava.library.path=languages/kotlin-with-native-logistic-benchmark/target/native -jar languages/kotlin-with-native-logistic-benchmark/target/kotlin-with-native-logistic-benchmark-jar-with-dependencies.jar",
-  "color": "#00FF80"
+  "color": "#FF007F",
+  "linestyle": "-."
 }
