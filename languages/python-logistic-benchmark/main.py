@@ -1,3 +1,4 @@
+# To compile native: pyinstaller -F main.py  
 import sys
 import time
 

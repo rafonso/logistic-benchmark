@@ -151,6 +151,12 @@ VOLUME /app/output
 RUN g++ -o languages/c-logistic-benchmark/c-logistic-benchmark languages/c-logistic-benchmark/c-logistic-benchmark.c
 RUN sed -Ei "s/(c-logistic-benchmark)\.exe/\1/" languages/c-logistic-benchmark/c.config.json
 
+# Python Native
+WORKDIR /app/languages/python-logistic-benchmark
+RUN pyinstaller -F main.py 
+RUN sed -Ei "s/(main)\.exe/\1/" python-exe.config.json
+WORKDIR /app
+
 # Rust
 RUN cargo build --manifest-path languages/rust-logistic-benchmark/Cargo.toml --release
 # Remove extension "exe" from executable name in config.json file
@@ -159,8 +165,8 @@ RUN sed -Ei "s/(rust-logistic-benchmark)\.exe/\1/" languages/rust-logistic-bench
 # Go
 WORKDIR /app/languages/go-logistic-benchmark
 RUN go build
+RUN sed -Ei "s/(go-logistic-benchmark)\.exe/\1/" go.config.json
 WORKDIR /app
-RUN sed -Ei "s/(go-logistic-benchmark)\.exe/\1/" languages/go-logistic-benchmark/go.config.json
 
 # C#
 RUN dotnet publish languages/cs-logistic-benchmark/cs-logistic-benchmark.sln \
