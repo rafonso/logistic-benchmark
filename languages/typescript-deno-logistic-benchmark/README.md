@@ -1,4 +1,4 @@
-# TypeScript - Dsno
+# TypeScript - Deno
 
 ## Development Environment
   - Typescript 4.5.5
