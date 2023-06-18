@@ -84,8 +84,8 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 
 # Install & configure Node.js and Deno
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt install -y nodejs
-# RUN npm install -g typescript@4.5.5
+    apt install -y nodejs npm
+RUN npm install -g typescript@4.5.5
 RUN curl -fsSL https://deno.land/x/install/install.sh | sh -s v1.19.1
 ENV DENO_INSTALL="/root/.deno"
 ENV PATH="$DENO_INSTALL/bin:$PATH"
@@ -178,7 +178,7 @@ RUN sed -Ei "s/(cs-logistic-benchmark)\.exe/\1/" languages/cs-logistic-benchmark
 
 # Node
 WORKDIR /app/languages/typescript-node-logistic-benchmark
-# RUN npm install
+RUN npm install
 WORKDIR /app
 
 # Java
