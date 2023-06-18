@@ -1,4 +1,4 @@
-// To compile : g++ -o c-logistic-benchmark.exe c-logistic-benchmark.c
+// To compile : g++ -o c-logistic-benchmark-1.exe c-logistic-benchmark-1.c
 #include <stdlib.h>
 #include <stdio.h>
 

@@ -85,7 +85,7 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 # Install & configure Node.js and Deno
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
     apt install -y nodejs
-RUN npm install -g typescript@4.5.5
+# RUN npm install -g typescript@4.5.5
 RUN curl -fsSL https://deno.land/x/install/install.sh | sh -s v1.19.1
 ENV DENO_INSTALL="/root/.deno"
 ENV PATH="$DENO_INSTALL/bin:$PATH"
@@ -135,6 +135,9 @@ RUN curl -L -o jython-installer-2.7.2.jar "https://search.maven.org/remoteconten
 ENV JYTHON_HOME=/opt/jython
 ENV PATH="${JYTHON_HOME}/bin:${PATH}"
 
+# # preload Java & JVM languages dependencies
+# COPY .libs $HOME/root
+
 ###########################################################
 # 2 - Define COPY and VOLUME
 ###########################################################
@@ -148,7 +151,7 @@ VOLUME /app/output
 ###########################################################
 
 # C compile
-RUN g++ -o languages/c-logistic-benchmark/c-logistic-benchmark languages/c-logistic-benchmark/c-logistic-benchmark.c
+RUN g++ -O3 -o languages/c-logistic-benchmark/c-logistic-benchmark languages/c-logistic-benchmark/c-logistic-benchmark.c
 RUN sed -Ei "s/(c-logistic-benchmark)\.exe/\1/" languages/c-logistic-benchmark/c.config.json
 
 # Python Native
@@ -175,7 +178,7 @@ RUN sed -Ei "s/(cs-logistic-benchmark)\.exe/\1/" languages/cs-logistic-benchmark
 
 # Node
 WORKDIR /app/languages/typescript-node-logistic-benchmark
-RUN npm install
+# RUN npm install
 WORKDIR /app
 
 # Java
