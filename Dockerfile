@@ -142,6 +142,8 @@ COPY pre-load pre-load
 WORKDIR /app/pre-load/preload-kotlin-native
 RUN gradle build
 WORKDIR /app
+# Preload Kotlin
+RUN mvn install -f ./pre-load/preload-kotlin/pom.xml
 # Preload Scala
 RUN mvn install -f ./pre-load/preload-scala/pom.xml
 # WORKDIR /app/pre-load/preload-java
