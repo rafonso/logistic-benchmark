@@ -5,7 +5,7 @@
 /.clj-kondo
 /.lsp
 /.jython_cache
-
+/.libs
 *.stackdump
 .vscode/settings.json
 *.o

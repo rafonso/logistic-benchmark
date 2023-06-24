@@ -137,6 +137,17 @@ ENV PATH="${JYTHON_HOME}/bin:${PATH}"
 
 # # preload Java & JVM languages dependencies
 # COPY .libs $HOME/root
+COPY pre-load pre-load
+WORKDIR /app/pre-load/preload-kotlin-native
+RUN gradle build
+# WORKDIR /app/pre-load/preload-java
+# RUN gradle build --scan --stacktrace
+# WORKDIR /app/pre-load/preload-kotlin
+# RUN gradle build
+# WORKDIR /app/pre-load/preload-scala
+# RUN gradle build
+WORKDIR /app
+RUN rm -rf /app/pre-load
 
 ###########################################################
 # 2 - Define COPY and VOLUME
@@ -203,8 +214,7 @@ WORKDIR /app
 
 # Kotlin native
 WORKDIR /app/languages/kotlin-native-logistic-benchmark
-RUN gradle clean
-RUN gradle build
+RUN gradle clean build
 RUN sed -Ei "s/(kotlin_native_logistic_benchmark)\.exe/\1.kexe/" kotlin-native.config.json
 WORKDIR /app
 
