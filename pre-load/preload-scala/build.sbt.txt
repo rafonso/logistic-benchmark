@@ -1,0 +1,14 @@
+ThisBuild / version := "0.1.0-SNAPSHOT"
+
+ThisBuild / scalaVersion := "2.13.8"
+
+//ThisBuild / assemblyMergeStrategy := ...
+
+lazy val root = (project in file("."))
+  .settings(
+    name := "scala-logistic-benchmark",
+    idePackagePrefix := Some("rafael.logistic_benchmark"),
+    Compile/mainClass := Some("rafael.logistic_benchmark.Main"),
+//    mainClass in assembly := Some("rafael.logistic_benchmark.Main")
+  )
+// Compile/mainClass := Some("rafael.logistic_benchmark.Main")

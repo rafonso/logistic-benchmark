@@ -138,15 +138,15 @@ ENV PATH="${JYTHON_HOME}/bin:${PATH}"
 # # preload Java & JVM languages dependencies
 # COPY .libs $HOME/root
 COPY pre-load pre-load
+# Preload Gradle daemon and Kotlin native
 WORKDIR /app/pre-load/preload-kotlin-native
 RUN gradle build
+WORKDIR /app
+# Preload Scala
+RUN mvn install -f ./pre-load/preload-scala/pom.xml
 # WORKDIR /app/pre-load/preload-java
 # RUN gradle build --scan --stacktrace
 # WORKDIR /app/pre-load/preload-kotlin
-# RUN gradle build
-# WORKDIR /app/pre-load/preload-scala
-# RUN gradle build
-WORKDIR /app
 RUN rm -rf /app/pre-load
 
 ###########################################################
