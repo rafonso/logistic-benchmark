@@ -1,9 +1,11 @@
 # Original Source: https://scipython.com/blog/cobweb-plots/
 import sys
-from matplotlib.figure import Figure
+from dataclasses import dataclass
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.figure import Figure
 
 # Use LaTeX throughout the figure for consistency
 # rc('font', **{'family': 'serif', 'serif': ['Computer Modern'], 'size': 16})
@@ -11,7 +13,22 @@ import numpy as np
 dpi = 72
 
 
-def plot_cobweb(f, r, x0, nmax=40):
+@dataclass
+class AnnotatedFunction:
+    """A small class representing a mathematical function.
+
+    This class is callable so it acts like a Python function, but it also
+    defines a string giving its latex representation.
+
+    """
+    func: Any
+    latex_label: str
+
+    def __call__(self, *args, **kwargs):
+        return self.func(*args, **kwargs)
+
+
+def plot_cobweb(f: AnnotatedFunction, r: float, x0: float, it: int = 40):
     """Make a cobweb plot.
 
     Plot y = f(x; r) and y = x for 0 <= x <= 1, and illustrate the behaviour of
@@ -26,10 +43,10 @@ def plot_cobweb(f, r, x0, nmax=40):
     ax.plot(x, f(x, r), c='#444444', lw=2)
     ax.plot(x, x, c='#444444', lw=2)
 
-    # Iterate x = f(x) for nmax steps, starting at (x0, 0).
-    px, py = np.empty((2, nmax+1, 2))
+    # Iterate x = f(x) for it steps, starting at (x0, 0).
+    px, py = np.empty((2, it+1, 2))
     px[0], py[0] = x0, 0
-    for n in range(1, nmax, 2):
+    for n in range(1, it, 2):
         px[n  ] =   px[n-1]
         py[n  ] = f(px[n-1], r)
         px[n+1] =   py[n  ]
@@ -45,27 +62,11 @@ def plot_cobweb(f, r, x0, nmax=40):
     ax.set_aspect('equal')
     ax.set_xlabel('$x$')
     ax.set_ylabel(f.latex_label)
-    ax.set_title('$x_0 = {:.1}, r = {:.2}$'.format(x0, r))
+    ax.set_title(f'$x_0 = {x0}, r = {r}$')
 
+    plt.get_current_fig_manager()\
+        .set_window_title(f'x0 = {x0}, r = {r}, interactions = {it}')
     plt.show()
-
-    # plt.savefig('cobweb_{:.1}_{:.2}.png'.format(x0, r), dpi=dpi)
-
-
-class AnnotatedFunction:
-    """A small class representing a mathematical function.
-
-    This class is callable so it acts like a Python function, but it also
-    defines a string giving its latex representation.
-
-    """
-
-    def __init__(self, func, latex_label):
-        self.func = func
-        self.latex_label = latex_label
-
-    def __call__(self, *args, **kwargs):
-        return self.func(*args, **kwargs)
 
 
 def main():
@@ -76,7 +77,6 @@ def main():
     # The logistic map, f(x) = rx(1-x).
     func = AnnotatedFunction(lambda x, r: r*x*(1-x), r'$rx(1-x)$')
 
-    # plot_cobweb(func, 2.8, 0.2)
     plot_cobweb(func, r, x0, it)
 
 
